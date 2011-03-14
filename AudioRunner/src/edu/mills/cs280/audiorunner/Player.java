@@ -14,10 +14,11 @@ public class Player extends Sprite {
 	private static final int GROUND = 0;
 	private static final int AIR = 1;
 
-	private int anim_countdown = 10;
-	private float vy;
-	private int animCount,animNum;
-	private int status;
+	private int mAnimDelay = 10;
+	private float mVertVelocity;
+	private int mAnimCounter;
+	private int mFrameNum;
+	private int mStatus;
 
 	/**
 	 * Constructor
@@ -26,10 +27,10 @@ public class Player extends Sprite {
 	 */
 	public Player(Texture texture) {
 		this.setTexture(texture);
-		vy = 0;
-		anim_countdown = 25/ScreenHandler.getSpeed();
-		animCount = 0;
-		animNum = 0;
+		mVertVelocity = 0;
+		mAnimDelay = 25/ScreenHandler.getSpeed();
+		mAnimCounter = 0;
+		mFrameNum = 0;
 	}
 
 	/**
@@ -51,20 +52,20 @@ public class Player extends Sprite {
 	 * to the next frame of animation
 	 */
 	public void animate(){
-		animCount++;
+		mAnimCounter++;
 
-		if(animCount % anim_countdown == 0) {
+		if(mAnimCounter % mAnimDelay == 0) {
 
-			if(animNum == FRAME_COUNT-1 ) {
-				animCount = 0;
-				animNum = 0;
+			if(mFrameNum == FRAME_COUNT-1 ) {
+				mAnimCounter = 0;
+				mFrameNum = 0;
 			}
-			animNum++;
+			mFrameNum++;
 		}
 
-		if(status == AIR){
-			setPosition(getX(), getY()+vy);
-			vy -= GRAVITY;
+		if(mStatus == AIR){
+			setPosition(getX(), getY()+mVertVelocity);
+			mVertVelocity -= GRAVITY;
 		}
 	}
 
@@ -75,7 +76,7 @@ public class Player extends Sprite {
 	 * @return int current X position within the sprite's texture
 	 */
 	public int getSpriteX(){
-		return animNum*SPRITE_SIZE;
+		return mFrameNum*SPRITE_SIZE;
 	}
 
 	/**
@@ -93,8 +94,8 @@ public class Player extends Sprite {
 	 * 
 	 * @param int Y velocity you wish to add to current Y velocity
 	 */
-	public void addVY(int vy){
-		this.vy += vy;
+	public void addVY(int mVertVelocity){
+		this.mVertVelocity += mVertVelocity;
 	}
 
 	/**
@@ -103,8 +104,8 @@ public class Player extends Sprite {
 	 * 
 	 * @param int Y velocity you sish to add to current Y velocity
 	 */
-	public void setVY(int vy){
-		this.vy = vy;
+	public void setVY(int mVertVelocity){
+		this.mVertVelocity = mVertVelocity;
 	}
 
 	/**
@@ -118,26 +119,38 @@ public class Player extends Sprite {
 	}
 
 	/**
-	 * Set player's status to GROUND.  The player will now stop falling
+	 * Set player's mStatus to GROUND.  The player will now stop falling
 	 */
 	public void setGround(){
-		status = GROUND;
+		mStatus = GROUND;
 	}
 
 	/**
-	 * Set player's status to AIR.  The player will now be in the air, gravity will effect the player
+	 * Set player's mStatus to AIR.  The player will now be in the air, gravity will effect the player
 	 */
 	public void setAir(){
-		status = AIR;
+		mStatus = AIR;
+	}
+	
+	/**
+	 * Checks if the player is on the Ground
+	 * 
+	 * @return Returns true if player is onthe Ground
+	 */
+	public Boolean onGround(){
+		if(mStatus == GROUND){
+			return true;
+		}
+		return false;
 	}
 
 	/**
 	 * Calculate Physics on player, Gravity always effects player if they are in the air
 	 */
 	public void physics(){
-		if(status == AIR && getY() < 40){
-			vy = 0;
-			status = GROUND;
+		if(mStatus == AIR && getY() < 40){
+			mVertVelocity = 0;
+			mStatus = GROUND;
 			setPosition(getX(),41);
 		}
 
@@ -147,9 +160,9 @@ public class Player extends Sprite {
 	 * Player Jumps.  Adds a posiytive velocity to player's vertical velocity
 	 */
 	public void jump(){
-		if(status != AIR){
+		if(mStatus != AIR){
 			addVY(JUMPSPEED);
-			status = AIR;
+			mStatus = AIR;
 		}
 	}
 }

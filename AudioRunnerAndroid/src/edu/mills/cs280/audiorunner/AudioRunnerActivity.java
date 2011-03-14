@@ -8,6 +8,6 @@ public class AudioRunnerActivity extends AndroidApplication {
     @Override
     public void onCreate(Bundle savedInstanceState) {
     	super.onCreate(savedInstanceState);
-        initialize(new AudioRunner(), false);  
+        initialize(new GameHandler(), false);  
     }
 }
