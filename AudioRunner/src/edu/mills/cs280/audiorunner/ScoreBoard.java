@@ -121,8 +121,8 @@ public class ScoreBoard {
 				currentPos.y++;
 			}
 			else{
-				currentPos.x += currentPos.distanceFrom(Gdx.graphics.getWidth(),Gdx.graphics.getHeight())*SCREENPERCENTAGE;
-				currentPos.y += currentPos.distanceFrom(Gdx.graphics.getWidth(),Gdx.graphics.getHeight())*SCREENPERCENTAGE;
+				currentPos.x += Math.abs(currentPos.x-Gdx.graphics.getWidth())*SCREENPERCENTAGE;
+				currentPos.y += Math.abs(currentPos.y-Gdx.graphics.getHeight())*SCREENPERCENTAGE;
 			}
 		}
 		
