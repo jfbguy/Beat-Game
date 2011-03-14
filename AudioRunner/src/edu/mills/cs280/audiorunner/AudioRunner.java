@@ -18,7 +18,6 @@ public class AudioRunner implements ApplicationListener {
 	private Player player;
 	private Music music;
 	private String trackLocation;
-	AudioAnalyzer analyzer;
 
 	private ScreenHandler screenHandler;
 	
@@ -31,7 +30,6 @@ public class AudioRunner implements ApplicationListener {
 		//Music Stuff
 		trackLocation = "data/music/Freezepop - Starlight (Karacter Remix).mp3";
 		music = Gdx.audio.newMusic (Gdx.files.internal(trackLocation));
-		analyzer = new AudioAnalyzer(trackLocation);
 		
 		//Screen Elements
 		spriteBatch = new SpriteBatch();
@@ -94,7 +92,6 @@ public class AudioRunner implements ApplicationListener {
 		//draw ForeGround
 		screenHandler.drawForeGround(spriteBatch);
 
-		analyzer.analyze();
 	}
 
 	@Override
