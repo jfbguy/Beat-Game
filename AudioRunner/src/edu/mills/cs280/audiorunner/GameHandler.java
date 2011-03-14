@@ -60,7 +60,7 @@ public class GameHandler implements ApplicationListener {
 		
 		if(Gdx.input.justTouched() && player.onGround()){
 			player.jump();
-			scoreBoard.addScore(17);
+			scoreBoard.addFloaterScore((int)player.getX(),(int)player.getY(),17);
 		}
 		
 		//Physics

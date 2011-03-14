@@ -3,8 +3,8 @@ package edu.mills.cs280.audiorunner;
 
 public class Vector2 implements Comparable<Object>{
 	
-	private int x;
-	private int y;
+	public int x;
+	public int y;
 	
 	public Vector2(){
 		x = 0;
@@ -35,6 +35,14 @@ public class Vector2 implements Comparable<Object>{
 	
 	public void setY(int y){
 		this.y = y;
+	}
+	
+	public float distanceFrom(Vector2 pos){
+		return (float) Math.sqrt(Math.pow(this.x-pos.x,2) + Math.pow(this.y-pos.y,2));
+	}
+	
+	public float distanceFrom(int x,int y){
+		return (float) Math.sqrt(Math.pow(this.x-x,2) + Math.pow(this.y-y,2));
 	}
 	
 	@Override
