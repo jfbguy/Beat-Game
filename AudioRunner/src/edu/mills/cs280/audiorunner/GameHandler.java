@@ -34,7 +34,7 @@ public class GameHandler implements ApplicationListener {
 		
 		//Screen Elements
 		spriteBatch = new SpriteBatch();
-		screenHandler = new ScreenHandler();
+		screenHandler = new ScreenHandler(5);
 		scoreBoard = new ScoreBoard();
 	}
 
@@ -63,38 +63,21 @@ public class GameHandler implements ApplicationListener {
 			scoreBoard.addFloaterScore((int)player.getX(),(int)player.getY(),17);
 		}
 		
+		//LEVEL LOGIC
+		screenHandler.updateScreen();
+		
 		//Physics
 		player.physics();
+		
+		//PLAYER LOGIC
+		player.animate();
 		
 		//Clear Screen
 		Gdx.graphics.getGL10().glClearColor(0,0,0,1);
 		Gdx.graphics.getGL10().glClear(GL10.GL_COLOR_BUFFER_BIT);
 		
-		
-		//LEVEL LOGIC
-		screenHandler.updateScreen();
-		
-		//PLAYER LOGIC
-		player.animate();
-		
-		//draw FarGround
-		screenHandler.drawFarGround(spriteBatch);
-		
-		//draw BackGround
-		screenHandler.drawBackGround(spriteBatch);
-		
-		//draw Ground
-		screenHandler.drawGround(spriteBatch);
-		
-		//draw player
-		spriteBatch.begin();
-		spriteBatch.draw(player.getTexture(), player.getX(), player.getY(),
-				player.getSpriteX(), player.getSpriteY(),
-				Player.getSize(), Player.getSize());
-		spriteBatch.end();
-		
-		//draw ForeGround
-		screenHandler.drawForeGround(spriteBatch);
+		//draw Screen
+		screenHandler.draw(spriteBatch, player);
 		
 		//draw ScoreBoard
 		scoreBoard.draw(spriteBatch);

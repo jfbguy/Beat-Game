@@ -39,11 +39,9 @@ public class Player extends Sprite {
 	 * @param  SpriteBatch, Draw within the current SpriteBatch
 	 */
 	public void draw(SpriteBatch spriteBatch){
-		spriteBatch.begin();
 		spriteBatch.draw(getTexture(), getX(), getY(),
 				getSpriteX(), getSpriteY(),
 				Player.getSize(), Player.getSize());
-		spriteBatch.end();
 	}
 
 	/**

@@ -9,9 +9,7 @@ import com.badlogic.gdx.graphics.glutils.ImmediateModeRenderer;
 public class ScreenHandler{
 	private static final int SPEED = 5;
 	private static final int DEFAULT_LEVEL_HEIGHT = 60;
-	private static final float FOREPARALLAX = 1.5f;
-	private static final float BACKPARALLAX = .3f;
-	private static final float FARPARALLAX = 0.02f;
+	private static final float[] PARALLAX = {1.5f,1.0f,.4f,.3f,.02f};
 	private static final int NUM_OF_mTextures = 4;
 	private static final int MOUNTAIN = 0;	//Texture Constants, each needs to be different!
 	private static final int SUN = 1;
@@ -24,17 +22,20 @@ public class ScreenHandler{
 	private int mWorldPosition;
 	private int[] mGroundLevels;
 	private Texture[] mTextures;
-	private SpriteLayer mForeGround;  //<X Position in Level, texture identifier>
-	//private SpriteLayer midGround; 
-	private SpriteLayer mBackGround;
-	private SpriteLayer mFarGround;
+	private SpriteLayer[] mSpriteLayers;
 
 	/**
 	 * Constructor
 	 */
-	public ScreenHandler(){
+	public ScreenHandler(int numOfLayers){
 		mDrawStarter = 0;
 		mWorldPosition = 0;
+		mSpriteLayers = new SpriteLayer[numOfLayers];
+		
+		//Declare all SpriteLayers
+		for(int i = 0; i < mSpriteLayers.length; i++){
+			mSpriteLayers[i] = new SpriteLayer(PARALLAX[i]);
+		}
 
 		//load default level start
 		mGroundLevels = new int[Gdx.graphics.getWidth()];
@@ -49,11 +50,6 @@ public class ScreenHandler{
 		mTextures[POWERLINES] = new Texture(Gdx.files.internal("data/powerlines.png"));
 		mTextures[GROUND] = new Texture(Gdx.files.internal("data/gradient_BW_1D.png"));
 
-		mForeGround = new SpriteLayer(FOREPARALLAX);
-		//midGround = new SpriteLayer();
-		mBackGround = new SpriteLayer(BACKPARALLAX);
-		mFarGround = new SpriteLayer(FARPARALLAX);
-
 		//************************************************************************************************
 		//************** DEBUG level load ****************************************************************
 		///***** Will be replaced with what the audio algorithm does *************************************
@@ -63,26 +59,26 @@ public class ScreenHandler{
 			temp.set(i*mTextures[POWERLINES].getWidth(),0);
 			Sprite tSprite = new Sprite(mTextures[POWERLINES]);
 			tSprite.setPosition(temp.getX(), temp.getY());
-			mForeGround.put(temp.getX(),tSprite);
+			mSpriteLayers[0].put(temp.getX(),tSprite);
 		}
 		
-		for(int i = 0; i < 10; i++){
+		for(int i = 0; i < 20; i++){
 			temp.set(i*400,0);
 			Sprite tSprite = new Sprite(mTextures[MOUNTAIN]);
 			tSprite.setPosition(temp.getX(), temp.getY());
-			mBackGround.put(temp.getX(),tSprite);
+			mSpriteLayers[2].put(temp.getX(),tSprite);
 		}
 		temp.set(400,100);
 		Sprite tSprite = new Sprite(mTextures[SUN]);
 		tSprite.setPosition(temp.getX(), temp.getY());
-		mFarGround.put(temp.getX(),tSprite);
+		mSpriteLayers[4].put(temp.getX(),tSprite);
 		//************************************************************************************
 		
 		
 		//Load start of Level Layers
-		mFarGround.loadStart(mWorldPosition);
-		mBackGround.loadStart(mWorldPosition);
-		mForeGround.loadStart(mWorldPosition);
+		for(int i = 0; i < mSpriteLayers.length; i++){
+			mSpriteLayers[i].loadStart(mWorldPosition);
+		}
 	}
 
 	/**
@@ -93,47 +89,35 @@ public class ScreenHandler{
 	public void updateScreen(){	//Updates level depending on music and how player is doing
 		mWorldPosition += SPEED;
 		
-		/*	//Updates next pixel of Ground
-		if(music.isPlaying()){
-			mGroundLevels[mDrawStarter] = (int) (music.getPosition()+1 % 400);	//TEMPORARY
+	}
+	
+	/**
+	 * Draws Everything on Screen
+	 * 
+	 * @param
+	 */
+	
+	public void draw(SpriteBatch spriteBatch, Player player){
+		spriteBatch.begin();
+		
+		//Draw first half of layers rounded down
+		for(int i = mSpriteLayers.length-1; i >= mSpriteLayers.length/2; i--){
+			mSpriteLayers[i].draw(spriteBatch,mWorldPosition);
 		}
-		else{
-			mGroundLevels[mDrawStarter] = DEFAULT_LEVEL_HEIGHT;
+		
+		//Draw Ground
+		drawGround(spriteBatch);
+		
+		//Draw Player
+		spriteBatch.draw(player.getTexture(), player.getX(), player.getY(),
+				player.getSpriteX(), player.getSpriteY(),
+				Player.getSize(), Player.getSize());
+		
+		//Draw second half of layers rounded down
+		for(int i = mSpriteLayers.length/2-1; i >= 0; i--){
+			mSpriteLayers[i].draw(spriteBatch,mWorldPosition);
 		}
-
-		mDrawStarter = (mDrawStarter + 1) % Gdx.graphics.getWidth();*/
-	}
-	
-	/**
-	 * Draws mForeGround, layer closest to user
-	 * 
-	 * @param  SpriteBatch, Draw within the current SpriteBatch
-	 */
-	public void drawForeGround(SpriteBatch spriteBatch){
-		spriteBatch.begin();
-		mForeGround.draw(spriteBatch,mWorldPosition);
-		spriteBatch.end();
-	}
-	
-	/**
-	 * Draws mFarGround, layer furthest away from user
-	 * 
-	 * @param  SpriteBatch, Draw within the current SpriteBatch
-	 */
-	public void drawFarGround(SpriteBatch spriteBatch){
-		spriteBatch.begin();
-		mFarGround.draw(spriteBatch,mWorldPosition);
-		spriteBatch.end();
-	}
-	
-	/**
-	 * Draws mBackGround, layer 2nd furthest away from user
-	 * 
-	 * @param  SpriteBatch, Draw within the current SpriteBatch
-	 */
-	public void drawBackGround(SpriteBatch spriteBatch){
-		spriteBatch.begin();
-		mBackGround.draw(spriteBatch,mWorldPosition);
+		
 		spriteBatch.end();
 	}
 
@@ -142,9 +126,8 @@ public class ScreenHandler{
 	 * 
 	 * @param  SpriteBatch, Draw within the current SpriteBatch
 	 */
-	public void drawGround(SpriteBatch spriteBatch){
+	private void drawGround(SpriteBatch spriteBatch){
 		Sprite sprite = new Sprite(mTextures[GROUND]);
-		spriteBatch.begin();
 		int posX = 0;
 		for(int i = 0; i < Gdx.graphics.getWidth(); i++) {
 			posX = (mDrawStarter+i)%Gdx.graphics.getWidth();
@@ -152,7 +135,6 @@ public class ScreenHandler{
 			sprite.setBounds(i, 0, 1, mGroundLevels[posX]);
 			sprite.draw(spriteBatch);
 		}
-		spriteBatch.end();
 	}
 	
 	/**
