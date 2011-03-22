@@ -1,18 +1,19 @@
 package edu.mills.cs280.audiorunner;
 
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
+import java.util.Collection;
+import java.util.LinkedList;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-public class Player extends Sprite {
+public class Player extends Collidable {
 
-
-	private static final int FRAME_COUNT = 6;
-	private static final int SPRITE_SIZE = 64;
-	private static final float GRAVITY = 0.5f;
-	private static final int JUMPSPEED = 10;
-	private static final int GROUND = 0;
-	private static final int AIR = 1;
+	private final float PLATFORM_CATCH = .4f;
+	private final int FRAME_COUNT = 6;
+	private final int SPRITE_SIZE = 64;
+	private final float GRAVITY = 0.5f;
+	private final int JUMPSPEED = 10;
+	private final int GROUND = 0;
+	private final int AIR = 1;
+	private final int PLATFORM = 2;
 
 	private int mAnimDelay = 10;
 	private float mVertVelocity;
@@ -25,12 +26,38 @@ public class Player extends Sprite {
 	 * 
 	 * @param  Texture, Holds The Sprite Texture for player
 	 */
-	public Player(Texture texture) {
-		this.setTexture(texture);
+	public Player(String texture) {
+		this.loadTexture(texture);
 		mVertVelocity = 0;
 		mAnimDelay = 25/ScreenHandler.getSpeed();
 		mAnimCounter = 0;
 		mFrameNum = 0;
+	}
+
+	/**
+	 * Constructor
+	 * 
+	 * @param  Texture, Holds The Sprite Texture for player
+	 * @param float, x position
+	 * @param float, y position
+	 * @param float, width
+	 * @param float, height
+	 */
+	public Player(String texture, float x, float y, float width, float height) {
+		this.loadTexture(texture);
+		this.setBounds(x, y, width, height);
+		mVertVelocity = 0;
+		mAnimDelay = 25/ScreenHandler.getSpeed();
+		mAnimCounter = 0;
+		mFrameNum = 0;
+	}
+
+	public Boolean onTop(Platform platform){
+		if(mVertVelocity < 0){
+
+		}
+
+		return false;
 	}
 
 	/**
@@ -39,9 +66,13 @@ public class Player extends Sprite {
 	 * @param  SpriteBatch, Draw within the current SpriteBatch
 	 */
 	public void draw(SpriteBatch spriteBatch){
-		spriteBatch.draw(getTexture(), getX(), getY(),
+
+		spriteBatch.draw(getTexture(),
+				getX(),	getY(),
+				this.getWidth(),this.getHeight(),
 				getSpriteX(), getSpriteY(),
-				Player.getSize(), Player.getSize());
+				SPRITE_SIZE, SPRITE_SIZE,
+				false,false);	
 	}
 
 	/**
@@ -88,7 +119,16 @@ public class Player extends Sprite {
 	}
 
 	/**
-	 * Adds a vertical velocty amount to player's velocity
+	 * Gets the vertical velocity
+	 * 
+	 * @return int, Y velocity
+	 */
+	public float getVY(){
+		return mVertVelocity;
+	}
+
+	/**
+	 * Adds a vertical velocity amount to player's velocity
 	 * 
 	 * @param int Y velocity you wish to add to current Y velocity
 	 */
@@ -111,7 +151,7 @@ public class Player extends Sprite {
 	 * 
 	 * @return int the size of player's sprite, EX: 64 would be a 64x64 Sprite
 	 */
-	public static int getSize()
+	public int getSize()
 	{
 		return SPRITE_SIZE;
 	}
@@ -129,14 +169,14 @@ public class Player extends Sprite {
 	public void setAir(){
 		mStatus = AIR;
 	}
-	
+
 	/**
 	 * Checks if the player is on the Ground
 	 * 
 	 * @return Returns true if player is onthe Ground
 	 */
-	public Boolean onGround(){
-		if(mStatus == GROUND){
+	public Boolean inAir(){
+		if(mStatus == AIR){
 			return true;
 		}
 		return false;
@@ -145,7 +185,39 @@ public class Player extends Sprite {
 	/**
 	 * Calculate Physics on player, Gravity always effects player if they are in the air
 	 */
-	public void physics(){
+
+	public void physics(ScreenHandler screenHandler){
+
+		if(mVertVelocity < 0 || mStatus == PLATFORM)
+		{
+			mStatus = AIR;
+			Collection<LinkedList<Platform>> platformLists = screenHandler.getPlatforms().getOnScreen().values();
+			for(LinkedList<Platform> platformList : platformLists){
+				for(Platform platform : platformList){
+					if(this.getY() >= platform.getY()+platform.getHeight() && this.getY()+mVertVelocity <= platform.getY()+platform.getHeight()){
+						if(this.getX() + this.getWidth() * PLATFORM_CATCH >= platform.getX() - screenHandler.getWorldPosition()
+								&& (this.getX() + this.getWidth() * PLATFORM_CATCH <= platform.getX() + platform.getWidth()- screenHandler.getWorldPosition())
+								|| (this.getX() + this.getWidth() * (1-PLATFORM_CATCH) >= platform.getX() - screenHandler.getWorldPosition()
+								&& this.getX() + this.getWidth() * (1-PLATFORM_CATCH) <= platform.getX() + platform.getWidth() - screenHandler.getWorldPosition())){
+							mStatus = PLATFORM;
+							mVertVelocity = 0;
+						}
+					}
+				}
+			}
+		}
+		//Check for platforms
+		/*for(int i = 0; i < this.getWidth(); i++){
+			if(platformLayer.contains((int)(screenHandler.getWorldPosition()+this.getX())+i)){
+				for(Platform platform : platformLayer.get((int)(screenHandler.getWorldPosition()+this.getX())+i)){
+					if((this.getPixmap().getPixel(i, 0) != 0) && (platform.getPixmap().getPixel(i, 0) != 0)){
+						setGround();
+					}
+				}
+			}
+		}*/
+
+		//GROUND
 		if(mStatus == AIR && getY() < 40){
 			mVertVelocity = 0;
 			mStatus = GROUND;

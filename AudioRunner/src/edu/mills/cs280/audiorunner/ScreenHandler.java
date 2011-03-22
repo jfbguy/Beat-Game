@@ -8,13 +8,14 @@ import com.badlogic.gdx.graphics.glutils.ImmediateModeRenderer;
 
 public class ScreenHandler{
 	private static final int SPEED = 5;
-	private static final int DEFAULT_LEVEL_HEIGHT = 60;
-	private static final float[] PARALLAX = {1.5f,1.0f,.4f,.3f,.02f};
-	private static final int NUM_OF_mTextures = 4;
-	private static final int MOUNTAIN = 0;	//Texture Constants, each needs to be different!
-	private static final int SUN = 1;
-	private static final int POWERLINES = 2;
-	private static final int GROUND = 3;
+	private final int DEFAULT_LEVEL_HEIGHT = 60;
+	private final float[] PARALLAX = {1.5f,1.0f,.4f,.3f,.02f};
+	private final int NUM_OF_mTextures = 5;
+	private final int MOUNTAIN = 0;	//Texture Constants, each needs to be different!
+	private final int SUN = 1;
+	private final int POWERLINES = 2;
+	private final int GROUND = 3;
+	private final int PLATFORM = 4;
 
 
 	ImmediateModeRenderer mRenderer;
@@ -23,6 +24,7 @@ public class ScreenHandler{
 	private int[] mGroundLevels;
 	private Texture[] mTextures;
 	private SpriteLayer[] mSpriteLayers;
+	private PlatformLayer platformLayer;
 
 	/**
 	 * Constructor
@@ -31,6 +33,7 @@ public class ScreenHandler{
 		mDrawStarter = 0;
 		mWorldPosition = 0;
 		mSpriteLayers = new SpriteLayer[numOfLayers];
+		platformLayer = new PlatformLayer(PARALLAX[1]);
 		
 		//Declare all SpriteLayers
 		for(int i = 0; i < mSpriteLayers.length; i++){
@@ -49,6 +52,7 @@ public class ScreenHandler{
 		mTextures[SUN] = new Texture(Gdx.files.internal("data/sun.png"));
 		mTextures[POWERLINES] = new Texture(Gdx.files.internal("data/powerlines.png"));
 		mTextures[GROUND] = new Texture(Gdx.files.internal("data/gradient_BW_1D.png"));
+		mTextures[PLATFORM] = new Texture(Gdx.files.internal("data/purple.png"));
 
 		//************************************************************************************************
 		//************** DEBUG level load ****************************************************************
@@ -68,12 +72,24 @@ public class ScreenHandler{
 			tSprite.setPosition(temp.getX(), temp.getY());
 			mSpriteLayers[2].put(temp.getX(),tSprite);
 		}
+		
+		//platforms
+		for(int i = 0; i < 10; i++){
+			temp.set(i*200+1000,50);
+			Platform platform = new Platform((float)temp.getX(),(float)temp.getY(),100f,10f,"data/purple.png");
+			platformLayer.put(temp.getX(),platform);
+			temp.set(i*200+1000,100);
+			platform = new Platform((float)temp.getX(),(float)temp.getY(),100f,10f,"data/purple.png");
+			platformLayer.put(temp.getX(),platform);
+		}
+		
+		//sun
 		temp.set(400,100);
 		Sprite tSprite = new Sprite(mTextures[SUN]);
 		tSprite.setPosition(temp.getX(), temp.getY());
 		mSpriteLayers[4].put(temp.getX(),tSprite);
 		//************************************************************************************
-		
+		//************************************************************************************
 		
 		//Load start of Level Layers
 		for(int i = 0; i < mSpriteLayers.length; i++){
@@ -109,9 +125,10 @@ public class ScreenHandler{
 		drawGround(spriteBatch);
 		
 		//Draw Player
-		spriteBatch.draw(player.getTexture(), player.getX(), player.getY(),
-				player.getSpriteX(), player.getSpriteY(),
-				Player.getSize(), Player.getSize());
+		player.draw(spriteBatch);
+		
+		//Draw Platforms
+		platformLayer.draw(spriteBatch, mWorldPosition);
 		
 		//Draw second half of layers rounded down
 		for(int i = mSpriteLayers.length/2-1; i >= 0; i--){
@@ -135,6 +152,14 @@ public class ScreenHandler{
 			sprite.setBounds(i, 0, 1, mGroundLevels[posX]);
 			sprite.draw(spriteBatch);
 		}
+	}
+	
+	public int getWorldPosition(){
+		return mWorldPosition;
+	}
+	
+	public PlatformLayer getPlatforms(){
+		return platformLayer;
 	}
 	
 	/**
