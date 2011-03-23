@@ -60,7 +60,7 @@ public class GameHandler implements ApplicationListener {
 		}
 
 		//Physics
-		player.physics(screenHandler);
+		player.physics(screenHandler,scoreBoard);
 
 		//Input
 		if(Gdx.input.isTouched()){

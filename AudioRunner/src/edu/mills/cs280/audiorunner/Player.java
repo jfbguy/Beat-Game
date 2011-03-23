@@ -1,6 +1,7 @@
 package edu.mills.cs280.audiorunner;
 
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.LinkedList;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
@@ -186,7 +187,7 @@ public class Player extends Collidable {
 	 * Calculate Physics on player, Gravity always effects player if they are in the air
 	 */
 
-	public void physics(ScreenHandler screenHandler){
+	public void physics(ScreenHandler screenHandler, ScoreBoard scoreBoard){
 
 		if(mVertVelocity < 0 || mStatus == PLATFORM)
 		{
@@ -206,18 +207,22 @@ public class Player extends Collidable {
 				}
 			}
 		}
-		//Check for platforms
-		/*for(int i = 0; i < this.getWidth(); i++){
-			if(platformLayer.contains((int)(screenHandler.getWorldPosition()+this.getX())+i)){
-				for(Platform platform : platformLayer.get((int)(screenHandler.getWorldPosition()+this.getX())+i)){
-					if((this.getPixmap().getPixel(i, 0) != 0) && (platform.getPixmap().getPixel(i, 0) != 0)){
-						setGround();
-					}
+
+		//Check if touches any scoreItems
+		Collection<LinkedList<Collidable>> scoreItemLists = screenHandler.getScoreItems().getOnScreen().values();
+		for(LinkedList<Collidable> scoreItemList : scoreItemLists){
+			Iterator<Collidable> iter = scoreItemList.iterator();
+			while(iter.hasNext()){
+				Collidable tempCollidable = (Collidable) iter.next();
+				if(this.rectCollides(tempCollidable, screenHandler.getWorldPosition())){
+					((ScoreItem)tempCollidable).scored(screenHandler,scoreBoard);	//Score!
+					iter.remove();		//Remove ScoreItem after being collected
 				}
 			}
-		}*/
+		}
 
-		//GROUND
+
+		//GROUND  ####THIS WILL PROBABLY CHANGE, just hardcoded for now####
 		if(mStatus == AIR && getY() < 40){
 			mVertVelocity = 0;
 			mStatus = GROUND;

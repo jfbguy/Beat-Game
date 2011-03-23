@@ -10,12 +10,13 @@ public class ScreenHandler{
 	private static final int SPEED = 5;
 	private final int DEFAULT_LEVEL_HEIGHT = 60;
 	private final float[] PARALLAX = {1.5f,1.0f,.4f,.3f,.02f};
-	private final int NUM_OF_mTextures = 5;
+	private final int NUM_OF_TEXTURES = 6;		//UPDATE THIS IF YOU ADD A TEXTURE!!!
 	private final int MOUNTAIN = 0;	//Texture Constants, each needs to be different!
 	private final int SUN = 1;
 	private final int POWERLINES = 2;
 	private final int GROUND = 3;
 	private final int PLATFORM = 4;
+	private final int SCOREITEM = 5;
 
 
 	ImmediateModeRenderer mRenderer;
@@ -25,6 +26,7 @@ public class ScreenHandler{
 	private Texture[] mTextures;
 	private SpriteLayer[] mSpriteLayers;
 	private CollisionLayer platformLayer;
+	private CollisionLayer scoreItemLayer;
 
 	/**
 	 * Constructor
@@ -34,6 +36,7 @@ public class ScreenHandler{
 		mWorldPosition = 0;
 		mSpriteLayers = new SpriteLayer[numOfLayers];
 		platformLayer = new CollisionLayer(PARALLAX[1]);
+		scoreItemLayer = new CollisionLayer(PARALLAX[1]);
 		
 		//Declare all SpriteLayers
 		for(int i = 0; i < mSpriteLayers.length; i++){
@@ -47,12 +50,13 @@ public class ScreenHandler{
 		}
 
 		//load sprites
-		mTextures = new Texture[NUM_OF_mTextures];
+		mTextures = new Texture[NUM_OF_TEXTURES];
 		mTextures[MOUNTAIN] = new Texture(Gdx.files.internal("data/mountain.png"));
 		mTextures[SUN] = new Texture(Gdx.files.internal("data/sun.png"));
 		mTextures[POWERLINES] = new Texture(Gdx.files.internal("data/powerlines.png"));
 		mTextures[GROUND] = new Texture(Gdx.files.internal("data/gradient_BW_1D.png"));
 		mTextures[PLATFORM] = new Texture(Gdx.files.internal("data/purple.png"));
+		mTextures[SCOREITEM] = new Texture(Gdx.files.internal("data/yellow.png"));
 
 		//************************************************************************************************
 		//************** DEBUG level load ****************************************************************
@@ -71,6 +75,14 @@ public class ScreenHandler{
 			Sprite tSprite = new Sprite(mTextures[MOUNTAIN]);
 			tSprite.setPosition(temp.getX(), temp.getY());
 			mSpriteLayers[2].put(temp.getX(),tSprite);
+		}
+		
+		//Score Items
+		for(int i = 0; i < 80; i++){
+			temp.set(i*30,150);
+			ScoreItem scoreItem = new ScoreItem((float)temp.getX(),(float)temp.getY(),10f,10f,"data/yellow.png",10);
+			scoreItem.setPosition(temp.getX(), temp.getY());
+			scoreItemLayer.put(temp.getX(),scoreItem);
 		}
 		
 		//platforms
@@ -130,6 +142,9 @@ public class ScreenHandler{
 		//Draw Platforms
 		platformLayer.draw(spriteBatch, mWorldPosition);
 		
+		//Draw Score Items
+		scoreItemLayer.draw(spriteBatch, mWorldPosition);
+		
 		//Draw second half of layers rounded down
 		for(int i = mSpriteLayers.length/2-1; i >= 0; i--){
 			mSpriteLayers[i].draw(spriteBatch,mWorldPosition);
@@ -160,6 +175,10 @@ public class ScreenHandler{
 	
 	public CollisionLayer getPlatforms(){
 		return platformLayer;
+	}
+	
+	public CollisionLayer getScoreItems(){
+		return scoreItemLayer;
 	}
 	
 	/**
