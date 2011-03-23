@@ -64,9 +64,9 @@ public class GameHandler implements ApplicationListener {
 
 		//Input
 		if(Gdx.input.isTouched()){
-			if(touched == false){
-				touched = true;
-				if(!player.inAir() ){
+			if(!player.inAir() ){
+				if(touched == false){
+					touched = true;
 					player.jump();
 					scoreBoard.addFloaterScore((int)player.getX(),(int)player.getY(),17);
 				}
@@ -78,7 +78,7 @@ public class GameHandler implements ApplicationListener {
 
 		//PLAYER LOGIC
 		player.animate();
-		
+
 		//LEVEL LOGIC
 		screenHandler.updateScreen();
 

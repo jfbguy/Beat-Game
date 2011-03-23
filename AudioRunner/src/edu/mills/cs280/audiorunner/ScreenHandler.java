@@ -24,7 +24,7 @@ public class ScreenHandler{
 	private int[] mGroundLevels;
 	private Texture[] mTextures;
 	private SpriteLayer[] mSpriteLayers;
-	private PlatformLayer platformLayer;
+	private CollisionLayer platformLayer;
 
 	/**
 	 * Constructor
@@ -33,7 +33,7 @@ public class ScreenHandler{
 		mDrawStarter = 0;
 		mWorldPosition = 0;
 		mSpriteLayers = new SpriteLayer[numOfLayers];
-		platformLayer = new PlatformLayer(PARALLAX[1]);
+		platformLayer = new CollisionLayer(PARALLAX[1]);
 		
 		//Declare all SpriteLayers
 		for(int i = 0; i < mSpriteLayers.length; i++){
@@ -158,7 +158,7 @@ public class ScreenHandler{
 		return mWorldPosition;
 	}
 	
-	public PlatformLayer getPlatforms(){
+	public CollisionLayer getPlatforms(){
 		return platformLayer;
 	}
 	

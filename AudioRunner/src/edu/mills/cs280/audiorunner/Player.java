@@ -191,9 +191,9 @@ public class Player extends Collidable {
 		if(mVertVelocity < 0 || mStatus == PLATFORM)
 		{
 			mStatus = AIR;
-			Collection<LinkedList<Platform>> platformLists = screenHandler.getPlatforms().getOnScreen().values();
-			for(LinkedList<Platform> platformList : platformLists){
-				for(Platform platform : platformList){
+			Collection<LinkedList<Collidable>> platformLists = screenHandler.getPlatforms().getOnScreen().values();
+			for(LinkedList<Collidable> platformList : platformLists){
+				for(Collidable platform : platformList){
 					if(this.getY() >= platform.getY()+platform.getHeight() && this.getY()+mVertVelocity <= platform.getY()+platform.getHeight()){
 						if(this.getX() + this.getWidth() * PLATFORM_CATCH >= platform.getX() - screenHandler.getWorldPosition()
 								&& (this.getX() + this.getWidth() * PLATFORM_CATCH <= platform.getX() + platform.getWidth()- screenHandler.getWorldPosition())
