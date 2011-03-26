@@ -67,9 +67,8 @@ public class Player extends Collidable {
 	 * @param  SpriteBatch, Draw within the current SpriteBatch
 	 */
 	public void draw(SpriteBatch spriteBatch){
-
 		spriteBatch.draw(getTexture(),
-				getX(),	getY(),
+				getX()-ScreenHandler.getWorldPosition(),	getY(),
 				this.getWidth(),this.getHeight(),
 				getSpriteX(), getSpriteY(),
 				SPRITE_SIZE, SPRITE_SIZE,
@@ -188,7 +187,7 @@ public class Player extends Collidable {
 	 */
 
 	public void physics(ScreenHandler screenHandler, ScoreBoard scoreBoard){
-
+		setPosition(getX()+ScreenHandler.getSpeed(), getY());
 		if(mVertVelocity < 0 || mStatus == PLATFORM)
 		{
 			mStatus = AIR;
@@ -196,10 +195,10 @@ public class Player extends Collidable {
 			for(LinkedList<Collidable> platformList : platformLists){
 				for(Collidable platform : platformList){
 					if(this.getY() >= platform.getY()+platform.getHeight() && this.getY()+mVertVelocity <= platform.getY()+platform.getHeight()){
-						if(this.getX() + this.getWidth() * PLATFORM_CATCH >= platform.getX() - screenHandler.getWorldPosition()
-								&& (this.getX() + this.getWidth() * PLATFORM_CATCH <= platform.getX() + platform.getWidth()- screenHandler.getWorldPosition())
-								|| (this.getX() + this.getWidth() * (1-PLATFORM_CATCH) >= platform.getX() - screenHandler.getWorldPosition()
-								&& this.getX() + this.getWidth() * (1-PLATFORM_CATCH) <= platform.getX() + platform.getWidth() - screenHandler.getWorldPosition())){
+						if(this.getX() + this.getWidth() * PLATFORM_CATCH >= platform.getX()
+								&& (this.getX() + this.getWidth() * PLATFORM_CATCH <= platform.getX() + platform.getWidth())
+								|| (this.getX() + this.getWidth() * (1-PLATFORM_CATCH) >= platform.getX()
+								&& this.getX() + this.getWidth() * (1-PLATFORM_CATCH) <= platform.getX() + platform.getWidth())){
 							mStatus = PLATFORM;
 							mVertVelocity = 0;
 						}
@@ -214,8 +213,10 @@ public class Player extends Collidable {
 			Iterator<Collidable> iter = scoreItemList.iterator();
 			while(iter.hasNext()){
 				Collidable tempCollidable = (Collidable) iter.next();
-				if(this.rectCollides(tempCollidable, screenHandler.getWorldPosition())){
-					((ScoreItem)tempCollidable).scored(screenHandler,scoreBoard);	//Score!
+				if(this.pixelCollides(tempCollidable)){
+					((ScoreItem)tempCollidable).scored(scoreBoard);	//Score!
+					//create explosion at touch point
+					screenHandler.explosionParticles(tempCollidable.getX(),tempCollidable.getY());
 					iter.remove();		//Remove ScoreItem after being collected
 				}
 			}

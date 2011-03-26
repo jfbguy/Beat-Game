@@ -1,6 +1,5 @@
 package edu.mills.cs280.audiorunner;
 
-
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
@@ -68,7 +67,11 @@ public class GameHandler implements ApplicationListener {
 				if(touched == false){
 					touched = true;
 					player.jump();
+					
+					//Score add according to jump, will change with music scoring method
 					scoreBoard.addFloaterScore((int)player.getX(),(int)player.getY(),17);
+					//and create particles to show if jump is special
+					screenHandler.jumpParticles(player);
 				}
 			}
 		}
@@ -89,7 +92,7 @@ public class GameHandler implements ApplicationListener {
 		//draw Screen
 		screenHandler.draw(spriteBatch, player);
 
-		//draw ScoreBoard
+		//draw UI
 		scoreBoard.draw(spriteBatch);
 
 	}

@@ -1,5 +1,8 @@
 package edu.mills.cs280.audiorunner;
 
+import java.util.LinkedList;
+import java.util.Random;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -21,12 +24,13 @@ public class ScreenHandler{
 
 	ImmediateModeRenderer mRenderer;
 	private int mDrawStarter;
-	private int mWorldPosition;
+	private static int mWorldPosition;
 	private int[] mGroundLevels;
 	private Texture[] mTextures;
 	private SpriteLayer[] mSpriteLayers;
 	private CollisionLayer platformLayer;
 	private CollisionLayer scoreItemLayer;
+	private LinkedList<Particle> particles;
 
 	/**
 	 * Constructor
@@ -37,7 +41,8 @@ public class ScreenHandler{
 		mSpriteLayers = new SpriteLayer[numOfLayers];
 		platformLayer = new CollisionLayer(PARALLAX[1]);
 		scoreItemLayer = new CollisionLayer(PARALLAX[1]);
-		
+		particles = new LinkedList<Particle>();
+
 		//Declare all SpriteLayers
 		for(int i = 0; i < mSpriteLayers.length; i++){
 			mSpriteLayers[i] = new SpriteLayer(PARALLAX[i]);
@@ -69,14 +74,14 @@ public class ScreenHandler{
 			tSprite.setPosition(temp.getX(), temp.getY());
 			mSpriteLayers[0].put(temp.getX(),tSprite);
 		}
-		
+
 		for(int i = 0; i < 20; i++){
 			temp.set(i*400,0);
 			Sprite tSprite = new Sprite(mTextures[MOUNTAIN]);
 			tSprite.setPosition(temp.getX(), temp.getY());
 			mSpriteLayers[2].put(temp.getX(),tSprite);
 		}
-		
+
 		//Score Items
 		for(int i = 0; i < 80; i++){
 			temp.set(i*30,150);
@@ -84,7 +89,7 @@ public class ScreenHandler{
 			scoreItem.setPosition(temp.getX(), temp.getY());
 			scoreItemLayer.put(temp.getX(),scoreItem);
 		}
-		
+
 		//platforms
 		for(int i = 0; i < 10; i++){
 			temp.set(i*200+1000,50);
@@ -94,7 +99,7 @@ public class ScreenHandler{
 			platform = new Platform((float)temp.getX(),(float)temp.getY(),100f,10f,"data/purple.png");
 			platformLayer.put(temp.getX(),platform);
 		}
-		
+
 		//sun
 		temp.set(400,100);
 		Sprite tSprite = new Sprite(mTextures[SUN]);
@@ -102,7 +107,7 @@ public class ScreenHandler{
 		mSpriteLayers[4].put(temp.getX(),tSprite);
 		//************************************************************************************
 		//************************************************************************************
-		
+
 		//Load start of Level Layers
 		for(int i = 0; i < mSpriteLayers.length; i++){
 			mSpriteLayers[i].loadStart(mWorldPosition);
@@ -116,40 +121,43 @@ public class ScreenHandler{
 	 */
 	public void updateScreen(){	//Updates level depending on music and how player is doing
 		mWorldPosition += SPEED;
-		
+
 	}
-	
+
 	/**
 	 * Draws Everything on Screen
 	 * 
 	 * @param
 	 */
-	
 	public void draw(SpriteBatch spriteBatch, Player player){
 		spriteBatch.begin();
-		
+
 		//Draw first half of layers rounded down
 		for(int i = mSpriteLayers.length-1; i >= mSpriteLayers.length/2; i--){
 			mSpriteLayers[i].draw(spriteBatch,mWorldPosition);
 		}
-		
+
 		//Draw Ground
 		drawGround(spriteBatch);
-		
+
 		//Draw Player
 		player.draw(spriteBatch);
-		
+
 		//Draw Platforms
 		platformLayer.draw(spriteBatch, mWorldPosition);
-		
+
 		//Draw Score Items
 		scoreItemLayer.draw(spriteBatch, mWorldPosition);
-		
+
+		//Draw Particles
+		Particle.updateParticles(particles);
+		Particle.draw(particles, spriteBatch, mWorldPosition);
+
 		//Draw second half of layers rounded down
 		for(int i = mSpriteLayers.length/2-1; i >= 0; i--){
 			mSpriteLayers[i].draw(spriteBatch,mWorldPosition);
 		}
-		
+
 		spriteBatch.end();
 	}
 
@@ -168,19 +176,35 @@ public class ScreenHandler{
 			sprite.draw(spriteBatch);
 		}
 	}
-	
-	public int getWorldPosition(){
-		return mWorldPosition;
-	}
-	
+
 	public CollisionLayer getPlatforms(){
 		return platformLayer;
 	}
-	
+
 	public CollisionLayer getScoreItems(){
 		return scoreItemLayer;
 	}
-	
+
+	public void jumpParticles(Player player){
+		Random rand = new Random();
+		for(int i = 0; i < 10; i++){
+			particles.add(new Particle(mTextures[SCOREITEM],
+					new Vector2((int)(player.getX()+player.getWidth()/2),(int)player.getY()), 
+					new Vector2(rand.nextInt(20)-10,rand.nextInt(20)-10),
+					Particle.FALLING));
+		}
+	}
+
+	public void explosionParticles(float x, float y){
+		Random rand = new Random();
+		for(int i = 0; i < 10; i++){
+			particles.add(new Particle(mTextures[SCOREITEM],
+					new Vector2((int)x,(int)y),
+					new Vector2((rand.nextInt(40)-20),rand.nextInt(40)-20),
+					Particle.EXPLODING));
+		}
+	}
+
 	/**
 	 * Draws Ground, Player runs ontop of
 	 * 
@@ -188,6 +212,32 @@ public class ScreenHandler{
 	 */
 	public static int getSpeed(){
 		return SPEED;
+	}
+	
+	public static int getWorldPosition(){
+		return mWorldPosition;
+	}
+
+	public static boolean onScreen(Vector2 pos){
+		if(pos.x-mWorldPosition < 0 || pos.x-mWorldPosition > Gdx.graphics.getWidth()){
+			return false;
+		}
+		if(pos.y < 0 || pos.y > Gdx.graphics.getHeight()){
+			return false;
+		}
+
+		return true;
+	}
+
+	public static boolean onScreen(float x,float y){
+		if(x-mWorldPosition < 0 || x-mWorldPosition > Gdx.graphics.getWidth()){
+			return false;
+		}
+		if(y < 0 || y > Gdx.graphics.getHeight()){
+			return false;
+		}
+
+		return true;
 	}
 
 }

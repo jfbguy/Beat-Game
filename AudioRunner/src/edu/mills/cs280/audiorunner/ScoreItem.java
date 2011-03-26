@@ -9,7 +9,7 @@ public class ScoreItem extends Collidable{
 		this.points = points;
 	}
 	
-	public void scored(ScreenHandler screenHandler, ScoreBoard scoreBoard){
-		scoreBoard.addFloaterScore((int)getX()-screenHandler.getWorldPosition(),(int)getY(),points);
+	public void scored(ScoreBoard scoreBoard){
+		scoreBoard.addFloaterScore((int)getX(),(int)getY(),points);
 	}
 }
