@@ -16,12 +16,14 @@ public class Particle extends Sprite{
 
 	float targetX,targetY;
 	int type;
+	float size;
 
-	public Particle(Texture texture, Vector2 position,Vector2 target, int type){
+	public Particle(Texture texture, Vector2 position,Vector2 target, float size, int type){
 		this.setTexture(texture);
 		this.setBounds(position.x, position.y, 3, 3);
 		this.targetX = target.getX();
 		this.targetY = target.getY();
+		this.size = size;
 		this.type = type;
 	}
 
@@ -68,13 +70,13 @@ public class Particle extends Sprite{
 		
 	}
 	
-	public static void draw(LinkedList<Particle> particles, SpriteBatch spriteBatch, int worldPosition){
+	public static void draw(LinkedList<Particle> particles, SpriteBatch spriteBatch, Vector2 worldPosition){
 		Iterator<Particle> iter = particles.iterator();
 		while(iter.hasNext()){
 			Particle p = iter.next();
 			spriteBatch.draw(p.getTexture(),
-					p.getX()-worldPosition,p.getY(),
-					p.getWidth(),p.getHeight(),
+					p.getX()-worldPosition.x,p.getY()-worldPosition.y,
+					p.size,p.size,
 					0, 0,
 					10, 10,
 					false,false);	

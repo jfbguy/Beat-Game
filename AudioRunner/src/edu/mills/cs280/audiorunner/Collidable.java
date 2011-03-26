@@ -25,7 +25,6 @@ public class Collidable extends Sprite{
 	}
 
 	public boolean pixelCollides(Collidable collidable){
-		int worldPosition = ScreenHandler.getWorldPosition();
 		// Rectangle Check
 		if (this.getX() > collidable.getX() + collidable.getWidth()){
 			return(false);

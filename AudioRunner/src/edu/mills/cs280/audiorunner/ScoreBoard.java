@@ -89,7 +89,7 @@ public class ScoreBoard {
 	 * @param  Integer, Amount of points to add
 	 */
 	public void addFloaterScore(int x, int y, int points){
-		floaters.add(new ScoreFloater(x-ScreenHandler.getWorldPosition(),y,points));
+		floaters.add(new ScoreFloater(x-ScreenHandler.getWorldPosition().x,y-ScreenHandler.getWorldPosition().y,points));
 	}
 
 	/**

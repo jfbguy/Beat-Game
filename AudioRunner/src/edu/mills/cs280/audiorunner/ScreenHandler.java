@@ -24,7 +24,7 @@ public class ScreenHandler{
 
 	ImmediateModeRenderer mRenderer;
 	private int mDrawStarter;
-	private static int mWorldPosition;
+	private static Vector2 mWorldPosition;
 	private int[] mGroundLevels;
 	private Texture[] mTextures;
 	private SpriteLayer[] mSpriteLayers;
@@ -37,7 +37,7 @@ public class ScreenHandler{
 	 */
 	public ScreenHandler(int numOfLayers){
 		mDrawStarter = 0;
-		mWorldPosition = 0;
+		mWorldPosition = new Vector2(0,0);
 		mSpriteLayers = new SpriteLayer[numOfLayers];
 		platformLayer = new CollisionLayer(PARALLAX[1]);
 		scoreItemLayer = new CollisionLayer(PARALLAX[1]);
@@ -120,7 +120,7 @@ public class ScreenHandler{
 	 * Need to add added platforms, sprites, change ground, etc
 	 */
 	public void updateScreen(){	//Updates level depending on music and how player is doing
-		mWorldPosition += SPEED;
+		mWorldPosition.x += SPEED;
 
 	}
 
@@ -191,7 +191,7 @@ public class ScreenHandler{
 			particles.add(new Particle(mTextures[SCOREITEM],
 					new Vector2((int)(player.getX()+player.getWidth()/2),(int)player.getY()), 
 					new Vector2(rand.nextInt(20)-10,rand.nextInt(20)-10),
-					Particle.FALLING));
+					(float)Gdx.graphics.getHeight()*.05f, Particle.FALLING));
 		}
 	}
 
@@ -201,7 +201,7 @@ public class ScreenHandler{
 			particles.add(new Particle(mTextures[SCOREITEM],
 					new Vector2((int)x,(int)y),
 					new Vector2((rand.nextInt(40)-20),rand.nextInt(40)-20),
-					Particle.EXPLODING));
+					(float)Gdx.graphics.getHeight()*.01f,Particle.EXPLODING));
 		}
 	}
 
@@ -214,15 +214,15 @@ public class ScreenHandler{
 		return SPEED;
 	}
 	
-	public static int getWorldPosition(){
+	public static Vector2 getWorldPosition(){
 		return mWorldPosition;
 	}
 
 	public static boolean onScreen(Vector2 pos){
-		if(pos.x-mWorldPosition < 0 || pos.x-mWorldPosition > Gdx.graphics.getWidth()){
+		if(pos.x-mWorldPosition.x < 0 || pos.x-mWorldPosition.x > Gdx.graphics.getWidth()){
 			return false;
 		}
-		if(pos.y < 0 || pos.y > Gdx.graphics.getHeight()){
+		if(pos.y-mWorldPosition.y < 0 || pos.y-mWorldPosition.y > Gdx.graphics.getHeight()){
 			return false;
 		}
 
@@ -230,10 +230,10 @@ public class ScreenHandler{
 	}
 
 	public static boolean onScreen(float x,float y){
-		if(x-mWorldPosition < 0 || x-mWorldPosition > Gdx.graphics.getWidth()){
+		if(x-mWorldPosition.x < 0 || x-mWorldPosition.x > Gdx.graphics.getWidth()){
 			return false;
 		}
-		if(y < 0 || y > Gdx.graphics.getHeight()){
+		if(y-mWorldPosition.y < 0 || y-mWorldPosition.y > Gdx.graphics.getHeight()){
 			return false;
 		}
 

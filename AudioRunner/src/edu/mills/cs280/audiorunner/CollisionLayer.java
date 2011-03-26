@@ -103,9 +103,9 @@ public class CollisionLayer {
 		}
 	}
 
-	public void draw(SpriteBatch spriteBatch, int worldPosition){
+	public void draw(SpriteBatch spriteBatch, Vector2 worldPosition){
 		LinkedList<Collidable> temp;
-		int parallaxPosition = (int)(worldPosition*parallax);				
+		int parallaxPosition = (int)(worldPosition.x*parallax);				
 
 		//Remove past Platforms from Screen
 		for(int i = -(SPEED+MAX_SPRITE_SIZE); i < -MAX_SPRITE_SIZE; i++){

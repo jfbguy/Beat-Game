@@ -68,7 +68,7 @@ public class Player extends Collidable {
 	 */
 	public void draw(SpriteBatch spriteBatch){
 		spriteBatch.draw(getTexture(),
-				getX()-ScreenHandler.getWorldPosition(),	getY(),
+				getX()-ScreenHandler.getWorldPosition().x,getY()-ScreenHandler.getWorldPosition().y,
 				this.getWidth(),this.getHeight(),
 				getSpriteX(), getSpriteY(),
 				SPRITE_SIZE, SPRITE_SIZE,

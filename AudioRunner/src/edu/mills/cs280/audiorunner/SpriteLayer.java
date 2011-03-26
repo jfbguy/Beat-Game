@@ -90,8 +90,8 @@ public class SpriteLayer {
 		return layer.get(xPos);
 	}
 
-	public void loadStart(int worldPosition){
-		int parallaxPosition = (int)(worldPosition*parallax);
+	public void loadStart(Vector2 worldPosition){
+		int parallaxPosition = (int)(worldPosition.x*parallax);
 		for(int i = -MAX_SPRITE_SIZE; i < Gdx.graphics.getWidth(); i++){
 			LinkedList<Sprite> temp;
 			if(layer.containsKey(i+parallaxPosition)){
@@ -101,9 +101,9 @@ public class SpriteLayer {
 		}
 	}
 
-	public void draw(SpriteBatch spriteBatch, int worldPosition){
+	public void draw(SpriteBatch spriteBatch, Vector2 worldPosition){
 		LinkedList<Sprite> temp;
-		int parallaxPosition = (int)(worldPosition*parallax);				
+		int parallaxPosition = (int)(worldPosition.x*parallax);				
 
 		//Remove past Sprites from Screen
 		for(int i = -(SPEED+MAX_SPRITE_SIZE); i < -MAX_SPRITE_SIZE; i++){
