@@ -191,7 +191,7 @@ public class ScreenHandler{
 			particles.add(new Particle(mTextures[SCOREITEM],
 					new Vector2((int)(player.getX()+player.getWidth()/2),(int)player.getY()), 
 					new Vector2(rand.nextInt(20)-10,rand.nextInt(20)-10),
-					(float)Gdx.graphics.getHeight()*.05f, Particle.FALLING));
+					(float)Gdx.graphics.getHeight()*.01f, Particle.FALLING));
 		}
 	}
 
@@ -200,7 +200,7 @@ public class ScreenHandler{
 		for(int i = 0; i < 10; i++){
 			particles.add(new Particle(mTextures[SCOREITEM],
 					new Vector2((int)x,(int)y),
-					new Vector2((rand.nextInt(40)-20),rand.nextInt(40)-20),
+					new Vector2((rand.nextInt(10)-5),rand.nextInt(10)-5),
 					(float)Gdx.graphics.getHeight()*.01f,Particle.EXPLODING));
 		}
 	}

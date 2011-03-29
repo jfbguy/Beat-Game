@@ -2,7 +2,6 @@ package edu.mills.cs280.audiorunner;
 
 import java.util.Iterator;
 import java.util.LinkedList;
-
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -17,6 +16,7 @@ public class Particle extends Sprite{
 	float targetX,targetY;
 	int type;
 	float size;
+	float alpha;
 
 	public Particle(Texture texture, Vector2 position,Vector2 target, float size, int type){
 		this.setTexture(texture);
@@ -25,6 +25,7 @@ public class Particle extends Sprite{
 		this.targetY = target.getY();
 		this.size = size;
 		this.type = type;
+		alpha = 1;
 	}
 
 	public static void updateParticles(LinkedList<Particle> particles){
@@ -33,14 +34,14 @@ public class Particle extends Sprite{
 			Particle p = iter.next();
 			switch(p.type){
 			case DIRECTIONAL:
-					double moveAngle = Math.atan2((p.targetY - p.getY()),(p.targetX - p.getX()));
-					p.setPosition((float)(p.getX()+(Math.cos(moveAngle)*SPEED)),
-							(float)(p.getY()+(Math.sin(moveAngle)*SPEED)));
+				double moveAngle = Math.atan2((p.targetY - p.getY()),(p.targetX - p.getX()));
+				p.setPosition((float)(p.getX()+(Math.cos(moveAngle)*SPEED)),
+						(float)(p.getY()+(Math.sin(moveAngle)*SPEED)));
 
-					if(Math.abs(p.targetX - p.getX()) < SPEED && Math.abs(p.targetY - p.getY()) < SPEED)
-					{
-						iter.remove();
-					}
+				if(Math.abs(p.targetX - p.getX()) < SPEED && Math.abs(p.targetY - p.getY()) < SPEED)
+				{
+					iter.remove();
+				}
 				break;
 			case FALLING:
 				if(ScreenHandler.onScreen(p.getX(),p.getY())){
@@ -52,7 +53,8 @@ public class Particle extends Sprite{
 				}
 				break;
 			case EXPLODING:
-				if(p.targetX < 1 && p.targetY < 1){
+				//if(p.targetX < 1 && p.targetY < 1){
+				if(p.alpha < .1){
 					iter.remove();
 				}
 				else if(!ScreenHandler.onScreen(p.getX(),p.getY())){
@@ -61,28 +63,39 @@ public class Particle extends Sprite{
 				else{
 					p.targetX *= .9f;
 					p.targetY *= .9f;
+					p.size *= 1.1;
 					p.setPosition(p.getX() + p.targetX,p.getY() + p.targetY);
+					p.alpha *= .9;
 				}
 				break;
 			}
 		}
-		
-		
+
+
 	}
-	
+
 	public static void draw(LinkedList<Particle> particles, SpriteBatch spriteBatch, Vector2 worldPosition){
 		Iterator<Particle> iter = particles.iterator();
 		while(iter.hasNext()){
 			Particle p = iter.next();
-			spriteBatch.draw(p.getTexture(),
-					p.getX()-worldPosition.x,p.getY()-worldPosition.y,
-					p.size,p.size,
-					0, 0,
-					10, 10,
-					false,false);	
-			
-			int debug = 0;
-			debug++;
+			switch(p.type){
+			case FALLING:
+				spriteBatch.draw(p.getTexture(),
+						p.getX()-worldPosition.x,p.getY()-worldPosition.y,
+						p.size,p.size,
+						0, 0,
+						10, 10,
+						false,false);
+				break;
+			case EXPLODING:
+				spriteBatch.draw(p.getTexture(),
+						p.getX()-worldPosition.x,p.getY()-worldPosition.y,
+						p.size,p.size,
+						0, 0,
+						10, 10,
+						false,false);
+				break;
+			}
 		}
 	}
 }
