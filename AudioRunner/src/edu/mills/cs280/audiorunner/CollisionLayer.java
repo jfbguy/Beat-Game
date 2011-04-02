@@ -124,6 +124,7 @@ public class CollisionLayer {
 			}
 		}
 
+		spriteBatch.begin();
 		//Draw Screen
 		for(LinkedList<Collidable> list : onScreenLayer.values()){
 			for(Collidable collidable : list)
@@ -137,8 +138,7 @@ public class CollisionLayer {
 						false,false);	
 			}
 		}
-		
-		//public void checkCollision
+		spriteBatch.end();
 	}
 
 }

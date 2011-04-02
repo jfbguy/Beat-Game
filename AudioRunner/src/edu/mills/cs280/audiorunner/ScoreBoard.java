@@ -97,7 +97,7 @@ public class ScoreBoard {
 		//Score add according to jump, will change with music scoring method
 		this.addFloaterScore((int)player.getX(),(int)player.getY(),jumpscore);
 		//and create particles to show if jump is special
-		screenHandler.jumpParticles(player);
+		Particle.createJumpParticles(player);
 	}
 
 	/**

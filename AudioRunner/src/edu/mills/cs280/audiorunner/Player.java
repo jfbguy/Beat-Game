@@ -67,12 +67,14 @@ public class Player extends Collidable {
 	 * @param  SpriteBatch, Draw within the current SpriteBatch
 	 */
 	public void draw(SpriteBatch spriteBatch){
+		spriteBatch.begin();
 		spriteBatch.draw(getTexture(),
 				getX()-ScreenHandler.getWorldPosition().x,getY()-ScreenHandler.getWorldPosition().y,
 				this.getWidth(),this.getHeight(),
 				getSpriteX(), getSpriteY(),
 				SPRITE_SIZE, SPRITE_SIZE,
-				false,false);	
+				false,false);
+		spriteBatch.end();
 	}
 
 	/**
@@ -216,7 +218,8 @@ public class Player extends Collidable {
 				if(this.pixelCollides(tempCollidable)){
 					((ScoreItem)tempCollidable).scored(scoreBoard);	//Score!
 					//create explosion at touch point
-					screenHandler.explosionParticles(tempCollidable.getX(),tempCollidable.getY());
+					Particle.createExplosion(tempCollidable.getX(),tempCollidable.getY());
+					//screenHandler.explosionParticles(tempCollidable.getX(),tempCollidable.getY());
 					iter.remove();		//Remove ScoreItem after being collected
 				}
 			}

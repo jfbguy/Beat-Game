@@ -122,6 +122,7 @@ public class SpriteLayer {
 			}
 		}
 
+		spriteBatch.begin();
 		//Draw Screen
 		for(LinkedList<Sprite> list : onScreenLayer.values()){
 			for(Sprite sprite : list)
@@ -129,6 +130,7 @@ public class SpriteLayer {
 				spriteBatch.draw(sprite.getTexture(),sprite.getX()-parallaxPosition, sprite.getY());
 			}
 		}
+		spriteBatch.end();
 	}
 
 }

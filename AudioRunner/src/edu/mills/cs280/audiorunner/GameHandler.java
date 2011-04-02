@@ -95,6 +95,8 @@ public class GameHandler implements ApplicationListener {
 		scoreBoard.draw(spriteBatch);
 		boostMeter.draw(spriteBatch);
 		
+		System.out.println(Gdx.graphics.getFramesPerSecond());
+		
 
 	}
 

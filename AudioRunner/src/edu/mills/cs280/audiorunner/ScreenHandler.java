@@ -30,7 +30,7 @@ public class ScreenHandler{
 	private SpriteLayer[] mSpriteLayers;
 	private CollisionLayer platformLayer;
 	private CollisionLayer scoreItemLayer;
-	private LinkedList<Particle> particles;
+	//private LinkedList<Particle> particles;
 
 	/**
 	 * Constructor
@@ -41,7 +41,7 @@ public class ScreenHandler{
 		mSpriteLayers = new SpriteLayer[numOfLayers];
 		platformLayer = new CollisionLayer(PARALLAX[1]);
 		scoreItemLayer = new CollisionLayer(PARALLAX[1]);
-		particles = new LinkedList<Particle>();
+		//particles = new LinkedList<Particle>();
 
 		//Declare all SpriteLayers
 		for(int i = 0; i < mSpriteLayers.length; i++){
@@ -83,7 +83,7 @@ public class ScreenHandler{
 		}
 
 		//Score Items
-		for(int i = 0; i < 80; i++){
+		for(int i = 0; i < 300; i++){
 			temp.set(i*30,150);
 			ScoreItem scoreItem = new ScoreItem((float)temp.getX(),(float)temp.getY(),10f,10f,"data/yellow.png",10);
 			scoreItem.setPosition(temp.getX(), temp.getY());
@@ -130,8 +130,6 @@ public class ScreenHandler{
 	 * @param
 	 */
 	public void draw(SpriteBatch spriteBatch, Player player){
-		spriteBatch.begin();
-
 		//Draw first half of layers rounded down
 		for(int i = mSpriteLayers.length-1; i >= mSpriteLayers.length/2; i--){
 			mSpriteLayers[i].draw(spriteBatch,mWorldPosition);
@@ -150,15 +148,13 @@ public class ScreenHandler{
 		scoreItemLayer.draw(spriteBatch, mWorldPosition);
 
 		//Draw Particles
-		Particle.updateParticles(particles);
-		Particle.draw(particles, spriteBatch, mWorldPosition);
+		Particle.updateParticles();
+		Particle.draw(spriteBatch, mWorldPosition);
 
 		//Draw second half of layers rounded down
 		for(int i = mSpriteLayers.length/2-1; i >= 0; i--){
 			mSpriteLayers[i].draw(spriteBatch,mWorldPosition);
 		}
-
-		spriteBatch.end();
 	}
 
 	/**
@@ -167,6 +163,7 @@ public class ScreenHandler{
 	 * @param  SpriteBatch, Draw within the current SpriteBatch
 	 */
 	private void drawGround(SpriteBatch spriteBatch){
+		spriteBatch.begin();
 		Sprite sprite = new Sprite(mTextures[GROUND]);
 		int posX = 0;
 		for(int i = 0; i < Gdx.graphics.getWidth(); i++) {
@@ -175,6 +172,7 @@ public class ScreenHandler{
 			sprite.setBounds(i, 0, 1, mGroundLevels[posX]);
 			sprite.draw(spriteBatch);
 		}
+		spriteBatch.end();
 	}
 
 	public CollisionLayer getPlatforms(){
@@ -183,26 +181,6 @@ public class ScreenHandler{
 
 	public CollisionLayer getScoreItems(){
 		return scoreItemLayer;
-	}
-
-	public void jumpParticles(Player player){
-		Random rand = new Random();
-		for(int i = 0; i < 10; i++){
-			particles.add(new Particle(mTextures[SCOREITEM],
-					new Vector2((int)(player.getX()+player.getWidth()/2),(int)player.getY()), 
-					new Vector2(rand.nextInt(20)-10,rand.nextInt(20)-10),
-					(float)Gdx.graphics.getHeight()*.01f, Particle.FALLING));
-		}
-	}
-
-	public void explosionParticles(float x, float y){
-		Random rand = new Random();
-		for(int i = 0; i < 10; i++){
-			particles.add(new Particle(mTextures[SCOREITEM],
-					new Vector2((int)x,(int)y),
-					new Vector2((rand.nextInt(10)-5),rand.nextInt(10)-5),
-					(float)Gdx.graphics.getHeight()*.01f,Particle.EXPLODING));
-		}
 	}
 
 	/**
