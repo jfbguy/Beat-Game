@@ -17,6 +17,7 @@ public class GameHandler implements ApplicationListener {
 	private Player player;
 	private Music music;
 	private ScoreBoard scoreBoard;
+	private BoostMeter boostMeter;
 	private String trackLocation;
 	private boolean touched;
 
@@ -38,6 +39,7 @@ public class GameHandler implements ApplicationListener {
 		spriteBatch = new SpriteBatch();
 		screenHandler = new ScreenHandler(5);
 		scoreBoard = new ScoreBoard();
+		boostMeter = new BoostMeter();
 	}
 
 	@Override
@@ -66,12 +68,8 @@ public class GameHandler implements ApplicationListener {
 			if(!player.inAir() ){
 				if(touched == false){
 					touched = true;
-					player.jump();
 					
-					//Score add according to jump, will change with music scoring method
-					scoreBoard.addFloaterScore((int)player.getX(),(int)player.getY(),17);
-					//and create particles to show if jump is special
-					screenHandler.jumpParticles(player);
+					scoreBoard.jumpScoring(player,screenHandler,boostMeter);
 				}
 			}
 		}
@@ -84,6 +82,7 @@ public class GameHandler implements ApplicationListener {
 
 		//LEVEL LOGIC
 		screenHandler.updateScreen();
+		boostMeter.updateBoost();
 
 		//Clear Screen
 		Gdx.graphics.getGL10().glClearColor(0,0,0,1);
@@ -94,6 +93,8 @@ public class GameHandler implements ApplicationListener {
 
 		//draw UI
 		scoreBoard.draw(spriteBatch);
+		boostMeter.draw(spriteBatch);
+		
 
 	}
 

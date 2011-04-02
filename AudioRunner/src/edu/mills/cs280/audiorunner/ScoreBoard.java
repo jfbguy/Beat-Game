@@ -82,6 +82,23 @@ public class ScoreBoard {
 	public void addCountingScore(int points){
 		mNewScore = mScore + points;
 	}
+	
+	public void jumpScoring(Player player, ScreenHandler screenHandler, BoostMeter boostMeter){
+		/* TODO 
+		 * Calculate amount of points player gets for the jump now based
+		 * upon synching with song
+		 * 
+		 */
+		int jumpscore = player.JUMPSPEED;	//DEBUG  *** TODO
+		boostMeter.addBoost(jumpscore);		//DEBUG
+		
+		
+		player.jump(jumpscore);
+		//Score add according to jump, will change with music scoring method
+		this.addFloaterScore((int)player.getX(),(int)player.getY(),jumpscore);
+		//and create particles to show if jump is special
+		screenHandler.jumpParticles(player);
+	}
 
 	/**
 	 * Adds some points to the score

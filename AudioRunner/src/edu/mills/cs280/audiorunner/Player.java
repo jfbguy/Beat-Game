@@ -11,7 +11,7 @@ public class Player extends Collidable {
 	private final int FRAME_COUNT = 6;
 	private final int SPRITE_SIZE = 64;
 	private final float GRAVITY = 0.5f;
-	private final int JUMPSPEED = 10;
+	public final int JUMPSPEED = 10;
 	private final int GROUND = 0;
 	private final int AIR = 1;
 	private final int PLATFORM = 2;
@@ -235,9 +235,10 @@ public class Player extends Collidable {
 	/**
 	 * Player Jumps.  Adds a posiytive velocity to player's vertical velocity
 	 */
-	public void jump(){
+	public void jump(int jumpSpeed){
 		if(mStatus != AIR){
-			addVY(JUMPSPEED);
+			//addVY(JUMPSPEED);
+			addVY(jumpSpeed);
 			mStatus = AIR;
 		}
 	}

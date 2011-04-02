@@ -8,6 +8,6 @@ public class DesktopStarter {
 	public static void main(String[] args){
 		new JoglApplication(new GameHandler(),
 							"Audio Runner",
-							480, 320, false);
+							854, 480, false);
 	}
 }
