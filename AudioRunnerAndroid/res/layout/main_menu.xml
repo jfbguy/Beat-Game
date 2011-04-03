@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="vertical" android:layout_width="fill_parent"
+	android:layout_height="fill_parent">
+	 <TextView
+    	android:layout_width="fill_parent"
+    	android:layout_height="wrap_content"
+    	android:textColor="#000000"
+    	android:textSize="24px"
+    	android:text="Android Audio Runner"
+    	android:gravity="center_horizontal"
+    	/>
+	 <Button 
+	    android:text="Select Music"
+        android:id="@+id/Start_Button"
+        android:layout_width="250px"
+        android:textSize="18px"
+        android:layout_height="55px"
+        android:gravity="center_horizontal"
+        >
+    </Button>
+    <Button 
+        android:text="Setting"
+        android:id="@+id/Quit_Button"
+        android:layout_width="250px"
+        android:textSize="18px"
+        android:layout_height="55px"
+        android:gravity="center_horizontal"
+        >
+    </Button>
+</LinearLayout>

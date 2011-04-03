@@ -32,6 +32,8 @@ public class GameHandler implements ApplicationListener {
 		player.setPosition(STARTX, STARTY);
 
 		//Music Stuff
+		
+		//TODO: replace track location with the datapath of the music on the phone
 		trackLocation = "data/music/Freezepop - Starlight (Karacter Remix).mp3";
 		music = Gdx.audio.newMusic (Gdx.files.internal(trackLocation));
 

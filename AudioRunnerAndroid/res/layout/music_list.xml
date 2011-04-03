@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="vertical" android:layout_width="fill_parent"
+	android:layout_height="fill_parent">
+	
+	<ListView 
+		android:id="@+id/PhoneMusicList"
+		android:layout_width="fill_parent" 
+		android:layout_height="wrap_content"
+		android:textSize="18px">
+	</ListView>		
+	
+	<Button 
+	    android:text="Start Game"
+        android:id="@+id/Start_Game_Button"
+        android:layout_width="250px"
+        android:textSize="18px"
+        android:layout_height="55px"
+        android:gravity="center_horizontal">
+    </Button>
+</LinearLayout>

@@ -2,4 +2,6 @@
 <resources>
     <string name="hello">Hello World, AudioRunnerActivity!</string>
     <string name="app_name">AudioRunnerAndroid</string>
+    <string name="button_info_text">Please choose a song</string>
+    <string name="button_text">Pick</string>
 </resources>
