@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 public class mainMenu extends Activity{
     @Override
@@ -12,6 +13,8 @@ public class mainMenu extends Activity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_menu);
 
+        TextView title = (TextView) findViewById(R.id.title_text);
+        
         Button start = (Button) findViewById(R.id.Start_Button);
         start.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {

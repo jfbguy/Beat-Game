@@ -16,6 +16,7 @@
         android:layout_width="250px"
         android:textSize="18px"
         android:layout_height="55px"
-        android:gravity="center_horizontal">
+        android:gravity="center_vertical|center_horizontal"
+        android:layout_gravity="center_vertical|center_horizontal|center" >
     </Button>
 </LinearLayout>

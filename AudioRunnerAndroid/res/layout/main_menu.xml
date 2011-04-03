@@ -3,12 +3,15 @@
 	android:orientation="vertical" android:layout_width="fill_parent"
 	android:layout_height="fill_parent">
 	 <TextView
+	    android:id="@+id/title_text"
     	android:layout_width="fill_parent"
     	android:layout_height="wrap_content"
-    	android:textColor="#000000"
-    	android:textSize="24px"
+    	android:textColor="#666666"
+    	android:textSize="36px"
+    	android:padding = "10px"
     	android:text="Android Audio Runner"
-    	android:gravity="center_horizontal"
+    	android:gravity="center_vertical|center_horizontal"
+        android:layout_gravity="center_vertical|center_horizontal|center"
     	/>
 	 <Button 
 	    android:text="Select Music"
@@ -16,7 +19,8 @@
         android:layout_width="250px"
         android:textSize="18px"
         android:layout_height="55px"
-        android:gravity="center_horizontal"
+        android:gravity="center_vertical|center_horizontal"
+        android:layout_gravity="center_vertical|center_horizontal|center"
         >
     </Button>
     <Button 
@@ -25,7 +29,8 @@
         android:layout_width="250px"
         android:textSize="18px"
         android:layout_height="55px"
-        android:gravity="center_horizontal"
+        android:gravity="center_vertical|center_horizontal"
+        android:layout_gravity="center_vertical|center_horizontal|center"
         >
     </Button>
 </LinearLayout>
