@@ -16,7 +16,14 @@ public class AudioRunnerActivity extends AndroidApplication {
 	@Override
     public void onCreate(Bundle savedInstanceState) {
     	super.onCreate(savedInstanceState);
-        initialize(new GameHandler(), false);
+    	
+    	Bundle extras = getIntent().getExtras();
+    	if(extras !=null)
+    	{
+    	music_file = extras.getString("song");
+    	}
+    	
+        initialize(new GameHandler(music_file), false);
     }
 
 }

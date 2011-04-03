@@ -22,11 +22,14 @@ import android.widget.Toast;
 
 public class BrowseMusic extends Activity {
 	/** Called when the activity is first created. */
-	ListView musiclist;
-	Cursor musiccursor;
-	int music_column_index;
-	int count;
-	MediaPlayer mMediaPlayer;
+	private ListView musiclist;
+	private TextView selectedSong;
+	private Button startGame;
+	private Cursor musiccursor;
+	private int music_column_index;
+	private int count;
+	//MediaPlayer mMediaPlayer;
+	public String filename;
 
 	/** Called when the activity is first created. */
 	@Override
@@ -41,21 +44,29 @@ public class BrowseMusic extends Activity {
 		String[] proj = { MediaStore.Audio.Media._ID,
 				MediaStore.Audio.Media.DATA,
 				MediaStore.Audio.Media.DISPLAY_NAME,
-				MediaStore.Video.Media.SIZE };
+				MediaStore.Video.Media.DURATION };
 		musiccursor = managedQuery(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
 				proj, null, null, null);
 		count = musiccursor.getCount();
+		
 		musiclist = (ListView) findViewById(R.id.PhoneMusicList);
-		Button start_game = (Button) findViewById(R.id.Start_Game_Button);
+		
+		selectedSong = (TextView) findViewById(R.id.selected_song);
+		
+		startGame = (Button) findViewById(R.id.Start_Game_Button);
+		startGame.setEnabled(false);
 		musiclist.setAdapter(new MusicAdapter(getApplicationContext()));
 		musiclist.setOnItemClickListener(musicgridlistener);
-		start_game.setOnClickListener(new View.OnClickListener() {	
+		
+		//start the game activity
+		startGame.setOnClickListener(new View.OnClickListener() {	
 			public void onClick(View v) {
-				Intent myIntent = new Intent(v.getContext(), AudioRunnerActivity.class);
-                startActivityForResult(myIntent, 0);
+				Intent gameIntent = new Intent(v.getContext(), AudioRunnerActivity.class);
+                gameIntent.putExtra("song", filename);
+				startActivityForResult(gameIntent, 0);
 			}
 		});
-		mMediaPlayer = new MediaPlayer();
+		//mMediaPlayer = new MediaPlayer();
 	}
 
 	private OnItemClickListener musicgridlistener = new OnItemClickListener() {
@@ -66,21 +77,13 @@ public class BrowseMusic extends Activity {
 			musiccursor.moveToPosition(position);
 			//TODO: filename tells where the music is
 			//needs a global variable to hold this value.
-			String filename = musiccursor.getString(music_column_index);
-			
-  	      Toast.makeText(getApplicationContext(), filename,
+			filename = musiccursor.getString(music_column_index);
+			/*
+  	      	Toast.makeText(getApplicationContext(), filename,
     	          Toast.LENGTH_SHORT).show();
-/*
-			try {
-				if (mMediaPlayer.isPlaying()) {
-					mMediaPlayer.reset();
-				}
-				mMediaPlayer.setDataSource(filename);
-				mMediaPlayer.prepare();
-				mMediaPlayer.start();
-			} catch (Exception e) {
-				System.out.println(e.getMessage());
-			}*/
+    	          */
+			selectedSong.setText(filename);
+			startGame.setEnabled(true);
 		}
 		
 	};
@@ -115,12 +118,10 @@ public class BrowseMusic extends Activity {
 				musiccursor.moveToPosition(position);
 				
 				id = musiccursor.getString(music_column_index);
-				/*
 				music_column_index = musiccursor
-				.getColumnIndexOrThrow(MediaStore.Audio.Media.SIZE);
+				.getColumnIndexOrThrow(MediaStore.Audio.Media.DURATION);
 				musiccursor.moveToPosition(position);
-				id += " Size(KB):" + musiccursor.getString(music_column_index);
-				*/
+				id += " Duration:" + musiccursor.getString(music_column_index);
 				tv.setText(id);
 			} else
 				tv = (TextView) convertView;

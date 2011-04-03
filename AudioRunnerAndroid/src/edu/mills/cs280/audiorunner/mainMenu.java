@@ -12,8 +12,6 @@ public class mainMenu extends Activity{
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_menu);
-
-        TextView title = (TextView) findViewById(R.id.title_text);
         
         Button start = (Button) findViewById(R.id.Start_Button);
         start.setOnClickListener(new View.OnClickListener() {

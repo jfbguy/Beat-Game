@@ -23,6 +23,13 @@ public class GameHandler implements ApplicationListener {
 
 	private ScreenHandler screenHandler;
 
+	public GameHandler(){
+		
+	}
+	
+	public GameHandler(String musicFile){
+		this.trackLocation = musicFile;
+	}
 	@Override
 	public void create() {
 		touched = false;
@@ -34,9 +41,13 @@ public class GameHandler implements ApplicationListener {
 		//Music Stuff
 		
 		//TODO: replace track location with the datapath of the music on the phone
-		trackLocation = "data/music/Freezepop - Starlight (Karacter Remix).mp3";
-		music = Gdx.audio.newMusic (Gdx.files.internal(trackLocation));
-
+		if(trackLocation == null){
+			trackLocation = "data/music/Freezepop - Starlight (Karacter Remix).mp3";
+			music = Gdx.audio.newMusic (Gdx.files.internal(trackLocation));
+		}else{
+			music = Gdx.audio.newMusic (Gdx.files.external(trackLocation));
+		}
+		
 		//Screen Elements
 		spriteBatch = new SpriteBatch();
 		screenHandler = new ScreenHandler(5);

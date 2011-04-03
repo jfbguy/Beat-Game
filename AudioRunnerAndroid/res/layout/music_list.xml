@@ -10,6 +10,18 @@
 		android:textSize="18px">
 	</ListView>		
 	
+	<TextView
+	    android:id="@+id/selected_song"
+    	android:layout_width="fill_parent"
+    	android:layout_height="wrap_content"
+    	android:textColor="#666666"
+    	android:textSize="12px"
+    	android:padding = "1px"
+    	android:text="No Song Selected Yet"
+    	android:gravity="center_vertical|center_horizontal"
+        android:layout_gravity="center_vertical|center_horizontal|center"
+    />
+	
 	<Button 
 	    android:text="Start Game"
         android:id="@+id/Start_Game_Button"
