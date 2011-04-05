@@ -6,10 +6,9 @@ import java.util.Random;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-public class Particle extends Sprite{
+public class Particle{
 	private final static float SPEED = .5f;
 	private final static float GRAVITY = -.3f;
 	public static final int FALLING = 0;
@@ -17,21 +16,23 @@ public class Particle extends Sprite{
 	public static final int EXPLODING = 2;
 	
 	//Explosion Constants
-	private static final float EXPLOSION_SPREAD = .9f;
+	private static final float EXPLOSION_SPREAD = .8f;
 	private static final float EXPLOSION_FADE = .95f;
 	private static final float EXPLOSION_GROWTH = 1.05f;
-	private static final float EXPLOSION_PARTICLE_SIZE = .005f;	//% of Screen
-	private static final int EXPLOSION_PARTICLE_AMOUNT = 120;
+	private static final float EXPLOSION_PARTICLE_SIZE = .01f;	//% of Screen
+	private static final int EXPLOSION_PARTICLE_AMOUNT = 30;
 	private static final float FADE_OUT_THRESHOLD = .03f;	//Value of alpha when to delet particle
 
 	private static LinkedList<Particle> PARTICLES = new LinkedList<Particle>();
 	private static Texture PARTICLE_TEXTURE = new Texture(Gdx.files.internal("data/particle.png"));
 	
+	private float x, y;
 	private float vX, vY;
 	private float targetX,targetY;
 	private int type;
 	private float size;
 	private float alpha;
+	private Texture mTexture;
 	
 	//Directional & Falling Particles
 	private Particle(float x, float y,float targetX, float targetY, float size, int type){
@@ -44,7 +45,8 @@ public class Particle extends Sprite{
 			break;
 		}
 		this.setTexture(PARTICLE_TEXTURE);
-		this.setBounds(x, y, 3, 3);
+		this.x = x;
+		this.y = y;
 		this.targetX = targetX;
 		this.targetY = targetY;
 		this.size = size;
@@ -77,7 +79,7 @@ public class Particle extends Sprite{
 				}
 				break;
 			case EXPLODING:
-				if(p.alpha < FADE_OUT_THRESHOLD){
+				if(p.alpha < FADE_OUT_THRESHOLD || !ScreenHandler.onScreen(p.getX(),p.getY())){
 					iter.remove();
 				}
 				else{
@@ -144,5 +146,29 @@ public class Particle extends Sprite{
 		}
 		spriteBatch.end();
 		spriteBatch.setColor(1.0f, 1.0f, 1.0f, 1.0f);	//reset transperancies to normal
+		
+		//DEBUG!!!
+		System.out.println("# of Particles: " + PARTICLES.size());
+	}
+	
+	public void setTexture(Texture texture){
+		this.mTexture = texture;
+	}
+	
+	public Texture getTexture(){
+		return this.mTexture;
+	}
+	
+	public void setPosition(float x, float y){
+		this.x = x;
+		this.y = y;
+	}
+	
+	public float getX(){
+		return x;
+	}
+	
+	public float getY(){
+		return y;
 	}
 }

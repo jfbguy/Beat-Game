@@ -1,8 +1,5 @@
 package edu.mills.cs280.audiorunner;
 
-import java.util.LinkedList;
-import java.util.Random;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -11,6 +8,7 @@ import com.badlogic.gdx.graphics.glutils.ImmediateModeRenderer;
 
 public class ScreenHandler{
 	private static final int SPEED = 5;
+	private static final float ONSCREEN_BUFFER = .2f*Gdx.graphics.getWidth();
 	private final int DEFAULT_LEVEL_HEIGHT = 60;
 	private final float[] PARALLAX = {1.5f,1.0f,.4f,.3f,.02f};
 	private final int NUM_OF_TEXTURES = 6;		//UPDATE THIS IF YOU ADD A TEXTURE!!!
@@ -197,7 +195,7 @@ public class ScreenHandler{
 	}
 
 	public static boolean onScreen(Vector2 pos){
-		if(pos.x-mWorldPosition.x < 0 || pos.x-mWorldPosition.x > Gdx.graphics.getWidth()){
+		if(pos.x-mWorldPosition.x < -ONSCREEN_BUFFER || pos.x-mWorldPosition.x > Gdx.graphics.getWidth() + ONSCREEN_BUFFER){
 			return false;
 		}
 		if(pos.y-mWorldPosition.y < 0 || pos.y-mWorldPosition.y > Gdx.graphics.getHeight()){
@@ -208,7 +206,7 @@ public class ScreenHandler{
 	}
 
 	public static boolean onScreen(float x,float y){
-		if(x-mWorldPosition.x < 0 || x-mWorldPosition.x > Gdx.graphics.getWidth()){
+		if(x-mWorldPosition.x < -ONSCREEN_BUFFER || x-mWorldPosition.x > Gdx.graphics.getWidth() + ONSCREEN_BUFFER){
 			return false;
 		}
 		if(y-mWorldPosition.y < 0 || y-mWorldPosition.y > Gdx.graphics.getHeight()){

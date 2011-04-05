@@ -11,7 +11,7 @@ public class GameHandler implements ApplicationListener {
 	private static final float STARTY = 50;
 	private static final float PLAYER_WIDTH = 64;
 	private static final float PLAYER_HEIGHT = 64;
-	private static final float VOLUME = .05f;
+	private static final float VOLUME = .5f;
 
 	private SpriteBatch spriteBatch;
 	private Player player;
@@ -95,8 +95,9 @@ public class GameHandler implements ApplicationListener {
 		scoreBoard.draw(spriteBatch);
 		boostMeter.draw(spriteBatch);
 		
-		System.out.println(Gdx.graphics.getFramesPerSecond());
 		
+		//DEBUG TESTS
+		System.out.println("FPS: "+Gdx.graphics.getFramesPerSecond());
 
 	}
 

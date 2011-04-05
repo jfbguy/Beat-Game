@@ -12,6 +12,7 @@ public class BoostMeter {
 	private final float YPOS = Gdx.graphics.getHeight()*.5f;
 	private final int WIDTH = (int) (Gdx.graphics.getHeight()*.1);
 	private final int HEIGHT = (int) (Gdx.graphics.getHeight()*.5);
+	private final int MAX_METER_VALUE = 100;
 
 	Texture mBoostTexture;
 	Texture mBorderTexture;
@@ -31,7 +32,7 @@ public class BoostMeter {
 		}
 		else if(mValue != 0){
 			if(mReduction == 0){
-				mValue *= (1-REDUCTION_AMOUNT);
+				mValue -= MAX_METER_VALUE*REDUCTION_AMOUNT;
 				mReduction = REDUCTION_RATE;
 			}
 			else{
@@ -42,12 +43,10 @@ public class BoostMeter {
 
 	public void addBoost(int value){
 		mValue += value;
-		if(mValue > 100){
-			mValue = 100;
+		if(mValue > MAX_METER_VALUE){
+			mValue = MAX_METER_VALUE;
 		}
-		if(mValue == 100){
-			mCoolDown = FULL_BAR_WAIT;
-		}
+		mCoolDown = FULL_BAR_WAIT;
 		mReduction = REDUCTION_RATE;
 	}
 
@@ -55,7 +54,7 @@ public class BoostMeter {
 		spriteBatch.begin();
 		spriteBatch.draw(mBoostTexture,
 				XPOS,YPOS,
-				WIDTH,HEIGHT*mValue/100,
+				WIDTH,HEIGHT*mValue/MAX_METER_VALUE,
 				0, 0,
 				mBorderTexture.getWidth(), mBorderTexture.getHeight(),
 				false,false);
