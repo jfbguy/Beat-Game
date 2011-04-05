@@ -71,9 +71,7 @@ public class Threshold
          else
             peaks.add( (float)0 );				
       }
-      System.out.println(prunedSpectralFlux.toString());
-      System.out.println(peaks.toString());
-      System.out.println("size = " + peaks.size());
+
       
       Plot plot = new Plot( "Spectral Flux", 1024, 512 );
       plot.plot( spectralFlux, 1, Color.red );		

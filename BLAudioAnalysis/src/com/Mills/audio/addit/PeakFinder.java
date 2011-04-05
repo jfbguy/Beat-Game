@@ -2,7 +2,7 @@
  * IT HAD BEEN MODIFIED BY US
  */
 
-package com.badlogic.audio.samples.part7;
+package com.Mills.audio.addit;
 
 import java.io.FileInputStream;
 import java.util.ArrayList;
