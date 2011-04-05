@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 22
+/svn/!svn/ver/32/trunk
+END
+.classpath
+K 25
+svn:wc:ra_dav:version-url
+V 33
+/svn/!svn/ver/24/trunk/.classpath
+END
+.project
+K 25
+svn:wc:ra_dav:version-url
+V 31
+/svn/!svn/ver/11/trunk/.project
+END
+data.flt
+K 25
+svn:wc:ra_dav:version-url
+V 31
+/svn/!svn/ver/24/trunk/data.flt
+END

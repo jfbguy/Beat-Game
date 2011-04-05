@@ -1,0 +1,35 @@
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/svn/!svn/ver/28/trunk/src/com/badlogic/audio/io
+END
+AudioDevice.java
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svn/!svn/ver/5/trunk/src/com/badlogic/audio/io/AudioDevice.java
+END
+EndianDataInputStream.java
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/!svn/ver/5/trunk/src/com/badlogic/audio/io/EndianDataInputStream.java
+END
+MP3Decoder.java
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svn/!svn/ver/28/trunk/src/com/badlogic/audio/io/MP3Decoder.java
+END
+Decoder.java
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svn/!svn/ver/24/trunk/src/com/badlogic/audio/io/Decoder.java
+END
+WaveDecoder.java
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/!svn/ver/24/trunk/src/com/badlogic/audio/io/WaveDecoder.java
+END
