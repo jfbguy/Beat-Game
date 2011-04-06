@@ -21,10 +21,10 @@ import android.util.Log;
 public class BrowseMusic extends Activity {
 	/** Called when the activity is first created. */
 	private ListView musiclist;
-	private TextView selectedSong;
+	private TextView selectedSong,duration,name;
 	private Button startGame;
-	private Cursor musiccursor;
-	private int music_column_index;
+	private Cursor musicCursor;
+	private int musicColumnIndex;
 	private int count;
 	//MediaPlayer mMediaPlayer;
 	public String filename;
@@ -34,23 +34,24 @@ public class BrowseMusic extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.music_list);
-		init_phone_music_grid();
+		initMusicList();
 	}
 
-	private void init_phone_music_grid() {
+	private void initMusicList() {
 		System.gc();
 		String[] proj = { MediaStore.Audio.Media._ID,
 				MediaStore.Audio.Media.DATA,
 				MediaStore.Audio.Media.DISPLAY_NAME,
 				MediaStore.Video.Media.DURATION };
-		musiccursor = managedQuery(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
+		musicCursor = managedQuery(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
 				proj, null, null, null);
-		count = musiccursor.getCount();
+		count = musicCursor.getCount();
 		
 		musiclist = (ListView) findViewById(R.id.PhoneMusicList);
 		//musiclist.layout(0, 0,getWindowManager().getDefaultDisplay().getWidth(), (int) (0.7*getWindowManager().getDefaultDisplay().getHeight()) );
 		selectedSong = (TextView) findViewById(R.id.selected_song);
-		
+		duration = (TextView) findViewById(R.id.song_duration);
+		name = (TextView)findViewById(R.id.song_name);
 		Log.d("screen height: ", " "+(getWindowManager().getDefaultDisplay().getHeight()) );
 		
 		startGame = (Button) findViewById(R.id.Start_Game_Button);
@@ -71,13 +72,26 @@ public class BrowseMusic extends Activity {
 	private OnItemClickListener musicgridlistener = new OnItemClickListener() {
 		public void onItemClick(AdapterView parent, View v, int position, long id) {
 			System.gc();
-			music_column_index = musiccursor
+			musicColumnIndex = musicCursor
 			.getColumnIndexOrThrow(MediaStore.Audio.Media.DATA);
-			musiccursor.moveToPosition(position);
+			musicCursor.moveToPosition(position);
 			//TODO: filename tells where the music is
 			//needs to pass it onto GameHandler
-			filename = musiccursor.getString(music_column_index);
+			filename = musicCursor.getString(musicColumnIndex);
 			selectedSong.setText(filename);
+			
+			musicColumnIndex = musicCursor
+			.getColumnIndexOrThrow(MediaStore.Audio.Media.DISPLAY_NAME);
+			musicCursor.moveToPosition(position);
+			String songName = musicCursor.getString(musicColumnIndex);
+			name.setText(stripFileExtension(songName));
+			
+			musicColumnIndex = musicCursor
+			.getColumnIndexOrThrow(MediaStore.Audio.Media.DURATION);
+			musicCursor.moveToPosition(position);
+			String songDuration = musicCursor.getString(musicColumnIndex);
+			duration.setText(convertTime(songDuration));
+			
 			startGame.setEnabled(true);
 		}
 		
@@ -108,14 +122,14 @@ public class BrowseMusic extends Activity {
 			tv.setTextSize(20);
 			String id = null;
 			
-			music_column_index = musiccursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DISPLAY_NAME);
-			musiccursor.moveToPosition(position);
-			
-			id = musiccursor.getString(music_column_index);
-			music_column_index = musiccursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DURATION);
-			musiccursor.moveToPosition(position);
-			id += "  Duration:" + musiccursor.getString(music_column_index);
-			
+			musicColumnIndex = musicCursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DISPLAY_NAME);
+			musicCursor.moveToPosition(position);
+			id = musicCursor.getString(musicColumnIndex);
+			/*
+			musicColumnIndex = musicCursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DURATION);
+			musicCursor.moveToPosition(position);
+			id += "  Duration:" + musicCursor.getString(musicColumnIndex);
+			*/
 			//reuse the view for each item on the list
 			if (convertView == null) {				
 				tv.setText(id);
@@ -125,5 +139,17 @@ public class BrowseMusic extends Activity {
 			}
 			return tv;
 		}
+	}
+	
+	public String convertTime(String ms){
+		int milisec = Integer.parseInt(ms);
+		int s = milisec/1000;
+		int min = s/60;
+		int sec = s%60;
+		return min+":"+(sec >= 10? sec: "0"+sec);
+	}
+	
+	public String stripFileExtension(String name){
+		return name.replace(".mp3","");
 	}
 }
