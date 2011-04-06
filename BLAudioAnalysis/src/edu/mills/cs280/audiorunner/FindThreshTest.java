@@ -1,4 +1,4 @@
-package com.Mills.audio.addit;
+package edu.mills.cs280.audiorunner;
 
 public class FindThreshTest {
 	
