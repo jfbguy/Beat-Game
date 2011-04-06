@@ -16,13 +16,14 @@ public class Particle{
 	public static final int EXPLODING = 2;
 
 	//Explosion Constants
-	private static final float EXPLOSION_SPREAD = .8f;
-	private static final float EXPLOSION_FADE = .95f;
-	private static final float EXPLOSION_GROWTH = 1.05f;
+	private static final float EXPLOSION_SPREAD = .2f;
+	private static final float EXPLOSION_FADE = .05f;
+	private static final float EXPLOSION_GROWTH = .1f;
 	private static final float EXPLOSION_PARTICLE_SIZE = .01f;	//% of Screen
 	private static final int EXPLOSION_PARTICLE_AMOUNT = 30;
-	private static final float FADE_OUT_THRESHOLD = .03f;	//Value of alpha when to delet particle
+	private static final float FADE_OUT_THRESHOLD = .03f;	//Value of alpha when to delete particle
 
+	//private static ArrayList<Particle> 
 	private static LinkedList<Particle> PARTICLES = new LinkedList<Particle>();
 	private static Texture PARTICLE_TEXTURE = new Texture(Gdx.files.internal("data/particle.png"));
 	//private static 
@@ -87,11 +88,11 @@ public class Particle{
 						iter.remove();
 					}
 					else{
-						p.targetX *= EXPLOSION_SPREAD*spdScale;
-						p.targetY *= EXPLOSION_SPREAD*spdScale;
-						p.size *= EXPLOSION_GROWTH*spdScale;
+						p.targetX *= (1-EXPLOSION_SPREAD*spdScale);
+						p.targetY *= (1-EXPLOSION_SPREAD*spdScale);
+						p.size *= (1+EXPLOSION_GROWTH*spdScale);
 						p.setPosition((p.getX() + p.targetX),(p.getY() + p.targetY));
-						p.alpha *= EXPLOSION_FADE;
+						p.alpha *= (1-EXPLOSION_FADE*spdScale);
 					}
 					break;
 				}
