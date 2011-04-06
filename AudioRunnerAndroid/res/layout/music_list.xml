@@ -1,22 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:orientation="vertical" android:layout_width="fill_parent"
-	android:layout_height="fill_parent">
+		android:orientation="vertical"
+		android:layout_width="fill_parent"
+		android:layout_height="fill_parent">
+    <ListView 
+    	android:id="@+id/PhoneMusicList"
+    	android:layout_height="150px"
+    	android:layout_width="fill_parent">
+    </ListView>		
 	
-	<ListView 
-		android:id="@+id/PhoneMusicList"
-		android:layout_width="fill_parent" 
-		android:layout_height="wrap_content"
-		android:textSize="18px">
-	</ListView>		
-	
+	<TextView
+		android:id="@+id/list_item"
+		android:layout_width="fill_parent"
+    	android:layout_height="wrap_content"
+    	android:textSize="20px"
+    />
+    
 	<TextView
 	    android:id="@+id/selected_song"
     	android:layout_width="fill_parent"
     	android:layout_height="wrap_content"
     	android:textColor="#666666"
-    	android:textSize="12px"
-    	android:padding = "1px"
+    	android:textSize="18px"
     	android:text="No Song Selected Yet"
     	android:gravity="center_vertical|center_horizontal"
         android:layout_gravity="center_vertical|center_horizontal|center"
