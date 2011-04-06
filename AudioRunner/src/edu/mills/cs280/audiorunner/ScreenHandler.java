@@ -7,7 +7,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ImmediateModeRenderer;
 
 public class ScreenHandler{
-	private static final int SPEED = 5;
+	
+	private static final int SPEED = 20;
 	private static final float ONSCREEN_BUFFER = .2f*Gdx.graphics.getWidth();
 	private final int DEFAULT_LEVEL_HEIGHT = 60;
 	private final float[] PARALLAX = {1.5f,1.0f,.4f,.3f,.02f};
@@ -20,6 +21,7 @@ public class ScreenHandler{
 	private final int SCOREITEM = 5;
 
 
+	private static float mCurrentFrameSpeed;
 	ImmediateModeRenderer mRenderer;
 	private int mDrawStarter;
 	private static Vector2 mWorldPosition;
@@ -118,7 +120,8 @@ public class ScreenHandler{
 	 * Need to add added platforms, sprites, change ground, etc
 	 */
 	public void updateScreen(){	//Updates level depending on music and how player is doing
-		mWorldPosition.x += SPEED;
+		mCurrentFrameSpeed = SPEED*MusicHandler.getTransitionScale();
+		mWorldPosition.x += mCurrentFrameSpeed;
 
 	}
 
@@ -188,6 +191,10 @@ public class ScreenHandler{
 	 */
 	public static int getSpeed(){
 		return SPEED;
+	}
+	
+	public static float getCurrentFrameSpeed(){
+		return mCurrentFrameSpeed;
 	}
 	
 	public static Vector2 getWorldPosition(){

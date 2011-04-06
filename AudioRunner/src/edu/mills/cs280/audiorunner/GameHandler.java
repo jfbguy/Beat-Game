@@ -7,8 +7,8 @@ import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class GameHandler implements ApplicationListener {
-	private static final float STARTX = 200;	//Default starting position for player
-	private static final float STARTY = 50;
+	private static final float STARTX = 200.0f;	//Default starting position for player
+	private static final float STARTY = 50.0f;
 	private static final float PLAYER_WIDTH = 64;
 	private static final float PLAYER_HEIGHT = 64;
 	private static final float VOLUME = .5f;
@@ -34,6 +34,7 @@ public class GameHandler implements ApplicationListener {
 		//Music Stuff
 		trackLocation = "data/music/Freezepop - Starlight (Karacter Remix).mp3";
 		music = Gdx.audio.newMusic (Gdx.files.internal(trackLocation));
+		MusicHandler.setMusic(music);
 
 		//Screen Elements
 		spriteBatch = new SpriteBatch();
@@ -59,16 +60,24 @@ public class GameHandler implements ApplicationListener {
 			music.setVolume(VOLUME);	//volume should be set by settings
 			music.play();
 		}
+		MusicHandler.updateTime();
+
+		//LEVEL LOGIC
+		screenHandler.updateScreen();
+		boostMeter.updateBoost();
 
 		//Physics
 		player.physics(screenHandler,scoreBoard);
+
+		//PLAYER LOGIC
+		player.animate();
 
 		//Input
 		if(Gdx.input.isTouched()){
 			if(!player.inAir() ){
 				if(touched == false){
 					touched = true;
-					
+
 					scoreBoard.jumpScoring(player,screenHandler,boostMeter);
 				}
 			}
@@ -76,13 +85,6 @@ public class GameHandler implements ApplicationListener {
 		else{
 			touched = false;
 		}
-
-		//PLAYER LOGIC
-		player.animate();
-
-		//LEVEL LOGIC
-		screenHandler.updateScreen();
-		boostMeter.updateBoost();
 
 		//Clear Screen
 		Gdx.graphics.getGL10().glClearColor(0,0,0,1);
@@ -94,8 +96,7 @@ public class GameHandler implements ApplicationListener {
 		//draw UI
 		scoreBoard.draw(spriteBatch);
 		boostMeter.draw(spriteBatch);
-		
-		
+
 		//DEBUG TESTS
 		System.out.println("FPS: "+Gdx.graphics.getFramesPerSecond());
 

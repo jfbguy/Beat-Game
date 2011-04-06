@@ -16,6 +16,7 @@ public class Player extends Collidable {
 	private final int AIR = 1;
 	private final int PLATFORM = 2;
 
+	private int mStartX;
 	private int mAnimDelay = 10;
 	private float mVertVelocity;
 	private int mAnimCounter;
@@ -30,7 +31,7 @@ public class Player extends Collidable {
 	public Player(String texture) {
 		this.loadTexture(texture);
 		mVertVelocity = 0;
-		mAnimDelay = 25/ScreenHandler.getSpeed();
+		mAnimDelay = (int)MusicHandler.FRAMERATE;
 		mAnimCounter = 0;
 		mFrameNum = 0;
 	}
@@ -46,6 +47,7 @@ public class Player extends Collidable {
 	 */
 	public Player(String texture, float x, float y, float width, float height) {
 		this.loadTexture(texture);
+		mStartX = (int)x;
 		this.setBounds(x, y, width, height);
 		mVertVelocity = 0;
 		mAnimDelay = 25/ScreenHandler.getSpeed();
@@ -79,7 +81,7 @@ public class Player extends Collidable {
 
 	/**
 	 * Updates the Animation of the Player
-	 * Incrememnts the animation count, and decides if the sprite should switch
+	 * Increments the animation count, and decides if the sprite should switch
 	 * to the next frame of animation
 	 */
 	public void animate(){
@@ -92,11 +94,6 @@ public class Player extends Collidable {
 				mFrameNum = 0;
 			}
 			mFrameNum++;
-		}
-
-		if(mStatus == AIR){
-			setPosition(getX(), getY()+mVertVelocity);
-			mVertVelocity -= GRAVITY;
 		}
 	}
 
@@ -189,7 +186,11 @@ public class Player extends Collidable {
 	 */
 
 	public void physics(ScreenHandler screenHandler, ScoreBoard scoreBoard){
-		setPosition(getX()+ScreenHandler.getSpeed(), getY());
+		setPosition(mStartX+ScreenHandler.getWorldPosition().x, getY());
+		if(mStatus == AIR){
+			setPosition(getX(), getY()+mVertVelocity);
+			mVertVelocity -= GRAVITY;
+		}
 		if(mVertVelocity < 0 || mStatus == PLATFORM)
 		{
 			mStatus = AIR;

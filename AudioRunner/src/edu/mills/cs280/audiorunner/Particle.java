@@ -10,11 +10,11 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class Particle{
 	private final static float SPEED = .5f;
-	private final static float GRAVITY = -.3f;
+	private final static float GRAVITY = -.6f;
 	public static final int FALLING = 0;
 	public static final int DIRECTIONAL = 1;
 	public static final int EXPLODING = 2;
-	
+
 	//Explosion Constants
 	private static final float EXPLOSION_SPREAD = .8f;
 	private static final float EXPLOSION_FADE = .95f;
@@ -25,7 +25,8 @@ public class Particle{
 
 	private static LinkedList<Particle> PARTICLES = new LinkedList<Particle>();
 	private static Texture PARTICLE_TEXTURE = new Texture(Gdx.files.internal("data/particle.png"));
-	
+	//private static 
+
 	private float x, y;
 	private float vX, vY;
 	private float targetX,targetY;
@@ -33,7 +34,7 @@ public class Particle{
 	private float size;
 	private float alpha;
 	private Texture mTexture;
-	
+
 	//Directional & Falling Particles
 	private Particle(float x, float y,float targetX, float targetY, float size, int type){
 		switch(type){
@@ -55,47 +56,51 @@ public class Particle{
 	}
 
 	public static void updateParticles(){
-		Iterator<Particle> iter = PARTICLES.iterator();
-		while(iter.hasNext()){
-			Particle p = iter.next();
-			switch(p.type){
-			case DIRECTIONAL:
-				double moveAngle = Math.atan2((p.targetY - p.getY()),(p.targetX - p.getX()));
-				p.setPosition((float)(p.getX()+(Math.cos(moveAngle)*SPEED)),
-						(float)(p.getY()+(Math.sin(moveAngle)*SPEED)));
+		float spdScale = MusicHandler.getTransitionScale();
 
-				if(Math.abs(p.targetX - p.getX()) < SPEED && Math.abs(p.targetY - p.getY()) < SPEED)
-				{
-					iter.remove();
+		if(spdScale != 0){
+			Iterator<Particle> iter = PARTICLES.iterator();
+			while(iter.hasNext()){
+				Particle p = iter.next();
+				switch(p.type){
+				case DIRECTIONAL:
+					double moveAngle = Math.atan2((p.targetY - p.getY()),(p.targetX - p.getX()));
+					p.setPosition((float)(p.getX()+(Math.cos(moveAngle)*spdScale)),
+							(float)(p.getY()+(Math.sin(moveAngle)*spdScale)));
+
+					if(Math.abs(p.targetX - p.getX()) < SPEED && Math.abs(p.targetY - p.getY()) < SPEED)
+					{
+						iter.remove();
+					}
+					break;
+				case FALLING:
+					if(ScreenHandler.onScreen(p.getX(),p.getY())){
+						p.targetY += GRAVITY*spdScale;	//gravity
+						p.setPosition((p.getX() + p.targetX),(p.getY() + p.targetY));
+					}
+					else{
+						iter.remove();
+					}
+					break;
+				case EXPLODING:
+					if(p.alpha < FADE_OUT_THRESHOLD || !ScreenHandler.onScreen(p.getX(),p.getY())){
+						iter.remove();
+					}
+					else{
+						p.targetX *= EXPLOSION_SPREAD*spdScale;
+						p.targetY *= EXPLOSION_SPREAD*spdScale;
+						p.size *= EXPLOSION_GROWTH*spdScale;
+						p.setPosition((p.getX() + p.targetX),(p.getY() + p.targetY));
+						p.alpha *= EXPLOSION_FADE;
+					}
+					break;
 				}
-				break;
-			case FALLING:
-				if(ScreenHandler.onScreen(p.getX(),p.getY())){
-					p.targetY += GRAVITY;	//gravity
-					p.setPosition(p.getX() + p.targetX,p.getY() + p.targetY);
-				}
-				else{
-					iter.remove();
-				}
-				break;
-			case EXPLODING:
-				if(p.alpha < FADE_OUT_THRESHOLD || !ScreenHandler.onScreen(p.getX(),p.getY())){
-					iter.remove();
-				}
-				else{
-					p.targetX *= EXPLOSION_SPREAD;
-					p.targetY *= EXPLOSION_SPREAD;
-					p.size *= EXPLOSION_GROWTH;
-					p.setPosition(p.getX() + p.targetX,p.getY() + p.targetY);
-					p.alpha *= EXPLOSION_FADE;
-				}
-				break;
 			}
 		}
 
 
 	}
-	
+
 	public static void createExplosion(float x, float y){
 		Random rand = new Random();
 		for(int i = 0; i < EXPLOSION_PARTICLE_AMOUNT; i++){
@@ -105,7 +110,7 @@ public class Particle{
 					(float)Gdx.graphics.getHeight()*EXPLOSION_PARTICLE_SIZE,Particle.EXPLODING));
 		}
 	}
-	
+
 	public static void createJumpParticles(Player player){
 		Random rand = new Random();
 		for(int i = 0; i < 10; i++){
@@ -117,9 +122,9 @@ public class Particle{
 	}
 
 	public static void draw(SpriteBatch spriteBatch, Vector2 worldPosition){
-		
-        //Gdx.gl.glEnable(GL10.GL_BLEND);
-        //Gdx.gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
+
+		//Gdx.gl.glEnable(GL10.GL_BLEND);
+		//Gdx.gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
 		spriteBatch.begin();
 		Iterator<Particle> iter = PARTICLES.iterator();
 		while(iter.hasNext()){
@@ -146,28 +151,28 @@ public class Particle{
 		}
 		spriteBatch.end();
 		spriteBatch.setColor(1.0f, 1.0f, 1.0f, 1.0f);	//reset transperancies to normal
-		
+
 		//DEBUG!!!
 		System.out.println("# of Particles: " + PARTICLES.size());
 	}
-	
+
 	public void setTexture(Texture texture){
 		this.mTexture = texture;
 	}
-	
+
 	public Texture getTexture(){
 		return this.mTexture;
 	}
-	
+
 	public void setPosition(float x, float y){
 		this.x = x;
 		this.y = y;
 	}
-	
+
 	public float getX(){
 		return x;
 	}
-	
+
 	public float getY(){
 		return y;
 	}
