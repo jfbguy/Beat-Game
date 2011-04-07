@@ -119,28 +119,23 @@ public class ScoreBoard {
 	class ScoreFloater {
 		private final float FLOATERSIZE = .8f;	//ratio of size floaters will draw as
 		
-		private Vector2 startPos;
-		private Vector2 currentPos;
+		private float posX;
+		private float posY;
 		private int points;
 		
 		public Vector2 getCurrentPosition(){
-			return currentPos;
+			return new Vector2((int)posX,(int)posY);
 		}
 
 		public ScoreFloater(int x, int y, int points){
-			startPos = new Vector2(x,y);
-			currentPos = new Vector2(x,y);
+			posX = x;
+			posY = y;
 			this.points = points;
 		}
 
 		public void moveFloater(){
-			if(currentPos.distanceFrom(startPos) < Gdx.graphics.getHeight()*SCREENPERCENTAGE){
-				currentPos.y++;
-			}
-			else{
-				currentPos.x += Math.abs(currentPos.x-Gdx.graphics.getWidth())*SCREENPERCENTAGE;
-				currentPos.y += Math.abs(currentPos.y-Gdx.graphics.getHeight())*SCREENPERCENTAGE;
-			}
+			posX += Math.abs(posX-Gdx.graphics.getWidth())*SCREENPERCENTAGE*MusicHandler.getTransitionScale();
+			posY += Math.abs(posY-Gdx.graphics.getHeight())*SCREENPERCENTAGE*MusicHandler.getTransitionScale();
 		}
 		
 		public void draw(SpriteBatch spriteBatch){
@@ -149,8 +144,8 @@ public class ScoreBoard {
 				char tempChar = pointArray.charAt(i);
 				float floaterSize = mDrawSize*FLOATERSIZE;
 				spriteBatch.draw(mNumbersTexture,
-						(float) (currentPos.x+floaterSize-floaterSize*(pointArray.length()-i)),	//Draw at X position
-						(float) (currentPos.y+floaterSize),								//Draw at Y position
+						(float) (posX+floaterSize-floaterSize*(pointArray.length()-i)),	//Draw at X position
+						(float) (posY+floaterSize),								//Draw at Y position
 						floaterSize,floaterSize,	//Size of Number
 						Character.digit(tempChar,10)*FONTSIZE, 0,		//Get part of texture
 						FONTSIZE, FONTSIZE,								//Size of gotten part

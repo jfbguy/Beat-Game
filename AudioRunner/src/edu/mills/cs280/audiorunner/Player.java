@@ -10,31 +10,18 @@ public class Player extends Collidable {
 	private final float PLATFORM_CATCH = .4f;
 	private final int FRAME_COUNT = 6;
 	private final int SPRITE_SIZE = 64;
-	private final float GRAVITY = 0.5f;
-	public final int JUMPSPEED = 10;
+	private final float GRAVITY = 6.0f;
+	public final int JUMPSPEED = 25;
 	private final int GROUND = 0;
 	private final int AIR = 1;
 	private final int PLATFORM = 2;
 
 	private int mStartX;
-	private int mAnimDelay = 10;
+	private float mAnimDelay = 1;
 	private float mVertVelocity;
-	private int mAnimCounter;
+	private float mAnimCounter;
 	private int mFrameNum;
 	private int mStatus;
-
-	/**
-	 * Constructor
-	 * 
-	 * @param  Texture, Holds The Sprite Texture for player
-	 */
-	public Player(String texture) {
-		this.loadTexture(texture);
-		mVertVelocity = 0;
-		mAnimDelay = (int)MusicHandler.FRAMERATE;
-		mAnimCounter = 0;
-		mFrameNum = 0;
-	}
 
 	/**
 	 * Constructor
@@ -50,7 +37,7 @@ public class Player extends Collidable {
 		mStartX = (int)x;
 		this.setBounds(x, y, width, height);
 		mVertVelocity = 0;
-		mAnimDelay = 25/ScreenHandler.getSpeed();
+		mAnimDelay = MusicHandler.FRAMERATE/120;
 		mAnimCounter = 0;
 		mFrameNum = 0;
 	}
@@ -85,15 +72,13 @@ public class Player extends Collidable {
 	 * to the next frame of animation
 	 */
 	public void animate(){
-		mAnimCounter++;
-
-		if(mAnimCounter % mAnimDelay == 0) {
-
+		mAnimCounter += (1.0f*MusicHandler.getTransitionScale());
+		if(mAnimCounter >= mAnimDelay) {
 			if(mFrameNum == FRAME_COUNT-1 ) {
-				mAnimCounter = 0;
 				mFrameNum = 0;
 			}
 			mFrameNum++;
+			mAnimCounter = 0;
 		}
 	}
 
@@ -127,19 +112,10 @@ public class Player extends Collidable {
 	}
 
 	/**
-	 * Adds a vertical velocity amount to player's velocity
-	 * 
-	 * @param int Y velocity you wish to add to current Y velocity
-	 */
-	public void addVY(int mVertVelocity){
-		this.mVertVelocity += mVertVelocity;
-	}
-
-	/**
 	 * Get the Y position with in the Sprite's Texture wher ethe current
 	 * frame of animation is located. 
 	 * 
-	 * @param int Y velocity you sish to add to current Y velocity
+	 * @param int Y velocity you wish to add to current Y velocity
 	 */
 	public void setVY(int mVertVelocity){
 		this.mVertVelocity = mVertVelocity;
@@ -188,8 +164,8 @@ public class Player extends Collidable {
 	public void physics(ScreenHandler screenHandler, ScoreBoard scoreBoard){
 		setPosition(mStartX+ScreenHandler.getWorldPosition().x, getY());
 		if(mStatus == AIR){
-			setPosition(getX(), getY()+mVertVelocity);
-			mVertVelocity -= GRAVITY;
+			setPosition(getX(), getY()+mVertVelocity*MusicHandler.getTransitionScale());
+			mVertVelocity -= GRAVITY*MusicHandler.getTransitionScale();
 		}
 		if(mVertVelocity < 0 || mStatus == PLATFORM)
 		{
@@ -237,12 +213,12 @@ public class Player extends Collidable {
 	}
 
 	/**
-	 * Player Jumps.  Adds a posiytive velocity to player's vertical velocity
+	 * Player Jumps.  Adds a positive velocity to player's vertical velocity
 	 */
 	public void jump(int jumpSpeed){
 		if(mStatus != AIR){
 			//addVY(JUMPSPEED);
-			addVY(jumpSpeed);
+			mVertVelocity += jumpSpeed;
 			mStatus = AIR;
 		}
 	}

@@ -22,13 +22,7 @@ public class MusicHandler {
 		return music.getPosition();
 	}
 	
-	public static void updateTime(){
-		if(MusicHandler.getTime() > 0){
-			int debug = 0;
-			currTime = MusicHandler.getTime();
-			debug++;
-		}
-		
+	public static void updateTime(){		
 		currTime = MusicHandler.getTime();
 		timeDiff = currTime - prevTime;
 		prevTime = currTime;
