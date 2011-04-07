@@ -103,17 +103,18 @@ public class SpriteLayer {
 
 	public void draw(SpriteBatch spriteBatch, Vector2 worldPosition){
 		LinkedList<Sprite> temp;
-		int parallaxPosition = (int)(worldPosition.x*parallax);				
+		int parallaxPosition = (int)(worldPosition.x*parallax);
+		int transition = (int) (SPEED*MusicHandler.getTransitionScale());
 
 		//Remove past Sprites from Screen
-		for(int i = -(SPEED+MAX_SPRITE_SIZE); i < -MAX_SPRITE_SIZE; i++){
+		for(int i = -(transition+MAX_SPRITE_SIZE); i < -MAX_SPRITE_SIZE; i++){
 			if(onScreenLayer.containsKey(i+parallaxPosition)){
 				onScreenLayer.remove(i+parallaxPosition);
 			}
 		}
 
 		//Add new onScreen Sprites
-		for(int i = Gdx.graphics.getWidth()-SPEED; i < Gdx.graphics.getWidth()+SPEED; i++){ 
+		for(int i = Gdx.graphics.getWidth()-transition; i < Gdx.graphics.getWidth()+SPEED; i++){ 
 			if(layer.containsKey(i+parallaxPosition+Gdx.graphics.getWidth())){	
 				if(!onScreenLayer.containsKey(i+parallaxPosition+Gdx.graphics.getWidth())){
 					temp = layer.get(i+parallaxPosition+Gdx.graphics.getWidth());

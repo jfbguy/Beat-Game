@@ -9,7 +9,7 @@ public class Player extends Collidable {
 
 	private final float PLATFORM_CATCH = .4f;
 	private final int FRAME_COUNT = 6;
-	private final float FRAME_DELAY = MusicHandler.FRAMERATE/10;
+	private final float FRAME_DELAY = 20;
 	private final int SPRITE_SIZE = 64;
 	private final float GRAVITY = 1.0f;
 	public final int JUMPSPEED = 15;
@@ -162,7 +162,7 @@ public class Player extends Collidable {
 	 * Calculate Physics on player, Gravity always effects player if they are in the air
 	 */
 
-	public void physics(ScreenHandler screenHandler, ScoreBoard scoreBoard){
+	public void update(ScreenHandler screenHandler, ScoreBoard scoreBoard){
 		setPosition(mStartX+ScreenHandler.getWorldPosition().x, getY());
 		if(mStatus == AIR){
 			setPosition(getX(), getY()+mVertVelocity*MusicHandler.getTransitionScale());

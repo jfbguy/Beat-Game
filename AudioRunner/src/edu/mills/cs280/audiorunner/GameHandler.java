@@ -70,7 +70,7 @@ public class GameHandler implements ApplicationListener {
 			boostMeter.updateBoost();
 
 			//Physics
-			player.physics(screenHandler,scoreBoard);
+			player.update(screenHandler,scoreBoard);
 
 			//PLAYER LOGIC
 			player.animate();
