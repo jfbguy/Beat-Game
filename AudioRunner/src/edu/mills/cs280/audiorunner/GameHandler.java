@@ -11,7 +11,7 @@ public class GameHandler implements ApplicationListener {
 	private static final float STARTY = 50.0f;
 	private static final float PLAYER_WIDTH = 64;
 	private static final float PLAYER_HEIGHT = 64;
-	private static final float VOLUME = .5f;
+	private static final float VOLUME = .01f;
 
 	private SpriteBatch spriteBatch;
 	private Player player;
@@ -41,6 +41,7 @@ public class GameHandler implements ApplicationListener {
 		screenHandler = new ScreenHandler(5);
 		scoreBoard = new ScoreBoard();
 		boostMeter = new BoostMeter();
+		Particle.BufferParticles();
 	}
 
 	@Override

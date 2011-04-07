@@ -3,8 +3,8 @@ package edu.mills.cs280.audiorunner;
 import com.badlogic.gdx.audio.Music;
 
 public class MusicHandler {
-	static public final float FRAMERATE = 60;
-	static private final float TIMESCALE = 1000/FRAMERATE;  //Milliseconds / Desire FrameRate
+	static public final float FRAMERATE = 30;
+	static private final float TIMESCALE = 1/FRAMERATE;  //Milliseconds / Desire FrameRate
 
 	static private Music music;
 	static private float prevTime = 0.0f;

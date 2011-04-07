@@ -9,15 +9,16 @@ public class Player extends Collidable {
 
 	private final float PLATFORM_CATCH = .4f;
 	private final int FRAME_COUNT = 6;
+	private final float FRAME_DELAY = MusicHandler.FRAMERATE/10;
 	private final int SPRITE_SIZE = 64;
-	private final float GRAVITY = 6.0f;
-	public final int JUMPSPEED = 25;
+	private final float GRAVITY = 1.0f;
+	public final int JUMPSPEED = 15;
 	private final int GROUND = 0;
 	private final int AIR = 1;
 	private final int PLATFORM = 2;
 
 	private int mStartX;
-	private float mAnimDelay = 1;
+	private float mAnimDelay;
 	private float mVertVelocity;
 	private float mAnimCounter;
 	private int mFrameNum;
@@ -37,7 +38,7 @@ public class Player extends Collidable {
 		mStartX = (int)x;
 		this.setBounds(x, y, width, height);
 		mVertVelocity = 0;
-		mAnimDelay = MusicHandler.FRAMERATE/120;
+		mAnimDelay = FRAME_DELAY;
 		mAnimCounter = 0;
 		mFrameNum = 0;
 	}

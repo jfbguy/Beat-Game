@@ -8,7 +8,7 @@ import com.badlogic.gdx.graphics.glutils.ImmediateModeRenderer;
 
 public class ScreenHandler{
 	
-	private static final int SPEED = 200;
+	private static final int SPEED = 6;
 	private static final float ONSCREEN_BUFFER = .2f*Gdx.graphics.getWidth();
 	private final int DEFAULT_LEVEL_HEIGHT = 60;
 	private final float[] PARALLAX = {1.5f,1.0f,.4f,.3f,.02f};
