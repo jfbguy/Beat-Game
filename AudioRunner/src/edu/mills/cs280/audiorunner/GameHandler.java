@@ -62,40 +62,47 @@ public class GameHandler implements ApplicationListener {
 		}
 		MusicHandler.updateTime();
 
-		//LEVEL LOGIC
-		screenHandler.updateScreen();
-		boostMeter.updateBoost();
+		if(MusicHandler.getTransitionScale() != 0){
 
-		//Physics
-		player.physics(screenHandler,scoreBoard);
+			//LEVEL LOGIC
+			screenHandler.updateScreen();
+			boostMeter.updateBoost();
 
-		//PLAYER LOGIC
-		player.animate();
+			//Physics
+			player.physics(screenHandler,scoreBoard);
 
-		//Input
-		if(Gdx.input.isTouched()){
-			if(!player.inAir() ){
-				if(touched == false){
-					touched = true;
+			//PLAYER LOGIC
+			player.animate();
 
-					scoreBoard.jumpScoring(player,screenHandler,boostMeter);
+			//Input
+			if(Gdx.input.isTouched()){
+				if(!player.inAir() ){
+					if(touched == false){
+						touched = true;
+
+						scoreBoard.jumpScoring(player,screenHandler,boostMeter);
+					}
 				}
 			}
+			else{
+				touched = false;
+			}
+
+			//Clear Screen
+			Gdx.graphics.getGL10().glClearColor(0,0,0,1);
+			Gdx.graphics.getGL10().glClear(GL10.GL_COLOR_BUFFER_BIT);
+
+			//draw Screen
+			screenHandler.draw(spriteBatch, player);
+
+			//draw UI
+			scoreBoard.draw(spriteBatch);
+			boostMeter.draw(spriteBatch);
 		}
 		else{
-			touched = false;
+			int debug = 0;
+			debug++;
 		}
-
-		//Clear Screen
-		Gdx.graphics.getGL10().glClearColor(0,0,0,1);
-		Gdx.graphics.getGL10().glClear(GL10.GL_COLOR_BUFFER_BIT);
-
-		//draw Screen
-		screenHandler.draw(spriteBatch, player);
-
-		//draw UI
-		scoreBoard.draw(spriteBatch);
-		boostMeter.draw(spriteBatch);
 
 		//DEBUG TESTS
 		System.out.println("FPS: "+Gdx.graphics.getFramesPerSecond());

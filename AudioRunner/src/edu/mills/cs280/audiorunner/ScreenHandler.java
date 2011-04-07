@@ -8,7 +8,7 @@ import com.badlogic.gdx.graphics.glutils.ImmediateModeRenderer;
 
 public class ScreenHandler{
 	
-	private static final int SPEED = 20;
+	private static final int SPEED = 200;
 	private static final float ONSCREEN_BUFFER = .2f*Gdx.graphics.getWidth();
 	private final int DEFAULT_LEVEL_HEIGHT = 60;
 	private final float[] PARALLAX = {1.5f,1.0f,.4f,.3f,.02f};
@@ -25,6 +25,8 @@ public class ScreenHandler{
 	ImmediateModeRenderer mRenderer;
 	private int mDrawStarter;
 	private static Vector2 mWorldPosition;
+	private static float mWorldPositionX;
+	private static float mWorldPositionY;
 	private int[] mGroundLevels;
 	private Texture[] mTextures;
 	private SpriteLayer[] mSpriteLayers;
@@ -121,7 +123,8 @@ public class ScreenHandler{
 	 */
 	public void updateScreen(){	//Updates level depending on music and how player is doing
 		mCurrentFrameSpeed = SPEED*MusicHandler.getTransitionScale();
-		mWorldPosition.x += mCurrentFrameSpeed;
+		mWorldPositionX += mCurrentFrameSpeed;
+		mWorldPosition.x = (int)mWorldPositionX;
 
 	}
 
