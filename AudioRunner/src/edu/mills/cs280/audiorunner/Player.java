@@ -1,6 +1,7 @@
 package edu.mills.cs280.audiorunner;
 
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.LinkedList;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
@@ -8,31 +9,20 @@ public class Player extends Collidable {
 
 	private final float PLATFORM_CATCH = .4f;
 	private final int FRAME_COUNT = 6;
+	private final float FRAME_DELAY = 20;
 	private final int SPRITE_SIZE = 64;
-	private final float GRAVITY = 0.5f;
-	private final int JUMPSPEED = 10;
+	private final float GRAVITY = 1.0f;
+	public final int JUMPSPEED = 15;
 	private final int GROUND = 0;
 	private final int AIR = 1;
 	private final int PLATFORM = 2;
 
-	private int mAnimDelay = 10;
+	private int mStartX;
+	private float mAnimDelay;
 	private float mVertVelocity;
-	private int mAnimCounter;
+	private float mAnimCounter;
 	private int mFrameNum;
 	private int mStatus;
-
-	/**
-	 * Constructor
-	 * 
-	 * @param  Texture, Holds The Sprite Texture for player
-	 */
-	public Player(String texture) {
-		this.loadTexture(texture);
-		mVertVelocity = 0;
-		mAnimDelay = 25/ScreenHandler.getSpeed();
-		mAnimCounter = 0;
-		mFrameNum = 0;
-	}
 
 	/**
 	 * Constructor
@@ -45,9 +35,10 @@ public class Player extends Collidable {
 	 */
 	public Player(String texture, float x, float y, float width, float height) {
 		this.loadTexture(texture);
+		mStartX = (int)x;
 		this.setBounds(x, y, width, height);
 		mVertVelocity = 0;
-		mAnimDelay = 25/ScreenHandler.getSpeed();
+		mAnimDelay = FRAME_DELAY;
 		mAnimCounter = 0;
 		mFrameNum = 0;
 	}
@@ -66,35 +57,29 @@ public class Player extends Collidable {
 	 * @param  SpriteBatch, Draw within the current SpriteBatch
 	 */
 	public void draw(SpriteBatch spriteBatch){
-
+		spriteBatch.begin();
 		spriteBatch.draw(getTexture(),
-				getX(),	getY(),
+				getX()-ScreenHandler.getWorldPosition().x,getY()-ScreenHandler.getWorldPosition().y,
 				this.getWidth(),this.getHeight(),
 				getSpriteX(), getSpriteY(),
 				SPRITE_SIZE, SPRITE_SIZE,
-				false,false);	
+				false,false);
+		spriteBatch.end();
 	}
 
 	/**
 	 * Updates the Animation of the Player
-	 * Incrememnts the animation count, and decides if the sprite should switch
+	 * Increments the animation count, and decides if the sprite should switch
 	 * to the next frame of animation
 	 */
 	public void animate(){
-		mAnimCounter++;
-
-		if(mAnimCounter % mAnimDelay == 0) {
-
+		mAnimCounter += (1.0f*MusicHandler.getTransitionScale());
+		if(mAnimCounter >= mAnimDelay) {
 			if(mFrameNum == FRAME_COUNT-1 ) {
-				mAnimCounter = 0;
 				mFrameNum = 0;
 			}
 			mFrameNum++;
-		}
-
-		if(mStatus == AIR){
-			setPosition(getX(), getY()+mVertVelocity);
-			mVertVelocity -= GRAVITY;
+			mAnimCounter = 0;
 		}
 	}
 
@@ -128,19 +113,10 @@ public class Player extends Collidable {
 	}
 
 	/**
-	 * Adds a vertical velocity amount to player's velocity
-	 * 
-	 * @param int Y velocity you wish to add to current Y velocity
-	 */
-	public void addVY(int mVertVelocity){
-		this.mVertVelocity += mVertVelocity;
-	}
-
-	/**
 	 * Get the Y position with in the Sprite's Texture wher ethe current
 	 * frame of animation is located. 
 	 * 
-	 * @param int Y velocity you sish to add to current Y velocity
+	 * @param int Y velocity you wish to add to current Y velocity
 	 */
 	public void setVY(int mVertVelocity){
 		this.mVertVelocity = mVertVelocity;
@@ -186,19 +162,23 @@ public class Player extends Collidable {
 	 * Calculate Physics on player, Gravity always effects player if they are in the air
 	 */
 
-	public void physics(ScreenHandler screenHandler){
-
+	public void update(ScreenHandler screenHandler, ScoreBoard scoreBoard){
+		setPosition(mStartX+ScreenHandler.getWorldPosition().x, getY());
+		if(mStatus == AIR){
+			setPosition(getX(), getY()+mVertVelocity*MusicHandler.getTransitionScale());
+			mVertVelocity -= GRAVITY*MusicHandler.getTransitionScale();
+		}
 		if(mVertVelocity < 0 || mStatus == PLATFORM)
 		{
 			mStatus = AIR;
-			Collection<LinkedList<Platform>> platformLists = screenHandler.getPlatforms().getOnScreen().values();
-			for(LinkedList<Platform> platformList : platformLists){
-				for(Platform platform : platformList){
+			Collection<LinkedList<Collidable>> platformLists = screenHandler.getPlatforms().getOnScreen().values();
+			for(LinkedList<Collidable> platformList : platformLists){
+				for(Collidable platform : platformList){
 					if(this.getY() >= platform.getY()+platform.getHeight() && this.getY()+mVertVelocity <= platform.getY()+platform.getHeight()){
-						if(this.getX() + this.getWidth() * PLATFORM_CATCH >= platform.getX() - screenHandler.getWorldPosition()
-								&& (this.getX() + this.getWidth() * PLATFORM_CATCH <= platform.getX() + platform.getWidth()- screenHandler.getWorldPosition())
-								|| (this.getX() + this.getWidth() * (1-PLATFORM_CATCH) >= platform.getX() - screenHandler.getWorldPosition()
-								&& this.getX() + this.getWidth() * (1-PLATFORM_CATCH) <= platform.getX() + platform.getWidth() - screenHandler.getWorldPosition())){
+						if(this.getX() + this.getWidth() * PLATFORM_CATCH >= platform.getX()
+								&& (this.getX() + this.getWidth() * PLATFORM_CATCH <= platform.getX() + platform.getWidth())
+								|| (this.getX() + this.getWidth() * (1-PLATFORM_CATCH) >= platform.getX()
+								&& this.getX() + this.getWidth() * (1-PLATFORM_CATCH) <= platform.getX() + platform.getWidth())){
 							mStatus = PLATFORM;
 							mVertVelocity = 0;
 						}
@@ -206,18 +186,25 @@ public class Player extends Collidable {
 				}
 			}
 		}
-		//Check for platforms
-		/*for(int i = 0; i < this.getWidth(); i++){
-			if(platformLayer.contains((int)(screenHandler.getWorldPosition()+this.getX())+i)){
-				for(Platform platform : platformLayer.get((int)(screenHandler.getWorldPosition()+this.getX())+i)){
-					if((this.getPixmap().getPixel(i, 0) != 0) && (platform.getPixmap().getPixel(i, 0) != 0)){
-						setGround();
-					}
+
+		//Check if touches any scoreItems
+		Collection<LinkedList<Collidable>> scoreItemLists = screenHandler.getScoreItems().getOnScreen().values();
+		for(LinkedList<Collidable> scoreItemList : scoreItemLists){
+			Iterator<Collidable> iter = scoreItemList.iterator();
+			while(iter.hasNext()){
+				Collidable tempCollidable = (Collidable) iter.next();
+				if(this.pixelCollides(tempCollidable)){
+					((ScoreItem)tempCollidable).scored(scoreBoard);	//Score!
+					//create explosion at touch point
+					Particle.createExplosion(tempCollidable.getX(),tempCollidable.getY());
+					//screenHandler.explosionParticles(tempCollidable.getX(),tempCollidable.getY());
+					iter.remove();		//Remove ScoreItem after being collected
 				}
 			}
-		}*/
+		}
 
-		//GROUND
+
+		//GROUND  ####THIS WILL PROBABLY CHANGE, just hardcoded for now####
 		if(mStatus == AIR && getY() < 40){
 			mVertVelocity = 0;
 			mStatus = GROUND;
@@ -227,11 +214,12 @@ public class Player extends Collidable {
 	}
 
 	/**
-	 * Player Jumps.  Adds a posiytive velocity to player's vertical velocity
+	 * Player Jumps.  Adds a positive velocity to player's vertical velocity
 	 */
-	public void jump(){
+	public void jump(int jumpSpeed){
 		if(mStatus != AIR){
-			addVY(JUMPSPEED);
+			//addVY(JUMPSPEED);
+			mVertVelocity += jumpSpeed;
 			mStatus = AIR;
 		}
 	}

@@ -7,34 +7,43 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ImmediateModeRenderer;
 
 public class ScreenHandler{
-	private static final int SPEED = 5;
+	
+	private static final int SPEED = 6;
+	private static final float ONSCREEN_BUFFER = .2f*Gdx.graphics.getWidth();
 	private final int DEFAULT_LEVEL_HEIGHT = 60;
 	private final float[] PARALLAX = {1.5f,1.0f,.4f,.3f,.02f};
-	private final int NUM_OF_mTextures = 5;
+	private final int NUM_OF_TEXTURES = 6;		//UPDATE THIS IF YOU ADD A TEXTURE!!!
 	private final int MOUNTAIN = 0;	//Texture Constants, each needs to be different!
 	private final int SUN = 1;
 	private final int POWERLINES = 2;
 	private final int GROUND = 3;
 	private final int PLATFORM = 4;
+	private final int SCOREITEM = 5;
 
-
+	private static float mCurrentFrameSpeed;
 	ImmediateModeRenderer mRenderer;
 	private int mDrawStarter;
-	private int mWorldPosition;
+	private static Vector2 mWorldPosition;
+	private static float mWorldPositionX;
+	//private static float mWorldPositionY;
 	private int[] mGroundLevels;
 	private Texture[] mTextures;
 	private SpriteLayer[] mSpriteLayers;
-	private PlatformLayer platformLayer;
+	private CollisionLayer platformLayer;
+	private CollisionLayer scoreItemLayer;
+	//private LinkedList<Particle> particles;
 
 	/**
 	 * Constructor
 	 */
 	public ScreenHandler(int numOfLayers){
 		mDrawStarter = 0;
-		mWorldPosition = 0;
+		mWorldPosition = new Vector2(0,0);
 		mSpriteLayers = new SpriteLayer[numOfLayers];
-		platformLayer = new PlatformLayer(PARALLAX[1]);
-		
+		platformLayer = new CollisionLayer(PARALLAX[1]);
+		scoreItemLayer = new CollisionLayer(PARALLAX[1]);
+		//particles = new LinkedList<Particle>();
+
 		//Declare all SpriteLayers
 		for(int i = 0; i < mSpriteLayers.length; i++){
 			mSpriteLayers[i] = new SpriteLayer(PARALLAX[i]);
@@ -47,12 +56,13 @@ public class ScreenHandler{
 		}
 
 		//load sprites
-		mTextures = new Texture[NUM_OF_mTextures];
+		mTextures = new Texture[NUM_OF_TEXTURES];
 		mTextures[MOUNTAIN] = new Texture(Gdx.files.internal("data/mountain.png"));
 		mTextures[SUN] = new Texture(Gdx.files.internal("data/sun.png"));
 		mTextures[POWERLINES] = new Texture(Gdx.files.internal("data/powerlines.png"));
 		mTextures[GROUND] = new Texture(Gdx.files.internal("data/gradient_BW_1D.png"));
 		mTextures[PLATFORM] = new Texture(Gdx.files.internal("data/purple.png"));
+		mTextures[SCOREITEM] = new Texture(Gdx.files.internal("data/yellow.png"));
 
 		//************************************************************************************************
 		//************** DEBUG level load ****************************************************************
@@ -65,14 +75,22 @@ public class ScreenHandler{
 			tSprite.setPosition(temp.getX(), temp.getY());
 			mSpriteLayers[0].put(temp.getX(),tSprite);
 		}
-		
+
 		for(int i = 0; i < 20; i++){
 			temp.set(i*400,0);
 			Sprite tSprite = new Sprite(mTextures[MOUNTAIN]);
 			tSprite.setPosition(temp.getX(), temp.getY());
 			mSpriteLayers[2].put(temp.getX(),tSprite);
 		}
-		
+
+		//Score Items
+		for(int i = 0; i < 300; i++){
+			temp.set(i*30,150);
+			ScoreItem scoreItem = new ScoreItem((float)temp.getX(),(float)temp.getY(),10f,10f,"data/yellow.png",10);
+			scoreItem.setPosition(temp.getX(), temp.getY());
+			scoreItemLayer.put(temp.getX(),scoreItem);
+		}
+
 		//platforms
 		for(int i = 0; i < 10; i++){
 			temp.set(i*200+1000,50);
@@ -82,7 +100,7 @@ public class ScreenHandler{
 			platform = new Platform((float)temp.getX(),(float)temp.getY(),100f,10f,"data/purple.png");
 			platformLayer.put(temp.getX(),platform);
 		}
-		
+
 		//sun
 		temp.set(400,100);
 		Sprite tSprite = new Sprite(mTextures[SUN]);
@@ -90,7 +108,7 @@ public class ScreenHandler{
 		mSpriteLayers[4].put(temp.getX(),tSprite);
 		//************************************************************************************
 		//************************************************************************************
-		
+
 		//Load start of Level Layers
 		for(int i = 0; i < mSpriteLayers.length; i++){
 			mSpriteLayers[i].loadStart(mWorldPosition);
@@ -103,39 +121,43 @@ public class ScreenHandler{
 	 * Need to add added platforms, sprites, change ground, etc
 	 */
 	public void updateScreen(){	//Updates level depending on music and how player is doing
-		mWorldPosition += SPEED;
-		
+		mCurrentFrameSpeed = SPEED*MusicHandler.getTransitionScale();
+		mWorldPositionX += mCurrentFrameSpeed;
+		mWorldPosition.x = (int)mWorldPositionX;
+
 	}
-	
+
 	/**
 	 * Draws Everything on Screen
 	 * 
 	 * @param
 	 */
-	
 	public void draw(SpriteBatch spriteBatch, Player player){
-		spriteBatch.begin();
-		
 		//Draw first half of layers rounded down
 		for(int i = mSpriteLayers.length-1; i >= mSpriteLayers.length/2; i--){
 			mSpriteLayers[i].draw(spriteBatch,mWorldPosition);
 		}
-		
+
 		//Draw Ground
 		drawGround(spriteBatch);
-		
+
 		//Draw Player
 		player.draw(spriteBatch);
-		
+
 		//Draw Platforms
 		platformLayer.draw(spriteBatch, mWorldPosition);
-		
+
+		//Draw Score Items
+		scoreItemLayer.draw(spriteBatch, mWorldPosition);
+
+		//Draw Particles
+		Particle.updateParticles();
+		Particle.draw(spriteBatch, mWorldPosition);
+
 		//Draw second half of layers rounded down
 		for(int i = mSpriteLayers.length/2-1; i >= 0; i--){
 			mSpriteLayers[i].draw(spriteBatch,mWorldPosition);
 		}
-		
-		spriteBatch.end();
 	}
 
 	/**
@@ -144,6 +166,7 @@ public class ScreenHandler{
 	 * @param  SpriteBatch, Draw within the current SpriteBatch
 	 */
 	private void drawGround(SpriteBatch spriteBatch){
+		spriteBatch.begin();
 		Sprite sprite = new Sprite(mTextures[GROUND]);
 		int posX = 0;
 		for(int i = 0; i < Gdx.graphics.getWidth(); i++) {
@@ -152,16 +175,17 @@ public class ScreenHandler{
 			sprite.setBounds(i, 0, 1, mGroundLevels[posX]);
 			sprite.draw(spriteBatch);
 		}
+		spriteBatch.end();
 	}
-	
-	public int getWorldPosition(){
-		return mWorldPosition;
-	}
-	
-	public PlatformLayer getPlatforms(){
+
+	public CollisionLayer getPlatforms(){
 		return platformLayer;
 	}
-	
+
+	public CollisionLayer getScoreItems(){
+		return scoreItemLayer;
+	}
+
 	/**
 	 * Draws Ground, Player runs ontop of
 	 * 
@@ -169,6 +193,36 @@ public class ScreenHandler{
 	 */
 	public static int getSpeed(){
 		return SPEED;
+	}
+	
+	public static float getCurrentFrameSpeed(){
+		return mCurrentFrameSpeed;
+	}
+	
+	public static Vector2 getWorldPosition(){
+		return mWorldPosition;
+	}
+
+	public static boolean onScreen(Vector2 pos){
+		if(pos.x-mWorldPosition.x < -ONSCREEN_BUFFER || pos.x-mWorldPosition.x > Gdx.graphics.getWidth() + ONSCREEN_BUFFER){
+			return false;
+		}
+		if(pos.y-mWorldPosition.y < 0 || pos.y-mWorldPosition.y > Gdx.graphics.getHeight()){
+			return false;
+		}
+
+		return true;
+	}
+
+	public static boolean onScreen(float x,float y){
+		if(x-mWorldPosition.x < -ONSCREEN_BUFFER || x-mWorldPosition.x > Gdx.graphics.getWidth() + ONSCREEN_BUFFER){
+			return false;
+		}
+		if(y-mWorldPosition.y < 0 || y-mWorldPosition.y > Gdx.graphics.getHeight()){
+			return false;
+		}
+
+		return true;
 	}
 
 }
