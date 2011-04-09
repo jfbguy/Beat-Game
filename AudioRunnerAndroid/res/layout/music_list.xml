@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout 
+android:orientation="horizontal" 
+android:layout_width="fill_parent"
+android:layout_height="fill_parent" 
+xmlns:android="http://schemas.android.com/apk/res/android">
+        <LinearLayout 
+        			android:id="@+id/left_linear_layout" 
+        			android:layout_height="fill_parent" 
+                    android:layout_width="fill_parent"
+                    android:layout_weight="2"
+        			android:orientation="vertical">
+    
+			<TextView
+			    android:id="@+id/selected_song"
+		    	android:layout_width="fill_parent"
+		    	android:layout_height="wrap_content"
+		    	android:textColor="#666666"
+		    	android:text="No Song Selected Yet"/>
+            <TextView android:text="song name" 
+            		android:id="@+id/song_name" 
+            		android:layout_width="fill_parent" 
+            		android:layout_height="wrap_content">
+            </TextView>
+            <TextView android:text="song duration" 
+            		android:id="@+id/song_duration" 
+            		android:layout_width="fill_parent" 
+            		android:layout_height="wrap_content">
+            </TextView>
+            <Button android:layout_height="wrap_content" 
+            		android:layout_width="fill_parent" 
+            		android:text="Start" 
+            		android:id="@+id/Start_Game_Button">
+           	</Button>
+        </LinearLayout>
+        <LinearLayout
+        			android:id="@+id/right_linear_layout" 
+        			android:layout_height="fill_parent" 
+                    android:layout_width="fill_parent"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+	        <ListView 
+	        		android:id="@+id/PhoneMusicList" 
+	        		android:layout_toRightOf="@id/right_linear_layout" 
+                    android:layout_height="fill_parent" 
+                    android:layout_width="fill_parent">
+	       </ListView>
+       </LinearLayout>
+</LinearLayout>
