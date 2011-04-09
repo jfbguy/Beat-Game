@@ -13,6 +13,8 @@ public class GameHandler implements ApplicationListener {
 	private static final float PLAYER_HEIGHT = 64;
 	private static final float VOLUME = .01f;
 
+	private static int FRAMESKIP = 0;
+
 	private SpriteBatch spriteBatch;
 	private Player player;
 	private Music music;
@@ -20,7 +22,6 @@ public class GameHandler implements ApplicationListener {
 	private BoostMeter boostMeter;
 	private String trackLocation;
 	private boolean touched;
-
 	private ScreenHandler screenHandler;
 
 	@Override
@@ -35,6 +36,13 @@ public class GameHandler implements ApplicationListener {
 		trackLocation = "data/music/Freezepop - Starlight (Karacter Remix).mp3";
 		music = Gdx.audio.newMusic (Gdx.files.internal(trackLocation));
 		MusicHandler.setMusic(music);
+		//Play Music
+		if(!music.isPlaying()){
+			music.setVolume(VOLUME);	//volume should be set by settings
+			music.play();
+			music.pause();
+			music.play();
+		}
 
 		//Screen Elements
 		spriteBatch = new SpriteBatch();
@@ -56,54 +64,57 @@ public class GameHandler implements ApplicationListener {
 
 	@Override
 	public void render() {
-		//Play Music
-		if(!music.isPlaying()){
-			music.setVolume(VOLUME);	//volume should be set by settings
-			music.play();
-		}
-		MusicHandler.updateTime();
+		if(FrameLocker.legalFrame()){
+			MusicHandler.updateTime();
+			//if(MusicHandler.getTransitionScale() != 0){
+				//LEVEL LOGIC
+				screenHandler.updateScreen();
+				boostMeter.updateBoost();
 
-		if(MusicHandler.getTransitionScale() != 0){
+				//Physics
+				player.update(screenHandler,scoreBoard);
 
-			//LEVEL LOGIC
-			screenHandler.updateScreen();
-			boostMeter.updateBoost();
+				//PLAYER LOGIC
+				player.animate();
 
-			//Physics
-			player.update(screenHandler,scoreBoard);
+				//Input
+				if(Gdx.input.isTouched()){
+					if(!player.inAir() ){
+						if(touched == false){
+							touched = true;
 
-			//PLAYER LOGIC
-			player.animate();
-
-			//Input
-			if(Gdx.input.isTouched()){
-				if(!player.inAir() ){
-					if(touched == false){
-						touched = true;
-
-						scoreBoard.jumpScoring(player,screenHandler,boostMeter);
+							scoreBoard.jumpScoring(player,screenHandler,boostMeter);
+						}
 					}
 				}
-			}
-			else{
-				touched = false;
-			}
+				else{
+					touched = false;
+				}
 
-			//Clear Screen
-			Gdx.graphics.getGL10().glClearColor(0,0,0,1);
-			Gdx.graphics.getGL10().glClear(GL10.GL_COLOR_BUFFER_BIT);
+				//Clear Screen
+				Gdx.graphics.getGL10().glClearColor(0,0,0,1);
+				Gdx.graphics.getGL10().glClear(GL10.GL_COLOR_BUFFER_BIT);
 
-			//draw Screen
-			screenHandler.draw(spriteBatch, player);
+				//draw Screen
+				screenHandler.draw(spriteBatch, player);
 
-			//draw UI
-			scoreBoard.draw(spriteBatch);
-			boostMeter.draw(spriteBatch);
+				//draw UI
+				scoreBoard.draw(spriteBatch);
+				boostMeter.draw(spriteBatch);
+
+				if(FRAMESKIP > 0){
+					System.out.print("FRAMESKIP: " + FRAMESKIP);
+					FRAMESKIP = 0;
+				}
+
+
+			//}
+			//else{
+			//	FRAMESKIP++;
+			//}
 		}
-		else{
-			int debug = 0;
-			debug++;
-		}
+
+		System.out.println(System.currentTimeMillis());
 
 		//DEBUG TESTS
 		System.out.println("FPS: "+Gdx.graphics.getFramesPerSecond());

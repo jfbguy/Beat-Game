@@ -4,12 +4,14 @@ import com.badlogic.gdx.audio.Music;
 
 public class MusicHandler {
 	static public final float FRAMERATE = 30;
-	static private final float TIMESCALE = 1/FRAMERATE;  //Milliseconds / Desire FrameRate
+	static private final float TIMESCALE = 1.0f/FRAMERATE;  //Milliseconds / Desire FrameRate
 
 	static private Music music;
 	static private float prevTime = 0.0f;
 	static private float currTime = 0.0f;
 	static private float timeDiff = 0.0f;
+	
+	static private float avgDiff = 0;
 
 	private MusicHandler(){
 	}
@@ -26,14 +28,18 @@ public class MusicHandler {
 		currTime = MusicHandler.getTime();
 		if(currTime != prevTime){
 			timeDiff = currTime - prevTime;
+			avgDiff = (avgDiff + timeDiff)/2.0f;
+			prevTime = currTime;
+		}
+		else{
+			currTime += avgDiff;
+			timeDiff = currTime - prevTime;
 			prevTime = currTime;
 		}
 	}
 
 	public static float getTransitionScale(){
-		if(timeDiff == 0.0f){
-			return 0;
-		}
+		
 		return timeDiff/TIMESCALE;
 	}
 }

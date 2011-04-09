@@ -20,13 +20,12 @@ public class ScreenHandler{
 	private final int PLATFORM = 4;
 	private final int SCOREITEM = 5;
 
-
 	private static float mCurrentFrameSpeed;
 	ImmediateModeRenderer mRenderer;
 	private int mDrawStarter;
 	private static Vector2 mWorldPosition;
 	private static float mWorldPositionX;
-	private static float mWorldPositionY;
+	//private static float mWorldPositionY;
 	private int[] mGroundLevels;
 	private Texture[] mTextures;
 	private SpriteLayer[] mSpriteLayers;
