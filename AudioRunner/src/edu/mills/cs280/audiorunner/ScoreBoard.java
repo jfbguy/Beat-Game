@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 public class ScoreBoard {
 	private final int FONTSIZE = 64;				//Size of Font in Texture
 	private final float SCREENPERCENTAGE = 0.1f;	//Percentage of screen to draw score on
+	private final float FLOATER_SPEED = .03f;
 
 	private Texture mNumbersTexture;
 	private int mScore;
@@ -91,8 +92,7 @@ public class ScoreBoard {
 		 */
 		int jumpscore = player.JUMPSPEED;	//DEBUG  *** TODO
 		boostMeter.addBoost(jumpscore);		//DEBUG
-		
-		
+
 		player.jump(jumpscore);
 		//Score add according to jump, will change with music scoring method
 		this.addFloaterScore((int)player.getX(),(int)player.getY(),jumpscore);
@@ -134,8 +134,8 @@ public class ScoreBoard {
 		}
 
 		public void moveFloater(){
-			posX += Math.abs(posX-Gdx.graphics.getWidth())*SCREENPERCENTAGE*MusicHandler.getTransitionScale();
-			posY += Math.abs(posY-Gdx.graphics.getHeight())*SCREENPERCENTAGE*MusicHandler.getTransitionScale();
+			posX += Math.abs(posX-Gdx.graphics.getWidth())*FLOATER_SPEED*MusicHandler.getTransitionScale();
+			posY += Math.abs(posY-Gdx.graphics.getHeight())*FLOATER_SPEED*MusicHandler.getTransitionScale();
 		}
 		
 		public void draw(SpriteBatch spriteBatch){

@@ -9,7 +9,7 @@ public class Player extends Collidable {
 
 	private final float PLATFORM_CATCH = .4f;
 	private final int FRAME_COUNT = 6;
-	private final float FRAME_DELAY = 20;
+	private final float FRAME_DELAY = MusicHandler.FRAMERATE/FRAME_COUNT/2;
 	private final int SPRITE_SIZE = 64;
 	private final float GRAVITY = 1.0f;
 	public final int JUMPSPEED = 15;

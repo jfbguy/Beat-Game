@@ -160,9 +160,6 @@ public class Particle{
 	}
 
 	public static void draw(SpriteBatch spriteBatch, Vector2 worldPosition){
-
-		//Gdx.gl.glEnable(GL10.GL_BLEND);
-		//Gdx.gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
 		spriteBatch.begin();
 		Iterator<Particle> iter = PARTICLES.iterator();
 		while(iter.hasNext()){
@@ -189,10 +186,6 @@ public class Particle{
 		}
 		spriteBatch.end();
 		spriteBatch.setColor(1.0f, 1.0f, 1.0f, 1.0f);	//reset transperancies to normal
-
-		//DEBUG!!!
-		System.out.println("# of Particles: " + PARTICLES.size());
-		System.out.println("# of Particles_BUFFERED: " + PARTICLE_BUFFER.size());
 	}
 
 	public void setTexture(Texture texture){

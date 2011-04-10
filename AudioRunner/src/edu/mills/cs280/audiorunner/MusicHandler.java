@@ -3,21 +3,21 @@ package edu.mills.cs280.audiorunner;
 import com.badlogic.gdx.audio.Music;
 
 public class MusicHandler {
-	static public final float FRAMERATE = 30;
-	static private final float TIMESCALE = 1.0f/FRAMERATE;  //Milliseconds / Desire FrameRate
+	static public final float FRAMERATE = 60.0f;
+	static private final float TIMESCALE = 1000/FRAMERATE;  //Milliseconds / Desire FrameRate
 
 	static private Music music;
-	static private float prevTime = 0.0f;
-	static private float currTime = 0.0f;
-	static private float timeDiff = 0.0f;
-	
-	static private float avgDiff = 0;
+	static private long prevTime = 0L;
+	static private long currTime = 0L;
+	static private long timeDiff = 0L;
 
 	private MusicHandler(){
 	}
 
 	public static void setMusic(Music music){
 		MusicHandler.music = music;
+		currTime = System.currentTimeMillis();
+		prevTime = System.currentTimeMillis();
 	}
 
 	public static float getTime(){
@@ -25,21 +25,14 @@ public class MusicHandler {
 	}
 
 	public static void updateTime(){		
-		currTime = MusicHandler.getTime();
+		currTime = System.currentTimeMillis();
 		if(currTime != prevTime){
-			timeDiff = currTime - prevTime;
-			avgDiff = (avgDiff + timeDiff)/2.0f;
-			prevTime = currTime;
-		}
-		else{
-			currTime += avgDiff;
 			timeDiff = currTime - prevTime;
 			prevTime = currTime;
 		}
 	}
 
 	public static float getTransitionScale(){
-		
 		return timeDiff/TIMESCALE;
 	}
 }

@@ -13,8 +13,6 @@ public class GameHandler implements ApplicationListener {
 	private static final float PLAYER_HEIGHT = 64;
 	private static final float VOLUME = .01f;
 
-	private static int FRAMESKIP = 0;
-
 	private SpriteBatch spriteBatch;
 	private Player player;
 	private Music music;
@@ -77,7 +75,6 @@ public class GameHandler implements ApplicationListener {
 
 	@Override
 	public void render() {
-		if(FrameLocker.legalFrame()){
 			MusicHandler.updateTime();
 			//if(MusicHandler.getTransitionScale() != 0){
 				//LEVEL LOGIC
@@ -95,7 +92,6 @@ public class GameHandler implements ApplicationListener {
 					if(!player.inAir() ){
 						if(touched == false){
 							touched = true;
-
 							scoreBoard.jumpScoring(player,screenHandler,boostMeter);
 						}
 					}
@@ -114,23 +110,6 @@ public class GameHandler implements ApplicationListener {
 				//draw UI
 				scoreBoard.draw(spriteBatch);
 				boostMeter.draw(spriteBatch);
-
-				if(FRAMESKIP > 0){
-					System.out.print("FRAMESKIP: " + FRAMESKIP);
-					FRAMESKIP = 0;
-				}
-
-
-			//}
-			//else{
-			//	FRAMESKIP++;
-			//}
-		}
-
-		System.out.println(System.currentTimeMillis());
-
-		//DEBUG TESTS
-		System.out.println("FPS: "+Gdx.graphics.getFramesPerSecond());
 
 	}
 
