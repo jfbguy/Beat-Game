@@ -5,14 +5,14 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class BoostMeter {
-	private final int FULL_BAR_WAIT = 50;
-	private final int REDUCTION_RATE = 10;
+	private final int FULL_BAR_WAIT = (int) (MusicHandler.FRAMERATE * 2);
 	private final float REDUCTION_AMOUNT = .01f;
 	private final float XPOS = Gdx.graphics.getWidth()*.01f;
 	private final float YPOS = Gdx.graphics.getHeight()*.5f;
 	private final int WIDTH = (int) (Gdx.graphics.getHeight()*.1);
 	private final int HEIGHT = (int) (Gdx.graphics.getHeight()*.5);
 	private final int MAX_METER_VALUE = 100;
+	private final int REDUCTION_RATE = (int) (MusicHandler.FRAMERATE/5);
 
 	Texture mBoostTexture;
 	Texture mBorderTexture;

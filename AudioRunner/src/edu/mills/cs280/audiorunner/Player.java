@@ -210,6 +210,8 @@ public class Player extends Collidable {
 			mStatus = GROUND;
 			setPosition(getX(),ScreenHandler.GROUND_HEIGHT);
 		}
+		
+		animate();
 
 	}
 
@@ -236,7 +238,7 @@ public class Player extends Collidable {
 		//Score add according to jump, will change with music scoring method
 		scoreBoard.addFloaterScore((int)this.getX(),(int)this.getY(),jumpscore);
 		//and create particles to show if jump is special
-		Particle.createJumpParticles(this);
+		Particle.createJumpParticles(this,jumpscore);
 	}
 	
 	public void boostJump(ScoreBoard scoreBoard, ScreenHandler screenHandler, BoostMeter boostMeter){
@@ -252,6 +254,6 @@ public class Player extends Collidable {
 		//Score add according to jump, will change with music scoring method
 		scoreBoard.addFloaterScore((int)this.getX(),(int)this.getY(),jumpscore);
 		//and create particles to show if jump is special
-		Particle.createJumpParticles(this);
+		Particle.createJumpParticles(this,jumpscore);
 	}
 }

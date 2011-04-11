@@ -2,7 +2,6 @@ package edu.mills.cs280.audiorunner;
 
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -79,12 +78,6 @@ public class GameHandler implements ApplicationListener {
 		screenHandler.updateScreen(player);
 		boostMeter.updateBoost();
 
-		//Physics
-		player.update(screenHandler,scoreBoard);
-
-		//PLAYER LOGIC
-		player.animate();
-
 		//Input
 		if(Gdx.input.isTouched()){
 			if(!player.inAir() ){
@@ -102,6 +95,9 @@ public class GameHandler implements ApplicationListener {
 		else{
 			touched = false;
 		}
+		
+		//PLAYER LOGIC
+		player.update(screenHandler,scoreBoard);
 
 		//Clear Screen
 		Gdx.graphics.getGL10().glClearColor(0,0,0,1);

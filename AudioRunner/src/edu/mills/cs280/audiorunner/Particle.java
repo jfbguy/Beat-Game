@@ -1,6 +1,5 @@
 package edu.mills.cs280.audiorunner;
 
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Random;
@@ -24,6 +23,10 @@ public class Particle{
 	private static final float EXPLOSION_PARTICLE_SIZE = .01f;	//% of Screen
 	private static final int EXPLOSION_PARTICLE_AMOUNT = 100;
 	private static final float FADE_OUT_THRESHOLD = .03f;	//Value of alpha when to delete particle
+	
+	//Falling Constants
+	private static final int FALLING_SPREAD = (int)(Gdx.graphics.getWidth()*.01f);
+	private static final float FALLING_PARTICLE_SIZE = Gdx.graphics.getWidth()*.005f;
 
 	private static Stack<Particle> PARTICLE_BUFFER = new Stack<Particle>();
 	private static LinkedList<Particle> PARTICLES = new LinkedList<Particle>();
@@ -149,13 +152,18 @@ public class Particle{
 		}
 	}
 
-	public static void createJumpParticles(Player player){
+	public static void createJumpParticles(Player player, int jumpscore){
 		Random rand = new Random();
-		for(int i = 0; i < 10; i++){
+		
+		int randX = 0;
+		int randY = 0;
+		for(int i = 0; i < jumpscore; i++){
+			randX = rand.nextInt(FALLING_SPREAD);
+			randY = rand.nextInt(FALLING_SPREAD);
 			AddParticle(
 					(int)(player.getX()+player.getWidth()/2),(int)player.getY(), 
-					rand.nextInt(10)-5,rand.nextInt(5)+5,
-					(float)Gdx.graphics.getHeight()*.01f, Particle.FALLING);
+					randX-FALLING_SPREAD/2,randY+FALLING_SPREAD/2,
+					FALLING_PARTICLE_SIZE, Particle.FALLING);
 		}
 	}
 

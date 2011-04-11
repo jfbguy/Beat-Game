@@ -13,8 +13,7 @@ public class ScreenHandler{
 	public static final float GROUND_HEIGHT = Gdx.graphics.getHeight()*.1f;
 	public static final float CEILING_HEIGHT = Gdx.graphics.getHeight()*.7f;
 	
-	private final int DEFAULT_LEVEL_HEIGHT = 60;
-	private final float[] PARALLAX = {1.5f,1.0f,.4f,.06f,.02f};
+	private final float[] PARALLAX = {1.5f,1.0f,.4f,.06f,.001f};
 	private final int NUM_OF_TEXTURES = 6;		//UPDATE THIS IF YOU ADD A TEXTURE!!!
 	private final int MOUNTAIN = 0;	//Texture Constants, each needs to be different!
 	private final int SUN = 1;
