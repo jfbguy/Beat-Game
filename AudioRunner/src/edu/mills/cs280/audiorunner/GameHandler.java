@@ -1,5 +1,10 @@
 package edu.mills.cs280.audiorunner;
 
+import java.io.IOException;
+
+import javax.sound.sampled.TargetDataLine;
+import javax.sound.sampled.UnsupportedAudioFileException;
+
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
@@ -48,9 +53,12 @@ public class GameHandler implements ApplicationListener {
 		if(!music.isPlaying()){
 			music.setVolume(VOLUME);	//volume should be set by settings
 			music.play();
-			music.pause();
-			music.play();
 		}
+		
+		PeakFinder george;
+		george = new PeakFinder(trackLocation);
+		System.out.println(george.returnPeaks().toString());
+		System.exit(0);
 
 		//Screen Elements
 		spriteBatch = new SpriteBatch();
