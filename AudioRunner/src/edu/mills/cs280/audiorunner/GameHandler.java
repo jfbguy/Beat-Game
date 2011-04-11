@@ -2,13 +2,12 @@ package edu.mills.cs280.audiorunner;
 
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class GameHandler implements ApplicationListener {
-	private static final float STARTX = 200.0f;	//Default starting position for player
-	private static final float STARTY = 50.0f;
 	private static final float PLAYER_WIDTH = 64;
 	private static final float PLAYER_HEIGHT = 64;
 	private static final float VOLUME = .01f;
@@ -23,9 +22,9 @@ public class GameHandler implements ApplicationListener {
 	private ScreenHandler screenHandler;
 
 	public GameHandler(){
-		
+
 	}
-	
+
 	public GameHandler(String musicFile){
 		this.trackLocation = musicFile;
 	}
@@ -34,8 +33,7 @@ public class GameHandler implements ApplicationListener {
 		touched = false;
 
 		//Initiate player
-		player = new Player("data/runner.png",STARTX,STARTY,PLAYER_WIDTH,PLAYER_HEIGHT);
-		player.setPosition(STARTX, STARTY);
+		player = new Player("data/runner.png",Gdx.graphics.getWidth()*.3f,ScreenHandler.GROUND_HEIGHT,PLAYER_WIDTH,PLAYER_HEIGHT);
 
 		//Music Stuff
 		//TODO: replace track location with the datapath of the music on the phone
@@ -46,7 +44,7 @@ public class GameHandler implements ApplicationListener {
 			music = Gdx.audio.newMusic (Gdx.files.external(trackLocation));
 		}
 		MusicHandler.setMusic(music);
-		
+
 		//Play Music
 		if(!music.isPlaying()){
 			music.setVolume(VOLUME);	//volume should be set by settings
@@ -75,41 +73,46 @@ public class GameHandler implements ApplicationListener {
 
 	@Override
 	public void render() {
-			MusicHandler.updateTime();
-			//if(MusicHandler.getTransitionScale() != 0){
-				//LEVEL LOGIC
-				screenHandler.updateScreen();
-				boostMeter.updateBoost();
+		MusicHandler.updateTime();
+		//if(MusicHandler.getTransitionScale() != 0){
+		//LEVEL LOGIC
+		screenHandler.updateScreen(player);
+		boostMeter.updateBoost();
 
-				//Physics
-				player.update(screenHandler,scoreBoard);
+		//Physics
+		player.update(screenHandler,scoreBoard);
 
-				//PLAYER LOGIC
-				player.animate();
+		//PLAYER LOGIC
+		player.animate();
 
-				//Input
-				if(Gdx.input.isTouched()){
-					if(!player.inAir() ){
-						if(touched == false){
-							touched = true;
-							scoreBoard.jumpScoring(player,screenHandler,boostMeter);
-						}
+		//Input
+		if(Gdx.input.isTouched()){
+			if(!player.inAir() ){
+				if(touched == false){
+					touched = true;
+					if(player.rectTouch(Gdx.input.getX(),Gdx.graphics.getHeight() - Gdx.input.getY(),ScreenHandler.getWorldPosition())){
+						player.boostJump(scoreBoard,screenHandler,boostMeter);
+					}
+					else{
+						player.jump(scoreBoard,screenHandler,boostMeter);
 					}
 				}
-				else{
-					touched = false;
-				}
+			}
+		}
+		else{
+			touched = false;
+		}
 
-				//Clear Screen
-				Gdx.graphics.getGL10().glClearColor(0,0,0,1);
-				Gdx.graphics.getGL10().glClear(GL10.GL_COLOR_BUFFER_BIT);
+		//Clear Screen
+		Gdx.graphics.getGL10().glClearColor(0,0,0,1);
+		Gdx.graphics.getGL10().glClear(GL10.GL_COLOR_BUFFER_BIT);
 
-				//draw Screen
-				screenHandler.draw(spriteBatch, player);
+		//draw Screen
+		screenHandler.draw(spriteBatch, player);
 
-				//draw UI
-				scoreBoard.draw(spriteBatch);
-				boostMeter.draw(spriteBatch);
+		//draw UI
+		scoreBoard.draw(spriteBatch);
+		boostMeter.draw(spriteBatch);
 
 	}
 

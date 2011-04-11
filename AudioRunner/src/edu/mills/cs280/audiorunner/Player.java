@@ -205,10 +205,10 @@ public class Player extends Collidable {
 
 
 		//GROUND  ####THIS WILL PROBABLY CHANGE, just hardcoded for now####
-		if(mStatus == AIR && getY() < 40){
+		if(mStatus == AIR && getY() < ScreenHandler.GROUND_HEIGHT){
 			mVertVelocity = 0;
 			mStatus = GROUND;
-			setPosition(getX(),41);
+			setPosition(getX(),ScreenHandler.GROUND_HEIGHT);
 		}
 
 	}
@@ -216,11 +216,42 @@ public class Player extends Collidable {
 	/**
 	 * Player Jumps.  Adds a positive velocity to player's vertical velocity
 	 */
-	public void jump(int jumpSpeed){
+	public void jump(float jumpSpeed){
 		if(mStatus != AIR){
-			//addVY(JUMPSPEED);
 			mVertVelocity += jumpSpeed;
 			mStatus = AIR;
 		}
+	}
+	
+	public void jump(ScoreBoard scoreBoard, ScreenHandler screenHandler, BoostMeter boostMeter){
+		/* TODO 
+		 * Calculate amount of points player gets for the jump now based
+		 * upon synching with song
+		 * 
+		 */
+		int jumpscore = this.JUMPSPEED;	//DEBUG
+		boostMeter.addBoost(jumpscore);		//DEBUG
+
+		this.jump(jumpscore);
+		//Score add according to jump, will change with music scoring method
+		scoreBoard.addFloaterScore((int)this.getX(),(int)this.getY(),jumpscore);
+		//and create particles to show if jump is special
+		Particle.createJumpParticles(this);
+	}
+	
+	public void boostJump(ScoreBoard scoreBoard, ScreenHandler screenHandler, BoostMeter boostMeter){
+		/* TODO 
+		 * Calculate amount of points player gets for the jump now based
+		 * upon synching with song
+		 * 
+		 */
+		float boost = boostMeter.boost();
+		int jumpscore = (int) (this.JUMPSPEED*boost);	//DEBUG
+
+		this.jump(this.JUMPSPEED*boost);
+		//Score add according to jump, will change with music scoring method
+		scoreBoard.addFloaterScore((int)this.getX(),(int)this.getY(),jumpscore);
+		//and create particles to show if jump is special
+		Particle.createJumpParticles(this);
 	}
 }

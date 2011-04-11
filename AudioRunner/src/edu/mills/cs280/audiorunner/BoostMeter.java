@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class BoostMeter {
-	private final int FULL_BAR_WAIT = 10;
+	private final int FULL_BAR_WAIT = 50;
 	private final int REDUCTION_RATE = 10;
 	private final float REDUCTION_AMOUNT = .01f;
 	private final float XPOS = Gdx.graphics.getWidth()*.01f;
@@ -48,6 +48,19 @@ public class BoostMeter {
 		}
 		mCoolDown = FULL_BAR_WAIT;
 		mReduction = REDUCTION_RATE;
+	}
+	
+	public float boost(){
+		float rVal;
+		if(mValue == MAX_METER_VALUE){
+			rVal = 3.0f;
+		}
+		else{
+			rVal = 1.0f + mValue / MAX_METER_VALUE;
+		}
+		mValue = 0;
+		
+		return rVal;
 	}
 
 	public void draw(SpriteBatch spriteBatch){

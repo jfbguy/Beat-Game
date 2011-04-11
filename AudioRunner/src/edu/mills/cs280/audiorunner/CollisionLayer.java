@@ -105,21 +105,22 @@ public class CollisionLayer {
 
 	public void draw(SpriteBatch spriteBatch, Vector2 worldPosition){
 		LinkedList<Collidable> temp;
-		int parallaxPosition = (int)(worldPosition.x*parallax);				
+		int parallaxPositionX = (int)(worldPosition.x*parallax);
+		int parallaxPositionY = (int)(worldPosition.y*parallax);	
 
 		//Remove past Platforms from Screen
 		for(int i = -(SPEED+MAX_SPRITE_SIZE); i < -MAX_SPRITE_SIZE; i++){
-			if(onScreenLayer.containsKey(i+parallaxPosition)){
-				onScreenLayer.remove(i+parallaxPosition);
+			if(onScreenLayer.containsKey(i+parallaxPositionX)){
+				onScreenLayer.remove(i+parallaxPositionX);
 			}
 		}
 
 		//Add new onScreen Platforms
 		for(int i = Gdx.graphics.getWidth()-SPEED; i < Gdx.graphics.getWidth()+SPEED; i++){ 
-			if(layer.containsKey(i+parallaxPosition+Gdx.graphics.getWidth())){	
-				if(!onScreenLayer.containsKey(i+parallaxPosition+Gdx.graphics.getWidth())){
-					temp = layer.get(i+parallaxPosition+Gdx.graphics.getWidth());
-					onScreenLayer.put(i+parallaxPosition+Gdx.graphics.getWidth(),temp);
+			if(layer.containsKey(i+parallaxPositionX+Gdx.graphics.getWidth())){	
+				if(!onScreenLayer.containsKey(i+parallaxPositionX+Gdx.graphics.getWidth())){
+					temp = layer.get(i+parallaxPositionX+Gdx.graphics.getWidth());
+					onScreenLayer.put(i+parallaxPositionX+Gdx.graphics.getWidth(),temp);
 				}
 			}
 		}
@@ -130,8 +131,8 @@ public class CollisionLayer {
 			for(Collidable collidable : list)
 			{
 				spriteBatch.draw(collidable.getTexture(),
-						(float) (collidable.getX()-parallaxPosition),							//Draw at X position
-						(float) (collidable.getY()),											//Draw at Y position
+						(float) (collidable.getX()-parallaxPositionX),							//Draw at X position
+						(float) (collidable.getY()-parallaxPositionY),											//Draw at Y position
 						collidable.getWidth(),collidable.getHeight(),							//Size of collidable
 						0, 0,																//Get part of texture
 						collidable.getTexture().getWidth(), collidable.getTexture().getHeight(),//Size of gotten part

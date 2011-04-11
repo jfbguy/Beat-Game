@@ -10,8 +10,11 @@ public class ScreenHandler{
 	
 	private static final int SPEED = 6;
 	private static final float ONSCREEN_BUFFER = .2f*Gdx.graphics.getWidth();
+	public static final float GROUND_HEIGHT = Gdx.graphics.getHeight()*.1f;
+	public static final float CEILING_HEIGHT = Gdx.graphics.getHeight()*.7f;
+	
 	private final int DEFAULT_LEVEL_HEIGHT = 60;
-	private final float[] PARALLAX = {1.5f,1.0f,.4f,.3f,.02f};
+	private final float[] PARALLAX = {1.5f,1.0f,.4f,.06f,.02f};
 	private final int NUM_OF_TEXTURES = 6;		//UPDATE THIS IF YOU ADD A TEXTURE!!!
 	private final int MOUNTAIN = 0;	//Texture Constants, each needs to be different!
 	private final int SUN = 1;
@@ -22,11 +25,7 @@ public class ScreenHandler{
 
 	private static float mCurrentFrameSpeed;
 	ImmediateModeRenderer mRenderer;
-	private int mDrawStarter;
 	private static Vector2 mWorldPosition;
-	private static float mWorldPositionX;
-	//private static float mWorldPositionY;
-	private int[] mGroundLevels;
 	private Texture[] mTextures;
 	private SpriteLayer[] mSpriteLayers;
 	private CollisionLayer platformLayer;
@@ -37,7 +36,6 @@ public class ScreenHandler{
 	 * Constructor
 	 */
 	public ScreenHandler(int numOfLayers){
-		mDrawStarter = 0;
 		mWorldPosition = new Vector2(0,0);
 		mSpriteLayers = new SpriteLayer[numOfLayers];
 		platformLayer = new CollisionLayer(PARALLAX[1]);
@@ -47,12 +45,6 @@ public class ScreenHandler{
 		//Declare all SpriteLayers
 		for(int i = 0; i < mSpriteLayers.length; i++){
 			mSpriteLayers[i] = new SpriteLayer(PARALLAX[i]);
-		}
-
-		//load default level start
-		mGroundLevels = new int[Gdx.graphics.getWidth()];
-		for(int i = 0; i < mGroundLevels.length; i++){
-			mGroundLevels[i] = DEFAULT_LEVEL_HEIGHT;
 		}
 
 		//load sprites
@@ -80,7 +72,7 @@ public class ScreenHandler{
 			temp.set(i*400,0);
 			Sprite tSprite = new Sprite(mTextures[MOUNTAIN]);
 			tSprite.setPosition(temp.getX(), temp.getY());
-			mSpriteLayers[2].put(temp.getX(),tSprite);
+			mSpriteLayers[3].put(temp.getX(),tSprite);
 		}
 
 		//Score Items
@@ -120,10 +112,16 @@ public class ScreenHandler{
 	 * For the moment, it just updatesthe world position.
 	 * Need to add added platforms, sprites, change ground, etc
 	 */
-	public void updateScreen(){	//Updates level depending on music and how player is doing
+	public void updateScreen(Player player){	//Updates level depending on music and how player is doing
 		mCurrentFrameSpeed = SPEED*MusicHandler.getTransitionScale();
-		mWorldPositionX += mCurrentFrameSpeed;
-		mWorldPosition.x = (int)mWorldPositionX;
+		mWorldPosition.x += mCurrentFrameSpeed;
+		
+		if(player.getY() > mWorldPosition.y + CEILING_HEIGHT){
+			mWorldPosition.y = (int) (player.getY() - CEILING_HEIGHT);
+		}
+		else if(player.getY() < mWorldPosition.y + GROUND_HEIGHT){
+			mWorldPosition.y = (int) (player.getY() - GROUND_HEIGHT);
+		}
 
 	}
 
@@ -166,15 +164,14 @@ public class ScreenHandler{
 	 * @param  SpriteBatch, Draw within the current SpriteBatch
 	 */
 	private void drawGround(SpriteBatch spriteBatch){
-		spriteBatch.begin();
-		Sprite sprite = new Sprite(mTextures[GROUND]);
-		int posX = 0;
-		for(int i = 0; i < Gdx.graphics.getWidth(); i++) {
-			posX = (mDrawStarter+i)%Gdx.graphics.getWidth();
-			sprite.setPosition(i, 0);
-			sprite.setBounds(i, 0, 1, mGroundLevels[posX]);
-			sprite.draw(spriteBatch);
-		}
+		spriteBatch.begin();		
+		spriteBatch.draw(mTextures[GROUND],
+				0.0f,							//Draw at X position
+				0-mWorldPosition.y,											//Draw at Y position
+				Gdx.graphics.getWidth(),GROUND_HEIGHT,							//Size of collidable
+				0, 0,																//Get part of texture
+				mTextures[GROUND].getWidth(), mTextures[GROUND].getHeight(),//Size of gotten part
+				false,false);	
 		spriteBatch.end();
 	}
 

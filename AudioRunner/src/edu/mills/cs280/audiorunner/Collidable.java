@@ -76,10 +76,22 @@ public class Collidable extends Sprite{
 		
 		return true;
 	}
-
-	public boolean pixelCollide(){
-
-
-		return false;
+	
+	public boolean rectTouch(int x, int y, Vector2 worldPosition){
+		// Rectangle Check
+		if (this.getX() - worldPosition.x > x ){
+			return(false);
+		}
+		if (this.getX() + this.getWidth() - worldPosition.x < x){
+			return(false);
+		}
+		if (this.getY() - worldPosition.y > y){
+			return(false);
+		}
+		if (this.getY() + this.getHeight() - worldPosition.y < y){
+			return(false);
+		}
+		
+		return true;
 	}
 }
