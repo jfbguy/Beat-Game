@@ -55,9 +55,8 @@ public class GameHandler implements ApplicationListener {
 			music.play();
 		}
 		
-		PeakFinder george;
-		george = new PeakFinder(trackLocation);
-		System.out.println(george.returnPeaks().toString());
+		AudioAnalyzer analyzer = new AudioAnalyzer(trackLocation);
+		System.out.println(analyzer.getData().toString());
 		System.exit(0);
 
 		//Screen Elements
