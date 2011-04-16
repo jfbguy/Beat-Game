@@ -63,7 +63,6 @@ public class GameHandler implements ApplicationListener {
 				}
 			}
 		}).start();
-		MusicHandler.setMusic();
 
 		//Screen Elements
 		spriteBatch = new SpriteBatch();
@@ -76,6 +75,7 @@ public class GameHandler implements ApplicationListener {
 	@Override
 	public void dispose() {
 		//music.dispose();
+		music.close();
 	}
 
 	@Override
@@ -90,7 +90,6 @@ public class GameHandler implements ApplicationListener {
 
 	@Override
 	public void render() {
-		System.out.println("HERE!");
 		MusicHandler.updateTime();
 		//if(MusicHandler.getTransitionScale() != 0){
 		//LEVEL LOGIC

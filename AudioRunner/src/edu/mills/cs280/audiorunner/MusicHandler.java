@@ -11,17 +11,13 @@ public class MusicHandler {
 	private MusicHandler(){
 	}
 
-	public static void setMusic(){
-		//MusicHandler.music = music;
-		currTime = System.currentTimeMillis();
-		prevTime = System.currentTimeMillis();
-	}
-
 	//public static float getMusicTime(){
 	//	return music.getPosition();
 	//}
 
-	public static void updateTime(){		
+	public static void updateTime(){
+		if(prevTime == 0)
+			prevTime = System.currentTimeMillis();
 		currTime = System.currentTimeMillis();
 		if(currTime != prevTime){
 			timeDiff = currTime - prevTime;
