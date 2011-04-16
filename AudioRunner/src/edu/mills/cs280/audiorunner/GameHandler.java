@@ -1,8 +1,13 @@
 package edu.mills.cs280.audiorunner;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+
+import javazoom.jl.decoder.JavaLayerException;
+
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
@@ -13,7 +18,7 @@ public class GameHandler implements ApplicationListener {
 
 	private SpriteBatch spriteBatch;
 	private Player player;
-	private Music music;
+	private javazoom.jl.player.Player music;
 	private ScoreBoard scoreBoard;
 	private BoostMeter boostMeter;
 	private String trackLocation;
@@ -21,7 +26,6 @@ public class GameHandler implements ApplicationListener {
 	private ScreenHandler screenHandler;
 
 	public GameHandler(){
-
 	}
 
 	public GameHandler(String musicFile){
@@ -29,6 +33,7 @@ public class GameHandler implements ApplicationListener {
 	}
 	@Override
 	public void create() {
+		
 		touched = false;
 
 		//Initiate player
@@ -36,23 +41,29 @@ public class GameHandler implements ApplicationListener {
 
 		//Music Stuff
 		//TODO: replace track location with the datapath of the music on the phone
-		if(trackLocation == null){
-			trackLocation = "data/music/Freezepop - Starlight (Karacter Remix).mp3";
-			music = Gdx.audio.newMusic (Gdx.files.internal(trackLocation));
-		}else{
-			music = Gdx.audio.newMusic (Gdx.files.external(trackLocation));
-		}
-		MusicHandler.setMusic(music);
 
-		//Play Music
-		if(!music.isPlaying()){
-			music.setVolume(VOLUME);	//volume should be set by settings
-			music.play();
-		}
-		
-		//AudioAnalyzer analyzer = new AudioAnalyzer(trackLocation);
-		//System.out.println(analyzer.getData().toString());
-		//System.exit(0);
+		new Thread(new Runnable() {
+			public void run() {
+				try{
+					if(trackLocation == null){
+						trackLocation = "data/music/Freezepop - Starlight (Karacter Remix).mp3";
+						music = new javazoom.jl.player.Player(new FileInputStream(new File(trackLocation)));
+						//music = Gdx.audio.newMusic (Gdx.files.internal(trackLocation));
+					}else{
+						//music = Gdx.audio.newMusic (Gdx.files.external(trackLocation));
+						music = new javazoom.jl.player.Player(new FileInputStream(new File(trackLocation)));
+					}
+
+					music.play();
+
+				} catch(FileNotFoundException e){
+
+				}catch (JavaLayerException e) {
+					e.printStackTrace();
+				}
+			}
+		}).start();
+		MusicHandler.setMusic();
 
 		//Screen Elements
 		spriteBatch = new SpriteBatch();
@@ -64,16 +75,22 @@ public class GameHandler implements ApplicationListener {
 
 	@Override
 	public void dispose() {
-		music.dispose();
+		//music.dispose();
 	}
 
 	@Override
 	public void pause() {
-		music.pause();
+		try {
+			music.wait();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	@Override
 	public void render() {
+		System.out.println("HERE!");
 		MusicHandler.updateTime();
 		//if(MusicHandler.getTransitionScale() != 0){
 		//LEVEL LOGIC
@@ -97,7 +114,7 @@ public class GameHandler implements ApplicationListener {
 		else{
 			touched = false;
 		}
-		
+
 		//PLAYER LOGIC
 		player.update(screenHandler,scoreBoard);
 
@@ -121,7 +138,7 @@ public class GameHandler implements ApplicationListener {
 
 	@Override
 	public void resume() {
-		music.play();
+		music.notify();
 	}
 
 }
