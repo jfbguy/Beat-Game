@@ -17,7 +17,13 @@ public class PeakFinder {
 	public static final String FILE = "samples/explosivo.mp3"; //this doesn't work
     public static final int THRESHOLD_WINDOW_SIZE = 10;
     public static final float MULTIPLIER = 1.5f;
+    
+    private static final int TIME_CHUNK = 1024;
+    private static final int SAMPLE_RATE = 44100; //WHAT IF IT ISN'T???
+    //TODO check if diff. rates mess this up
+    
     private String fileName;
+    
     
     public PeakFinder(String file){
     	fileName = file;
@@ -27,11 +33,11 @@ public class PeakFinder {
     {
     	try{
 	       MP3Decoder decoder = new MP3Decoder(  new FileInputStream (fileName ) );
-	       FFT fft = new FFT( 1024, 44100 );
+	       FFT fft = new FFT( TIME_CHUNK, SAMPLE_RATE );
 	       fft.window( FFT.HAMMING );
-	       float[] samples = new float[1024];
-	       float[] spectrum = new float[1024 / 2 + 1];
-	       float[] lastSpectrum = new float[1024 / 2 + 1];
+	       float[] samples = new float[TIME_CHUNK];
+	       float[] spectrum = new float[TIME_CHUNK / 2 + 1];
+	       float[] lastSpectrum = new float[TIME_CHUNK / 2 + 1];
 	       List<Float> spectralFlux = new ArrayList<Float>( );
 	       List<Float> threshold = new ArrayList<Float>( );
 	       List<Float> prunedSpectralFlux = new ArrayList<Float>();
@@ -92,8 +98,13 @@ public class PeakFinder {
 	//       
     	}catch(Exception e){
     		//What should I do here???
-    		System.out.println("FILE FAILED TO LOAD");
+    		System.out.println("FILE FAILED TO LOAD - Love, PEAKFINDER");
     		return null;
     	}
+    }
+    
+    public float getChunksPerSec(){
+    	float chunksPerSec = (float)TIME_CHUNK / (float)SAMPLE_RATE;
+    	return chunksPerSec;
     }
 }
