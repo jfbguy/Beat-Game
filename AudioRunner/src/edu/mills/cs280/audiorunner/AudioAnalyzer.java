@@ -38,12 +38,19 @@ public class AudioAnalyzer extends Thread{
 
 		try {
 
-			while(!done){
+			while(true){
 				Header header;
 				header = bitstream.readFrame();
 
 				try{
 					SampleBuffer output = (SampleBuffer)decoder.decodeFrame(header, bitstream);
+				
+
+					for(short e : output.getBuffer()){
+						System.out.print(e + " , ");
+					}
+					System.out.println();
+				
 				}catch(Exception e){
 					break;
 				}
@@ -62,7 +69,7 @@ public class AudioAnalyzer extends Thread{
 				bitstream.closeFrame();
 			}
 
-			System.out.println("SUCCESS!!!");
+			//System.out.println("SUCCESS!!!");
 
 			return 1;
 
