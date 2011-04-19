@@ -3,6 +3,7 @@ package edu.mills.cs280.audiorunner;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.util.List;
 
 import javazoom.jl.decoder.JavaLayerException;
 
@@ -21,7 +22,7 @@ public class GameHandler implements ApplicationListener {
 	private javazoom.jl.player.Player music;
 	private ScoreBoard scoreBoard;
 	private BoostMeter boostMeter;
-	private String trackLocation;
+	private String trackLocation = "data/music/Freezepop - Starlight (Karacter Remix).mp3";//default value, REMOVE in release
 	private boolean touched;
 	private ScreenHandler screenHandler;
 
@@ -39,6 +40,19 @@ public class GameHandler implements ApplicationListener {
 		//Initiate player
 		player = new Player("data/runner.png",Gdx.graphics.getWidth()*.3f,ScreenHandler.GROUND_HEIGHT,PLAYER_WIDTH,PLAYER_HEIGHT);
 
+		//calculate music event data
+		//TODO this should be done when the file is loaded, work that implementation
+		PeakFinder songData = new PeakFinder("data/music/Freezepop - Starlight (Karacter Remix).mp3");
+		List<Float> peaks = songData.returnPeaks();
+		//System.out.println(peaks.toString());
+		
+		//Screen Elements
+		spriteBatch = new SpriteBatch();
+		screenHandler = new ScreenHandler(5,peaks);
+		scoreBoard = new ScoreBoard();
+		boostMeter = new BoostMeter();
+		Particle.BufferParticles();
+		
 		//Music Stuff
 		//TODO: replace track location with the datapath of the music on the phone
 
@@ -64,12 +78,6 @@ public class GameHandler implements ApplicationListener {
 			}
 		}).start();
 
-		//Screen Elements
-		spriteBatch = new SpriteBatch();
-		screenHandler = new ScreenHandler(5);
-		scoreBoard = new ScoreBoard();
-		boostMeter = new BoostMeter();
-		Particle.BufferParticles();
 	}
 
 	@Override

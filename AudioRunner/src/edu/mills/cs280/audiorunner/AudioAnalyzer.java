@@ -46,10 +46,10 @@ public class AudioAnalyzer extends Thread{
 					SampleBuffer output = (SampleBuffer)decoder.decodeFrame(header, bitstream);
 				
 
-					for(short e : output.getBuffer()){
-						System.out.print(e + " , ");
-					}
-					System.out.println();
+//					for(short e : output.getBuffer()){
+//						System.out.print(e + " , ");
+//					}
+//					System.out.println();
 				
 				}catch(Exception e){
 					break;

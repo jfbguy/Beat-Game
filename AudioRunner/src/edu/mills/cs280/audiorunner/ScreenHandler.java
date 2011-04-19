@@ -1,5 +1,7 @@
 package edu.mills.cs280.audiorunner;
 
+import java.util.List;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -8,6 +10,8 @@ import com.badlogic.gdx.graphics.glutils.ImmediateModeRenderer;
 
 public class ScreenHandler{
 	
+	//private static final int SCREEN_SPEED_FACTOR = 200;
+	//private static final int SPEED = Gdx.graphics.getWidth()/SCREEN_SPEED_FACTOR;
 	private static final int SPEED = 6;
 	private static final float ONSCREEN_BUFFER = .2f*Gdx.graphics.getWidth();
 	public static final float GROUND_HEIGHT = Gdx.graphics.getHeight()*.1f;
@@ -21,7 +25,12 @@ public class ScreenHandler{
 	private final int GROUND = 3;
 	private final int PLATFORM = 4;
 	private final int SCOREITEM = 5;
-
+	
+	//TODO Synch platform occurrences with music
+	private final int PLATFORM_STEP_SIZE = 200;//These will be defined by screensize/music synch
+	private final int PLATFORMS_START = 1000;
+	private final int PLATFORM_HEIGHT = 100;//This will be defined by...something
+	
 	private static float mCurrentFrameSpeed;
 	ImmediateModeRenderer mRenderer;
 	private static Vector2 mWorldPosition;
@@ -34,7 +43,7 @@ public class ScreenHandler{
 	/**
 	 * Constructor
 	 */
-	public ScreenHandler(int numOfLayers){
+	public ScreenHandler(int numOfLayers, List<Float> eventList){
 		mWorldPosition = new Vector2(0,0);
 		mSpriteLayers = new SpriteLayer[numOfLayers];
 		platformLayer = new CollisionLayer(PARALLAX[1]);
@@ -81,16 +90,25 @@ public class ScreenHandler{
 			scoreItem.setPosition(temp.getX(), temp.getY());
 			scoreItemLayer.put(temp.getX(),scoreItem);
 		}
-
+		
 		//platforms
-		for(int i = 0; i < 10; i++){
-			temp.set(i*200+1000,50);
-			Platform platform = new Platform((float)temp.getX(),(float)temp.getY(),100f,10f,"data/purple.png");
-			platformLayer.put(temp.getX(),platform);
-			temp.set(i*200+1000,100);
-			platform = new Platform((float)temp.getX(),(float)temp.getY(),100f,10f,"data/purple.png");
-			platformLayer.put(temp.getX(),platform);
+		//TODO make platforms more interesting
+		for(int i = 0; i < eventList.size(); i++){
+			if(eventList.get(i)>0){
+				temp.set(PLATFORMS_START + (i * PLATFORM_STEP_SIZE), PLATFORM_HEIGHT);
+				Platform platform = new Platform((float)temp.getX(),(float)temp.getY(),100f,10f,"data/purple.png");
+				platformLayer.put(temp.getX(),platform);
+			}
 		}
+		
+//		for(int i = 0; i < 10; i++){
+//			temp.set(i*200+1000,50);
+//			Platform platform = new Platform((float)temp.getX(),(float)temp.getY(),100f,10f,"data/purple.png");
+//			platformLayer.put(temp.getX(),platform);
+//			temp.set(i*200+1000,100);
+//			platform = new Platform((float)temp.getX(),(float)temp.getY(),100f,10f,"data/purple.png");
+//			platformLayer.put(temp.getX(),platform);
+//		}
 
 		//sun
 		temp.set(400,100);
