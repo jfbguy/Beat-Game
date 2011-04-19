@@ -42,13 +42,13 @@ public class GameHandler implements ApplicationListener {
 
 		//calculate music event data
 		//TODO this should be done when the file is loaded, work that implementation
-		PeakFinder songData = new PeakFinder("data/music/Freezepop - Starlight (Karacter Remix).mp3");
+		PeakFinder songData = new PeakFinder(trackLocation);
 		List<Float> peaks = songData.returnPeaks();
 		//System.out.println(peaks.toString());
 		
 		//Screen Elements
 		spriteBatch = new SpriteBatch();
-		screenHandler = new ScreenHandler(5,peaks);
+		screenHandler = new ScreenHandler(5,peaks,songData.getChunkTime());
 		scoreBoard = new ScoreBoard();
 		boostMeter = new BoostMeter();
 		Particle.BufferParticles();

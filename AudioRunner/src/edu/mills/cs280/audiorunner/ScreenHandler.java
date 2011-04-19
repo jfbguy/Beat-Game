@@ -12,7 +12,7 @@ public class ScreenHandler{
 	
 	//private static final int SCREEN_SPEED_FACTOR = 200;
 	//private static final int SPEED = Gdx.graphics.getWidth()/SCREEN_SPEED_FACTOR;
-	private static final int SPEED = 6;
+	private static final int SPEED = 6;//pixels per frame?
 	private static final float ONSCREEN_BUFFER = .2f*Gdx.graphics.getWidth();
 	public static final float GROUND_HEIGHT = Gdx.graphics.getHeight()*.1f;
 	public static final float CEILING_HEIGHT = Gdx.graphics.getHeight()*.7f;
@@ -28,8 +28,9 @@ public class ScreenHandler{
 	
 	//TODO Synch platform occurrences with music
 	private final int PLATFORM_STEP_SIZE = 200;//These will be defined by screensize/music synch
-	private final int PLATFORMS_START = 1000;
+	private final int PLATFORMS_START = 0;//1000;
 	private final int PLATFORM_HEIGHT = 100;//This will be defined by...something
+	
 	
 	private static float mCurrentFrameSpeed;
 	ImmediateModeRenderer mRenderer;
@@ -38,17 +39,19 @@ public class ScreenHandler{
 	private SpriteLayer[] mSpriteLayers;
 	private CollisionLayer platformLayer;
 	private CollisionLayer scoreItemLayer;
+	private float platformStep;
 	//private LinkedList<Particle> particles;
 
 	/**
 	 * Constructor
 	 */
-	public ScreenHandler(int numOfLayers, List<Float> eventList){
+	public ScreenHandler(int numOfLayers, List<Float> eventList,float stepLength){
 		mWorldPosition = new Vector2(0,0);
 		mSpriteLayers = new SpriteLayer[numOfLayers];
 		platformLayer = new CollisionLayer(PARALLAX[1]);
 		scoreItemLayer = new CollisionLayer(PARALLAX[1]);
 		//particles = new LinkedList<Particle>();
+		platformStep = (1/stepLength);// * SPEED;
 
 		//Declare all SpriteLayers
 		for(int i = 0; i < mSpriteLayers.length; i++){
@@ -76,7 +79,7 @@ public class ScreenHandler{
 			mSpriteLayers[0].put(temp.getX(),tSprite);
 		}
 
-		for(int i = 0; i < 20; i++){
+		for(int i = 0; i < 200; i++){
 			temp.set(i*400,0);
 			Sprite tSprite = new Sprite(mTextures[MOUNTAIN]);
 			tSprite.setPosition(temp.getX(), temp.getY());
@@ -95,12 +98,15 @@ public class ScreenHandler{
 		//TODO make platforms more interesting
 		for(int i = 0; i < eventList.size(); i++){
 			if(eventList.get(i)>0){
-				temp.set(PLATFORMS_START + (i * PLATFORM_STEP_SIZE), PLATFORM_HEIGHT);
-				Platform platform = new Platform((float)temp.getX(),(float)temp.getY(),100f,10f,"data/purple.png");
-				platformLayer.put(temp.getX(),platform);
+				//temp.set(PLATFORMS_START + (i * PLATFORM_STEP_SIZE), PLATFORM_HEIGHT);
+				//Platform platform = new Platform((float)temp.getX(),(float)temp.getY(),100f,10f,"data/purple.png");
+				//platformLayer.put(temp.getX(),platform);
+				float x = PLATFORMS_START + (i * platformStep);
+				Platform platform = new Platform(x,PLATFORM_HEIGHT,100f,10f,"data/purple.png");
+				platformLayer.put((int)x,platform);
 			}
 		}
-		
+		//old platform code, delete
 //		for(int i = 0; i < 10; i++){
 //			temp.set(i*200+1000,50);
 //			Platform platform = new Platform((float)temp.getX(),(float)temp.getY(),100f,10f,"data/purple.png");
@@ -133,6 +139,7 @@ public class ScreenHandler{
 		mCurrentFrameSpeed = SPEED*MusicHandler.getTransitionScale();
 		mWorldPosition.x += mCurrentFrameSpeed;
 		
+		//vertical position
 		if(player.getY() > mWorldPosition.y + CEILING_HEIGHT){
 			mWorldPosition.y = (int) (player.getY() - CEILING_HEIGHT);
 		}

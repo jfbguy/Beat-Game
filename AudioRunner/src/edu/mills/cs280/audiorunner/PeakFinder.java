@@ -103,8 +103,10 @@ public class PeakFinder {
     	}
     }
     
-    public float getChunksPerSec(){
-    	float chunksPerSec = (float)TIME_CHUNK / (float)SAMPLE_RATE;
-    	return chunksPerSec;
+    //returns the time length of a single 'chunk' of sample data
+    //in seconds (will of course be a small fraction of a second)
+    public float getChunkTime(){
+    	float chunkTime = (float)TIME_CHUNK / (float)SAMPLE_RATE;
+    	return chunkTime;
     }
 }
