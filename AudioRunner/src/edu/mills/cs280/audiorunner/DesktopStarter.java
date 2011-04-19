@@ -1,10 +1,7 @@
 package edu.mills.cs280.audiorunner;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 
-import javazoom.jl.decoder.JavaLayerException;
+import java.util.List;
 
 import com.badlogic.gdx.backends.jogl.JoglApplication;
 
@@ -14,11 +11,13 @@ public class DesktopStarter {
 	public static void main(String[] args){
 
 		//MusicHandler musicTest = new MusicHandler("data/music/Freezepop - Starlight (Karacter Remix).mp3");
-		//get druation of song
-		float[] samples = new float[1024];
+		//get duration of song
+		
+		/*float[] samples = new float[1024];
 		AudioAnalyzer analyzer = new AudioAnalyzer("data/music/Freezepop - Starlight (Karacter Remix).mp3");
 		System.out.println(analyzer.readSamples(samples));
-		System.exit(0);
+		System.exit(0);*/
+		
 		/*
 		new Thread(new Runnable() {
 			public void run() {
@@ -35,10 +34,10 @@ public class DesktopStarter {
 		}).start();
 		*/
 
-		/*
-		PeakFinder peakfinder = new PeakFinder("data/music/Freezepop - Starlight (Karacter Remix).mp3");
-		System.out.println(peakfinder.returnPeaks().toString());
-		System.exit(0);*/
+		MusicData.setFile("data/music/Freezepop - Starlight (Karacter Remix).mp3");
+		PeakFinder songData = new PeakFinder(MusicData.getFileLocation());
+		List<Float> peaks = songData.returnPeaks();
+		MusicData.setpeaks(peaks);
 
 		//PeakFinder george = new PeakFinder("data/music/Freezepop - Starlight (Karacter Remix).mp3");
 		//System.out.println(george.returnPeaks().toString());

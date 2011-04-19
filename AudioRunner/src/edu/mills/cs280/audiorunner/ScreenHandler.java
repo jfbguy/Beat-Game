@@ -1,5 +1,7 @@
 package edu.mills.cs280.audiorunner;
 
+import java.util.List;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -21,6 +23,11 @@ public class ScreenHandler{
 	private final int GROUND = 3;
 	private final int PLATFORM = 4;
 	private final int SCOREITEM = 5;
+	
+	//TODO Synch platform occurrences with music
+	private final int PLATFORM_STEP_SIZE = 200;//These will be defined by screensize/music synch
+	private final int PLATFORMS_START = 1000;
+	private final int PLATFORM_HEIGHT = 100;//This will be defined by...something
 
 	private static float mCurrentFrameSpeed;
 	ImmediateModeRenderer mRenderer;
@@ -34,6 +41,87 @@ public class ScreenHandler{
 	/**
 	 * Constructor
 	 */
+	public ScreenHandler(int numOfLayers, List<Float> eventList){
+		mWorldPosition = new Vector2(0,0);
+		mSpriteLayers = new SpriteLayer[numOfLayers];
+		platformLayer = new CollisionLayer(PARALLAX[1]);
+		scoreItemLayer = new CollisionLayer(PARALLAX[1]);
+		//particles = new LinkedList<Particle>();
+
+		//Declare all SpriteLayers
+		for(int i = 0; i < mSpriteLayers.length; i++){
+			mSpriteLayers[i] = new SpriteLayer(PARALLAX[i]);
+		}
+
+		//load sprites
+		mTextures = new Texture[NUM_OF_TEXTURES];
+		mTextures[MOUNTAIN] = new Texture(Gdx.files.internal("data/mountain.png"));
+		mTextures[SUN] = new Texture(Gdx.files.internal("data/sun.png"));
+		mTextures[POWERLINES] = new Texture(Gdx.files.internal("data/powerlines.png"));
+		mTextures[GROUND] = new Texture(Gdx.files.internal("data/gradient_BW_1D.png"));
+		mTextures[PLATFORM] = new Texture(Gdx.files.internal("data/purple.png"));
+		mTextures[SCOREITEM] = new Texture(Gdx.files.internal("data/yellow.png"));
+
+		//************************************************************************************************
+		//************** DEBUG level load ****************************************************************
+		///***** Will be replaced with what the audio algorithm does *************************************
+		//************************************************************************************************
+		Vector2 temp = new Vector2();
+		for(int i = 0; i < 80; i++){
+			temp.set(i*mTextures[POWERLINES].getWidth(),0);
+			Sprite tSprite = new Sprite(mTextures[POWERLINES]);
+			tSprite.setPosition(temp.getX(), temp.getY());
+			mSpriteLayers[0].put(temp.getX(),tSprite);
+		}
+
+		for(int i = 0; i < 20; i++){
+			temp.set(i*400,0);
+			Sprite tSprite = new Sprite(mTextures[MOUNTAIN]);
+			tSprite.setPosition(temp.getX(), temp.getY());
+			mSpriteLayers[3].put(temp.getX(),tSprite);
+		}
+
+		//Score Items
+		for(int i = 0; i < 300; i++){
+			temp.set(i*30,150);
+			ScoreItem scoreItem = new ScoreItem((float)temp.getX(),(float)temp.getY(),10f,10f,"data/yellow.png",10);
+			scoreItem.setPosition(temp.getX(), temp.getY());
+			scoreItemLayer.put(temp.getX(),scoreItem);
+		}
+
+		//platforms
+		//TODO make platforms more interesting
+		for(int i = 0; i < eventList.size(); i++){
+			if(eventList.get(i)>0){
+				temp.set(PLATFORMS_START + (i * PLATFORM_STEP_SIZE), PLATFORM_HEIGHT);
+				Platform platform = new Platform((float)temp.getX(),(float)temp.getY(),100f,10f,"data/purple.png");
+				platformLayer.put(temp.getX(),platform);
+			}
+		}
+
+//		for(int i = 0; i < 10; i++){
+//			temp.set(i*200+1000,50);
+//			Platform platform = new Platform((float)temp.getX(),(float)temp.getY(),100f,10f,"data/purple.png");
+//			platformLayer.put(temp.getX(),platform);
+//			temp.set(i*200+1000,100);
+//			platform = new Platform((float)temp.getX(),(float)temp.getY(),100f,10f,"data/purple.png");
+//			platformLayer.put(temp.getX(),platform);
+//		}
+
+		//sun
+		temp.set(400,100);
+		Sprite tSprite = new Sprite(mTextures[SUN]);
+		tSprite.setPosition(temp.getX(), temp.getY());
+		mSpriteLayers[4].put(temp.getX(),tSprite);
+		//************************************************************************************
+		//************************************************************************************
+
+		//Load start of Level Layers
+		for(int i = 0; i < mSpriteLayers.length; i++){
+			mSpriteLayers[i].loadStart(mWorldPosition);
+		}
+	}
+	
 	public ScreenHandler(int numOfLayers){
 		mWorldPosition = new Vector2(0,0);
 		mSpriteLayers = new SpriteLayer[numOfLayers];

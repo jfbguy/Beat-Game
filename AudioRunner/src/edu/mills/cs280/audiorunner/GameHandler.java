@@ -66,7 +66,8 @@ public class GameHandler implements ApplicationListener {
 
 		//Screen Elements
 		spriteBatch = new SpriteBatch();
-		screenHandler = new ScreenHandler(5);
+		//screenHandler = new ScreenHandler(5);
+		screenHandler = new ScreenHandler(5,MusicData.getPeaks());
 		scoreBoard = new ScoreBoard();
 		boostMeter = new BoostMeter();
 		Particle.BufferParticles();

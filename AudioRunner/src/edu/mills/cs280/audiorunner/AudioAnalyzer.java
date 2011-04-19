@@ -31,6 +31,37 @@ public class AudioAnalyzer extends Thread{
 		decoder = new Decoder();
 	}
 
+	public int singleSamples(float[] samples)
+	{
+
+		try {
+			Header header;
+			header = bitstream.readFrame();
+
+			SampleBuffer output;
+			try{
+				output = (SampleBuffer)decoder.decodeFrame(header, bitstream);
+			}catch(Exception e){
+				return 0;
+			}
+			
+			for(int i = 0; i < samples.length; i++){
+				samples[i] = output.getBuffer()[i];
+			}
+
+			bitstream.closeFrame();
+
+			System.out.println("SUCCESS!!!");
+
+			return 1;
+
+		} catch (BitstreamException e) {
+			//e.printStackTrace();
+			return 0;
+		}
+
+	}
+
 	public int readSamples(float[] samples)
 	{
 
@@ -42,8 +73,9 @@ public class AudioAnalyzer extends Thread{
 				Header header;
 				header = bitstream.readFrame();
 
+				SampleBuffer output;
 				try{
-					SampleBuffer output = (SampleBuffer)decoder.decodeFrame(header, bitstream);
+					output = (SampleBuffer)decoder.decodeFrame(header, bitstream);
 				}catch(Exception e){
 					break;
 				}
@@ -54,12 +86,13 @@ public class AudioAnalyzer extends Thread{
 				//for(int i = 0; i < output.getBuffer().length; i++){
 				//samples[i] = 
 				//}
-				//for(short e : output.getBuffer()){
-				//	System.out.print(e + " , ");
-				//}
-				//System.out.println();
+				for(short e : output.getBuffer()){
+					System.out.print(e + " , ");
+				}
 
 				bitstream.closeFrame();
+
+				System.out.println();
 			}
 
 			System.out.println("SUCCESS!!!");
