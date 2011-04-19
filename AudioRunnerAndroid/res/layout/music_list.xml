@@ -17,12 +17,12 @@ xmlns:android="http://schemas.android.com/apk/res/android">
 		    	android:layout_height="wrap_content"
 		    	android:textColor="#666666"
 		    	android:text="No Song Selected Yet"/>
-            <TextView android:text="song name" 
+            <TextView android:text="song name: " 
             		android:id="@+id/song_name" 
             		android:layout_width="fill_parent" 
             		android:layout_height="wrap_content">
             </TextView>
-            <TextView android:text="song duration" 
+            <TextView android:text="song duration: " 
             		android:id="@+id/song_duration" 
             		android:layout_width="fill_parent" 
             		android:layout_height="wrap_content">

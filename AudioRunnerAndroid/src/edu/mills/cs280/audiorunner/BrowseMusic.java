@@ -28,14 +28,22 @@ public class BrowseMusic extends Activity {
 	private int count;
 	//MediaPlayer mMediaPlayer;
 	public String filename;
+	
+	static final private int CODE = 0;
 
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.music_list);
-		initMusicList();
+		initMusicList();	
 	}
+	
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(requestCode==CODE){
+        	finish();
+        }
+    }
 
 	private void initMusicList() {
 		System.gc();
@@ -45,28 +53,33 @@ public class BrowseMusic extends Activity {
 				MediaStore.Video.Media.DURATION };
 		musicCursor = managedQuery(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
 				proj, null, null, null);
-		count = musicCursor.getCount();
-		
-		musiclist = (ListView) findViewById(R.id.PhoneMusicList);
-		//musiclist.layout(0, 0,getWindowManager().getDefaultDisplay().getWidth(), (int) (0.7*getWindowManager().getDefaultDisplay().getHeight()) );
 		selectedSong = (TextView) findViewById(R.id.selected_song);
-		duration = (TextView) findViewById(R.id.song_duration);
-		name = (TextView)findViewById(R.id.song_name);
-		Log.d("screen height: ", " "+(getWindowManager().getDefaultDisplay().getHeight()) );
-		
-		startGame = (Button) findViewById(R.id.Start_Game_Button);
-		startGame.setEnabled(false);
-		musiclist.setAdapter(new MusicAdapter(getApplicationContext()));
-		musiclist.setOnItemClickListener(musicgridlistener);
-		
-		//start the game activity
-		startGame.setOnClickListener(new View.OnClickListener() {	
-			public void onClick(View v) {
-				Intent gameIntent = new Intent(v.getContext(), AudioRunnerActivity.class);
-                gameIntent.putExtra("song", filename);
-				startActivityForResult(gameIntent, 0);
-			}
-		});
+		if(musicCursor == null){
+			//TODO Ideally prompt user to a new screen
+			selectedSong.setText("There is no song on your SD card");
+			startGame.setEnabled(false);
+		}else{
+			count = musicCursor.getCount();
+			musiclist = (ListView) findViewById(R.id.PhoneMusicList);
+			//musiclist.layout(0, 0,getWindowManager().getDefaultDisplay().getWidth(), (int) (0.7*getWindowManager().getDefaultDisplay().getHeight()) );
+			
+			duration = (TextView) findViewById(R.id.song_duration);
+			name = (TextView)findViewById(R.id.song_name);
+			
+			startGame = (Button) findViewById(R.id.Start_Game_Button);
+			startGame.setEnabled(false);
+			musiclist.setAdapter(new MusicAdapter(getApplicationContext()));
+			musiclist.setOnItemClickListener(musicgridlistener);
+			
+			//start the game activity
+			startGame.setOnClickListener(new View.OnClickListener() {	
+				public void onClick(View v) {
+					Intent gameIntent = new Intent(v.getContext(), AudioRunnerActivity.class);
+	                gameIntent.putExtra("song", filename);
+					startActivityForResult(gameIntent, CODE);
+				}
+			});
+		}
 	}
 
 	private OnItemClickListener musicgridlistener = new OnItemClickListener() {
