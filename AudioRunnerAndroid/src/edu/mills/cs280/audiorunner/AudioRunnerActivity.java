@@ -2,13 +2,14 @@ package edu.mills.cs280.audiorunner;
 
 import java.util.List;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.badlogic.gdx.backends.android.AndroidApplication;
  
 public class AudioRunnerActivity extends AndroidApplication {
 	
-	public String music_file;
+	public String musicFile;
 
 	@Override
     public void onCreate(Bundle savedInstanceState) {
@@ -17,15 +18,19 @@ public class AudioRunnerActivity extends AndroidApplication {
     	Bundle extras = getIntent().getExtras();
     	if(extras !=null)
     	{
-    		music_file = extras.getString("song");
+    		musicFile = extras.getString("song");
     	}
     	
-    	MusicData.setFile(music_file);
+    	MusicData.setFile(musicFile);
 		PeakFinder songData = new PeakFinder(MusicData.getFileLocation());
 		List<Float> peaks = songData.returnPeaks();
 		MusicData.setpeaks(peaks);
 		System.out.println(5);
-        initialize(new GameHandler(music_file), false);
+        initialize(new GameHandler(musicFile), false);
+
     }
+	
+	
+
 
 }
