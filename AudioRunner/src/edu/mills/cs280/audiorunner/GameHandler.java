@@ -8,6 +8,7 @@ import javazoom.jl.decoder.JavaLayerException;
 
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
@@ -18,7 +19,8 @@ public class GameHandler implements ApplicationListener {
 
 	private SpriteBatch spriteBatch;
 	private Player player;
-	private javazoom.jl.player.Player music;
+	//private javazoom.jl.player.Player music;
+	Music music;
 	private ScoreBoard scoreBoard;
 	private BoostMeter boostMeter;
 	private String trackLocation;
@@ -33,7 +35,7 @@ public class GameHandler implements ApplicationListener {
 	}
 	@Override
 	public void create() {
-		
+
 		touched = false;
 
 		//Initiate player
@@ -41,7 +43,7 @@ public class GameHandler implements ApplicationListener {
 
 		//Music Stuff
 		//TODO: replace track location with the datapath of the music on the phone
-
+		/*
 		new Thread(new Runnable() {
 			public void run() {
 				try{
@@ -62,7 +64,19 @@ public class GameHandler implements ApplicationListener {
 					e.printStackTrace();
 				}
 			}
-		}).start();
+		}).start();*/
+
+/*
+		if(trackLocation == null){
+			trackLocation = "data/music/Freezepop - Starlight (Karacter Remix).mp3";
+			music = Gdx.audio.newMusic (Gdx.files.internal(trackLocation));
+		}else{
+			music = Gdx.audio.newMusic (Gdx.files.external(trackLocation));
+		}
+
+		music.play();*/
+
+
 
 		//Screen Elements
 		spriteBatch = new SpriteBatch();
@@ -75,8 +89,8 @@ public class GameHandler implements ApplicationListener {
 
 	@Override
 	public void dispose() {
-		//music.dispose();
-		music.close();
+		music.dispose();
+		//music.close();
 	}
 
 	@Override

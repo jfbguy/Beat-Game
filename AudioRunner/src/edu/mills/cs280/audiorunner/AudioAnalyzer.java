@@ -4,6 +4,7 @@ import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
 
 import javazoom.jl.decoder.Bitstream;
@@ -12,7 +13,7 @@ import javazoom.jl.decoder.Decoder;
 import javazoom.jl.decoder.Header;
 import javazoom.jl.decoder.SampleBuffer;
 
-public class AudioAnalyzer extends Thread{
+public class AudioAnalyzer{
 
 	private File file;
 	private InputStream inputStream;
@@ -104,7 +105,18 @@ public class AudioAnalyzer extends Thread{
 			return 0;
 		}
 
-	}/*
+	}
+	
+	public void dispose(){
+		try {
+			inputStream.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	/*
+	
 
 	public static byte[] decode(String path, int startMs, int maxMs)
 	throws IOException {

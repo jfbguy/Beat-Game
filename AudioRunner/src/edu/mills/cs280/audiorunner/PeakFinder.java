@@ -76,6 +76,9 @@ public class PeakFinder {
 	//       System.out.println(peaks.toString());
 	//       System.out.println("size = " + peaks.size());
 	//       
+	       
+	       decoder.dispose();
+	       
 	       return peaks;
 
 	//       Plot plot = new Plot( "Spectral Flux", 1024, 512 );
@@ -88,5 +91,6 @@ public class PeakFinder {
     		System.out.println("FILE FAILED TO LOAD");
     		return null;
     	}
+    	
     }
 }
