@@ -66,15 +66,15 @@ public class GameHandler implements ApplicationListener {
 			}
 		}).start();*/
 
-/*
+
 		if(trackLocation == null){
 			trackLocation = "data/music/Freezepop - Starlight (Karacter Remix).mp3";
-			music = Gdx.audio.newMusic (Gdx.files.internal(trackLocation));
+			music = Gdx.audio.newMusic (Gdx.files.internal(MusicData.getFileLocation()));
 		}else{
 			music = Gdx.audio.newMusic (Gdx.files.external(trackLocation));
 		}
 
-		music.play();*/
+		music.play();
 
 
 

@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.badlogic.gdx.audio.analysis.FFT;
 
-public class PeakFinder {
+public class PeakFinder{
 
     public static final int THRESHOLD_WINDOW_SIZE = 10;
     public static final float MULTIPLIER = 1.5f;
@@ -29,7 +29,7 @@ public class PeakFinder {
 	       List<Float> threshold = new ArrayList<Float>( );
 	       List<Float> prunedSpectralFlux = new ArrayList<Float>();
 	       List<Float> peaks = new ArrayList<Float>();
-
+	       
 	       while( decoder.singleSamples( samples ) > 0 )
 	       {			
 	          fft.forward( samples );
@@ -43,7 +43,7 @@ public class PeakFinder {
 	             flux += value < 0? 0: value;
 	          }
 	          spectralFlux.add( flux );					
-	       }		
+	       }	
 
 	       for( int i = 0; i < spectralFlux.size(); i++ )
 	       {
@@ -55,6 +55,7 @@ public class PeakFinder {
 	          mean /= (end - start);
 	          threshold.add( mean * MULTIPLIER );
 	       }
+	       
 	       //now prune the threshold sizes
 	       for( int i = 0; i < threshold.size(); i++ )
 	       {

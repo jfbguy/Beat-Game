@@ -24,6 +24,7 @@ public class AudioRunnerActivity extends AndroidApplication {
 		PeakFinder songData = new PeakFinder(MusicData.getFileLocation());
 		List<Float> peaks = songData.returnPeaks();
 		MusicData.setpeaks(peaks);
+		System.out.println(5);
         initialize(new GameHandler(music_file), false);
     }
 

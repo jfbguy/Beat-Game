@@ -48,11 +48,12 @@ public class AudioAnalyzer{
 			
 			for(int i = 0; i < samples.length; i++){
 				samples[i] = output.getBuffer()[i];
+				//System.out.print(samples[i]);
 			}
 
 			bitstream.closeFrame();
 
-			System.out.println("SUCCESS!!!");
+			//System.out.println("");
 
 			return 1;
 
