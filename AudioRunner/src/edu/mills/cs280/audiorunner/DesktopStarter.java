@@ -18,7 +18,7 @@ public class DesktopStarter {
 		float[] samples = new float[1024];
 		AudioAnalyzer analyzer = new AudioAnalyzer("data/music/Freezepop - Starlight (Karacter Remix).mp3");
 		System.out.println(analyzer.readSamples(samples));
-
+		System.exit(0);
 		/*
 		new Thread(new Runnable() {
 			public void run() {
