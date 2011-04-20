@@ -11,10 +11,6 @@ public class MusicHandler {
 	private MusicHandler(){
 	}
 
-	//public static float getMusicTime(){
-	//	return music.getPosition();
-	//}
-
 	public static void updateTime(){
 		if(prevTime == 0)
 			prevTime = System.currentTimeMillis();

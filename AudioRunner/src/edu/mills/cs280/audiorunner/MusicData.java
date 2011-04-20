@@ -7,7 +7,6 @@ import javazoom.jl.decoder.SampleBuffer;
 
 public class MusicData {
 	private static String fileLocation;
-	private static ArrayList<SampleBuffer> musicData;
 	private static List<Float> peaks;
 	
 	private MusicData(){
@@ -24,13 +23,6 @@ public class MusicData {
 	
 	public static List<Float> getPeaks(){
 		return peaks;
-	}
-	
-	public static void addMusicData(SampleBuffer buffer){
-		if(musicData == null){
-			musicData = new ArrayList<SampleBuffer>();
-		}
-		musicData.add(buffer);
 	}
 	
 	public static String getFileLocation(){

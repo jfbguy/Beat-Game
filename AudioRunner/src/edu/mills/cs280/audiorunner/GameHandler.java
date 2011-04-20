@@ -19,7 +19,6 @@ public class GameHandler implements ApplicationListener {
 
 	private SpriteBatch spriteBatch;
 	private Player player;
-	//private javazoom.jl.player.Player music;
 	Music music;
 	private ScoreBoard scoreBoard;
 	private BoostMeter boostMeter;
@@ -41,32 +40,6 @@ public class GameHandler implements ApplicationListener {
 		//Initiate player
 		player = new Player("data/runner.png",Gdx.graphics.getWidth()*.3f,ScreenHandler.GROUND_HEIGHT,PLAYER_WIDTH,PLAYER_HEIGHT);
 
-		//Music Stuff
-		//TODO: replace track location with the datapath of the music on the phone
-		/*
-		new Thread(new Runnable() {
-			public void run() {
-				try{
-					if(trackLocation == null){
-						trackLocation = "data/music/Freezepop - Starlight (Karacter Remix).mp3";
-						music = new javazoom.jl.player.Player(new FileInputStream(new File(trackLocation)));
-						//music = Gdx.audio.newMusic (Gdx.files.internal(trackLocation));
-					}else{
-						//music = Gdx.audio.newMusic (Gdx.files.external(trackLocation));
-						music = new javazoom.jl.player.Player(new FileInputStream(new File(trackLocation)));
-					}
-
-					music.play();
-
-				} catch(FileNotFoundException e){
-
-				}catch (JavaLayerException e) {
-					e.printStackTrace();
-				}
-			}
-		}).start();*/
-
-
 		if(trackLocation == null){
 			trackLocation = "data/music/Freezepop - Starlight (Karacter Remix).mp3";
 			music = Gdx.audio.newMusic (Gdx.files.internal(MusicData.getFileLocation()));
@@ -74,13 +47,10 @@ public class GameHandler implements ApplicationListener {
 			music = Gdx.audio.newMusic (Gdx.files.external(trackLocation));
 		}
 
-		music.play();
-
 
 
 		//Screen Elements
 		spriteBatch = new SpriteBatch();
-		//screenHandler = new ScreenHandler(5);
 		screenHandler = new ScreenHandler(5,MusicData.getPeaks());
 		scoreBoard = new ScoreBoard();
 		boostMeter = new BoostMeter();
@@ -90,23 +60,21 @@ public class GameHandler implements ApplicationListener {
 	@Override
 	public void dispose() {
 		music.dispose();
-		//music.close();
 	}
 
 	@Override
 	public void pause() {
-		try {
-			music.wait();
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		music.pause();
 	}
 
 	@Override
 	public void render() {
 		MusicHandler.updateTime();
-		//if(MusicHandler.getTransitionScale() != 0){
+		
+		if(!music.isPlaying()){
+			music.play();
+		}
+		
 		//LEVEL LOGIC
 		screenHandler.updateScreen(player);
 		boostMeter.updateBoost();
