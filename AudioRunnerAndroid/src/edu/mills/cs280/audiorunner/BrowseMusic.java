@@ -74,9 +74,10 @@ public class BrowseMusic extends Activity {
 			//start the game activity
 			startGame.setOnClickListener(new View.OnClickListener() {	
 				public void onClick(View v) {
-					Intent gameIntent = new Intent(v.getContext(), AudioRunnerActivity.class);
-	                gameIntent.putExtra("song", filename);
-					startActivityForResult(gameIntent, CODE);
+					Intent loadIntent = new Intent(v.getContext(), LoadMusic.class);
+	                loadIntent.putExtra("song", filename);
+					//startActivityForResult(loadIntent, CODE);
+	                startActivityForResult(loadIntent, 0);
 				}
 			});
 		}
