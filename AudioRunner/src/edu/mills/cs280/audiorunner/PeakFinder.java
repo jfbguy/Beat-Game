@@ -5,6 +5,9 @@
 package edu.mills.cs280.audiorunner;
 
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,6 +28,8 @@ public class PeakFinder {
     
     public List<Float> returnPeaks()
     {
+    	SerializableMusicData sMusicData = new SerializableMusicData();
+    	
     	try{
 	       MP3Decoder decoder = new MP3Decoder(  new FileInputStream (fileName ) );
 	       FFT fft = new FFT( 1024, 44100 );
@@ -39,6 +44,7 @@ public class PeakFinder {
 	       
 	       while( decoder.readSamples( samples ) > 0 )
 	       {			
+	    	  sMusicData.addSamples(samples);
 	          fft.forward( samples );
 	          System.arraycopy( spectrum, 0, lastSpectrum, 0, spectrum.length ); 
 	          System.arraycopy( fft.getSpectrum(), 0, spectrum, 0, spectrum.length );
@@ -83,6 +89,23 @@ public class PeakFinder {
 	//       System.out.println(peaks.toString());
 	//       System.out.println("size = " + peaks.size());
 	//       
+	       
+	       sMusicData.setPeaks(peaks);
+
+	       FileOutputStream fos = null;
+	       ObjectOutputStream out = null;
+	       try
+	       {
+	    	   fos = new FileOutputStream(SerializableMusicData.getDefaultName());
+	    	   out = new ObjectOutputStream(fos);
+	    	   out.writeObject(sMusicData);
+	    	   out.close();
+	       }
+	       catch(IOException ex)
+	       {
+	    	   ex.printStackTrace();
+	       }
+	       
 	       return peaks;
 	       
 	//       Plot plot = new Plot( "Spectral Flux", 1024, 512 );
