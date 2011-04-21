@@ -10,10 +10,22 @@ public class PeakFinder{
     public static final int THRESHOLD_WINDOW_SIZE = 10;
     public static final float MULTIPLIER = 1.5f;
     
+    private boolean useTestMusicData = false;
+    
+    //action performed in returnPeaks
     public PeakFinder(){}
     
+    public void setTestable(boolean testable){
+    	useTestMusicData = testable;
+    }
+    
+    //takes a list of of floats representing aggregate onset amplitudes
+    //and prunes them by creating an average threshold of amplitude
     public List<Float> returnPeaks()
     {
+    	if(useTestMusicData){
+    		//return
+    	}
     	try{
 	       //MP3Decoder decoder = new MP3Decoder(  new FileInputStream (fileName ) );
     	   AudioAnalyzer decoder = new AudioAnalyzer(MusicData.getFileLocation());
