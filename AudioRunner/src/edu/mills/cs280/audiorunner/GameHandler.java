@@ -15,7 +15,7 @@ public class GameHandler implements ApplicationListener {
 	private ScoreBoard scoreBoard;
 	private BoostMeter boostMeter;
 	private boolean touched;
-	private ScreenHandler screenHandler;
+	private static ScreenHandler screenHandler;
 	private AudioAnalyzer audioAnalyzer;
 
 	public GameHandler(){
@@ -39,9 +39,7 @@ public class GameHandler implements ApplicationListener {
 			MusicData.music = Gdx.audio.newMusic (Gdx.files.external(MusicData.getFileLocation()));
 		}
 		
-		audioAnalyzer = new AudioAnalyzer(MusicData.getFileLocation());
-
-
+		audioAnalyzer = new AudioAnalyzer(MusicData.getFileLocation(),screenHandler);
 
 		//Screen Elements
 		spriteBatch = new SpriteBatch();
@@ -49,6 +47,8 @@ public class GameHandler implements ApplicationListener {
 		scoreBoard = new ScoreBoard();
 		boostMeter = new BoostMeter();
 		Particle.BufferParticles();
+		
+		//audioAnalyzer.start();
 	}
 
 	@Override
@@ -69,7 +69,8 @@ public class GameHandler implements ApplicationListener {
 			MusicData.music.play();
 		}
 		
-		screenHandler.addPlatforms(audioAnalyzer.returnPeaks(TimeHandler.getTimePerFrame()));
+		//screenHandler.addPlatforms(audioAnalyzer.returnPeaks(MusicData.getMusicStep()));
+		audioAnalyzer.decode(screenHandler);
 		
 		//LEVEL LOGIC
 		screenHandler.updateScreen(player);
@@ -117,6 +118,10 @@ public class GameHandler implements ApplicationListener {
 	@Override
 	public void resume() {
 		MusicData.music.play();
+	}
+	
+	public static ScreenHandler getScreenHandler(){
+		return screenHandler;
 	}
 
 }

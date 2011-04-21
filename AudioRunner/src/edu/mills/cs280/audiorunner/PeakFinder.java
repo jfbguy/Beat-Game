@@ -12,7 +12,7 @@ public class PeakFinder{
     
     public PeakFinder(String file){
     }
-    
+    /*
     public List<Float> returnPeaks()
     {
     	try{
@@ -91,5 +91,5 @@ public class PeakFinder{
     		return null;
     	}
     	
-    }
+    }*/
 }
