@@ -118,8 +118,8 @@ public class ScoreBoard {
 		}
 
 		public void moveFloater(){
-			posX += Math.abs(posX-Gdx.graphics.getWidth())*FLOATER_SPEED*MusicHandler.getTransitionScale();
-			posY += Math.abs(posY-Gdx.graphics.getHeight())*FLOATER_SPEED*MusicHandler.getTransitionScale();
+			posX += Math.abs(posX-Gdx.graphics.getWidth())*FLOATER_SPEED*TimeHandler.getTransitionScale();
+			posY += Math.abs(posY-Gdx.graphics.getHeight())*FLOATER_SPEED*TimeHandler.getTransitionScale();
 		}
 		
 		public void draw(SpriteBatch spriteBatch){

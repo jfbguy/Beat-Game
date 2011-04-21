@@ -105,7 +105,7 @@ public class SpriteLayer {
 		LinkedList<Sprite> temp;
 		int parallaxPositionX = (int)(worldPosition.x*parallax);
 		int parallaxPositionY = (int)(worldPosition.y*parallax);
-		int transition = (int) (SPEED*MusicHandler.getTransitionScale());
+		int transition = (int) (SPEED*TimeHandler.getTransitionScale());
 
 		//Remove past Sprites from Screen
 		for(int i = -(transition+MAX_SPRITE_SIZE); i < -MAX_SPRITE_SIZE; i++){

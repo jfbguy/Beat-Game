@@ -95,7 +95,7 @@ public class Particle{
 	}
 
 	public static void updateParticles(){
-		float spdScale = MusicHandler.getTransitionScale();
+		float spdScale = TimeHandler.getTransitionScale();
 
 		Iterator<Particle> iter = PARTICLES.iterator();
 		while(iter.hasNext()){

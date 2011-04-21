@@ -1,14 +1,7 @@
 package edu.mills.cs280.audiorunner;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-
-import javazoom.jl.decoder.JavaLayerException;
-
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
@@ -19,18 +12,17 @@ public class GameHandler implements ApplicationListener {
 
 	private SpriteBatch spriteBatch;
 	private Player player;
-	Music music;
 	private ScoreBoard scoreBoard;
 	private BoostMeter boostMeter;
-	private String trackLocation;
 	private boolean touched;
 	private ScreenHandler screenHandler;
+	private AudioAnalyzer audioAnalyzer;
 
 	public GameHandler(){
 	}
 
 	public GameHandler(String musicFile){
-		this.trackLocation = musicFile;
+		MusicData.setFile(musicFile);
 	}
 	@Override
 	public void create() {
@@ -40,12 +32,14 @@ public class GameHandler implements ApplicationListener {
 		//Initiate player
 		player = new Player("data/runner.png",Gdx.graphics.getWidth()*.3f,ScreenHandler.GROUND_HEIGHT,PLAYER_WIDTH,PLAYER_HEIGHT);
 
-		if(trackLocation == null){
-			trackLocation = "data/music/Freezepop - Starlight (Karacter Remix).mp3";
-			music = Gdx.audio.newMusic (Gdx.files.internal(MusicData.getFileLocation()));
+		if(MusicData.getFileLocation() == null){
+			MusicData.setFile("data/music/Freezepop - Starlight (Karacter Remix).mp3");
+			MusicData.music = Gdx.audio.newMusic (Gdx.files.internal(MusicData.getFileLocation()));
 		}else{
-			music = Gdx.audio.newMusic (Gdx.files.external(trackLocation));
+			MusicData.music = Gdx.audio.newMusic (Gdx.files.external(MusicData.getFileLocation()));
 		}
+		
+		audioAnalyzer = new AudioAnalyzer(MusicData.getFileLocation());
 
 
 
@@ -59,21 +53,23 @@ public class GameHandler implements ApplicationListener {
 
 	@Override
 	public void dispose() {
-		music.dispose();
+		MusicData.music.dispose();
 	}
 
 	@Override
 	public void pause() {
-		music.pause();
+		MusicData.music.pause();
 	}
 
 	@Override
 	public void render() {
-		MusicHandler.updateTime();
+		TimeHandler.updateTime();
 		
-		if(!music.isPlaying()){
-			music.play();
+		if(!MusicData.music.isPlaying()){
+			MusicData.music.play();
 		}
+		
+		screenHandler.addPlatforms(audioAnalyzer.returnPeaks(TimeHandler.getTimePerFrame()));
 		
 		//LEVEL LOGIC
 		screenHandler.updateScreen(player);
@@ -120,7 +116,7 @@ public class GameHandler implements ApplicationListener {
 
 	@Override
 	public void resume() {
-		music.notify();
+		MusicData.music.play();
 	}
 
 }

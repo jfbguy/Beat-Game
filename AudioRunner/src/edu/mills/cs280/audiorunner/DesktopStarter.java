@@ -1,7 +1,7 @@
 package edu.mills.cs280.audiorunner;
 
 
-import java.util.List;
+//import java.util.List;
 
 import com.badlogic.gdx.backends.jogl.JoglApplication;
 
@@ -10,10 +10,10 @@ import com.badlogic.gdx.backends.jogl.JoglApplication;
 public class DesktopStarter {
 	public static void main(String[] args){
 
-		MusicData.setFile("data/music/Freezepop - Starlight (Karacter Remix).mp3");
-		PeakFinder songData = new PeakFinder(MusicData.getFileLocation());
-		List<Float> peaks = songData.returnPeaks();
-		MusicData.setpeaks(peaks);
+		//MusicData.setFile("data/music/Freezepop - Starlight (Karacter Remix).mp3");
+		//PeakFinder songData = new PeakFinder(MusicData.getFileLocation());
+		//List<Float> peaks = songData.returnPeaks();
+		//MusicData.setPeaks(peaks);
 
 		new JoglApplication(new GameHandler(),
 				"Audio Runner",

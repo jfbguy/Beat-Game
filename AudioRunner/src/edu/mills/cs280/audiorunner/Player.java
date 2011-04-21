@@ -9,7 +9,7 @@ public class Player extends Collidable {
 
 	private final float PLATFORM_CATCH = .4f;
 	private final int FRAME_COUNT = 6;
-	private final float FRAME_DELAY = MusicHandler.FRAMERATE/FRAME_COUNT/2;
+	private final float FRAME_DELAY = TimeHandler.FRAMERATE/FRAME_COUNT/2;
 	private final int SPRITE_SIZE = 64;
 	private final float GRAVITY = 1.0f;
 	public final int JUMPSPEED = 15;
@@ -73,7 +73,7 @@ public class Player extends Collidable {
 	 * to the next frame of animation
 	 */
 	public void animate(){
-		mAnimCounter += (1.0f*MusicHandler.getTransitionScale());
+		mAnimCounter += (1.0f*TimeHandler.getTransitionScale());
 		if(mAnimCounter >= mAnimDelay) {
 			if(mFrameNum == FRAME_COUNT-1 ) {
 				mFrameNum = 0;
@@ -165,8 +165,8 @@ public class Player extends Collidable {
 	public void update(ScreenHandler screenHandler, ScoreBoard scoreBoard){
 		setPosition(mStartX+ScreenHandler.getWorldPosition().x, getY());
 		if(mStatus == AIR){
-			setPosition(getX(), getY()+mVertVelocity*MusicHandler.getTransitionScale());
-			mVertVelocity -= GRAVITY*MusicHandler.getTransitionScale();
+			setPosition(getX(), getY()+mVertVelocity*TimeHandler.getTransitionScale());
+			mVertVelocity -= GRAVITY*TimeHandler.getTransitionScale();
 		}
 		if(mVertVelocity < 0 || mStatus == PLATFORM)
 		{

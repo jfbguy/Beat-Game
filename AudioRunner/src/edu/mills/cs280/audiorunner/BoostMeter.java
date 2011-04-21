@@ -5,14 +5,14 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class BoostMeter {
-	private final int FULL_BAR_WAIT = (int) (MusicHandler.FRAMERATE * 2);
+	private final int FULL_BAR_WAIT = (int) (TimeHandler.FRAMERATE * 2);
 	private final float REDUCTION_AMOUNT = .01f;
 	private final float XPOS = Gdx.graphics.getWidth()*.01f;
 	private final float YPOS = Gdx.graphics.getHeight()*.5f;
 	private final int WIDTH = (int) (Gdx.graphics.getHeight()*.1);
 	private final int HEIGHT = (int) (Gdx.graphics.getHeight()*.5);
 	private final int MAX_METER_VALUE = 100;
-	private final int REDUCTION_RATE = (int) (MusicHandler.FRAMERATE/5);
+	private final int REDUCTION_RATE = (int) (TimeHandler.FRAMERATE/5);
 
 	Texture mBoostTexture;
 	Texture mBorderTexture;
@@ -28,15 +28,15 @@ public class BoostMeter {
 
 	public void updateBoost(){
 		if(mCoolDown > 0){
-			mCoolDown -= MusicHandler.getTransitionScale();
+			mCoolDown -= TimeHandler.getTransitionScale();
 		}
 		else if(mValue > 0){
 			if(mReduction <= 0){
-				mValue -= MAX_METER_VALUE*REDUCTION_AMOUNT*MusicHandler.getTransitionScale();
+				mValue -= MAX_METER_VALUE*REDUCTION_AMOUNT*TimeHandler.getTransitionScale();
 				mReduction = REDUCTION_RATE;
 			}
 			else{
-				mReduction -= MusicHandler.getTransitionScale();
+				mReduction -= TimeHandler.getTransitionScale();
 			}
 		}
 	}

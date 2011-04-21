@@ -1,6 +1,6 @@
 package edu.mills.cs280.audiorunner;
 
-import java.util.List;
+import java.util.Hashtable;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
@@ -9,12 +9,12 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ImmediateModeRenderer;
 
 public class ScreenHandler{
-	
+
 	private static final int SPEED = 6;
 	private static final float ONSCREEN_BUFFER = .2f*Gdx.graphics.getWidth();
 	public static final float GROUND_HEIGHT = Gdx.graphics.getHeight()*.1f;
 	public static final float CEILING_HEIGHT = Gdx.graphics.getHeight()*.7f;
-	
+
 	private final float[] PARALLAX = {1.5f,1.0f,.4f,.06f,.001f};
 	private final int NUM_OF_TEXTURES = 6;		//UPDATE THIS IF YOU ADD A TEXTURE!!!
 	private final int MOUNTAIN = 0;	//Texture Constants, each needs to be different!
@@ -23,7 +23,7 @@ public class ScreenHandler{
 	private final int GROUND = 3;
 	private final int PLATFORM = 4;
 	private final int SCOREITEM = 5;
-	
+
 	//TODO Synch platform occurrences with music
 	private final int PLATFORM_STEP_SIZE = 200;//These will be defined by screensize/music synch
 	private final int PLATFORMS_START = 1000;
@@ -41,7 +41,7 @@ public class ScreenHandler{
 	/**
 	 * Constructor
 	 */
-	public ScreenHandler(int numOfLayers, List<Float> eventList){
+	public ScreenHandler(int numOfLayers, Hashtable<Integer,Float> events){
 		mWorldPosition = new Vector2(0,0);
 		mSpriteLayers = new SpriteLayer[numOfLayers];
 		platformLayer = new CollisionLayer(PARALLAX[1]);
@@ -91,22 +91,23 @@ public class ScreenHandler{
 
 		//platforms
 		//TODO make platforms more interesting
-		for(int i = 0; i < eventList.size(); i++){
-			if(eventList.get(i)>0){
-				temp.set(PLATFORMS_START + (i * PLATFORM_STEP_SIZE), PLATFORM_HEIGHT);
-				Platform platform = new Platform((float)temp.getX(),(float)temp.getY(),100f,10f,"data/purple.png");
-				platformLayer.put(temp.getX(),platform);
-			}
-		}
 
-//		for(int i = 0; i < 10; i++){
-//			temp.set(i*200+1000,50);
-//			Platform platform = new Platform((float)temp.getX(),(float)temp.getY(),100f,10f,"data/purple.png");
-//			platformLayer.put(temp.getX(),platform);
-//			temp.set(i*200+1000,100);
-//			platform = new Platform((float)temp.getX(),(float)temp.getY(),100f,10f,"data/purple.png");
-//			platformLayer.put(temp.getX(),platform);
-//		}
+		/*
+		for(int key : events.keySet()){
+			temp.set(key, PLATFORM_HEIGHT);
+			Platform platform = new Platform((float)temp.getX(),(float)temp.getY(),100f,10f,"data/purple.png");
+			platformLayer.put(temp.getX(),platform);
+		}*/
+
+
+		//		for(int i = 0; i < 10; i++){
+		//			temp.set(i*200+1000,50);
+		//			Platform platform = new Platform((float)temp.getX(),(float)temp.getY(),100f,10f,"data/purple.png");
+		//			platformLayer.put(temp.getX(),platform);
+		//			temp.set(i*200+1000,100);
+		//			platform = new Platform((float)temp.getX(),(float)temp.getY(),100f,10f,"data/purple.png");
+		//			platformLayer.put(temp.getX(),platform);
+		//		}
 
 		//sun
 		temp.set(400,100);
@@ -120,8 +121,9 @@ public class ScreenHandler{
 		for(int i = 0; i < mSpriteLayers.length; i++){
 			mSpriteLayers[i].loadStart(mWorldPosition);
 		}
+
 	}
-	
+
 	public ScreenHandler(int numOfLayers){
 		mWorldPosition = new Vector2(0,0);
 		mSpriteLayers = new SpriteLayer[numOfLayers];
@@ -200,9 +202,9 @@ public class ScreenHandler{
 	 * Need to add added platforms, sprites, change ground, etc
 	 */
 	public void updateScreen(Player player){	//Updates level depending on music and how player is doing
-		mCurrentFrameSpeed = SPEED*MusicHandler.getTransitionScale();
+		mCurrentFrameSpeed = SPEED*TimeHandler.getTransitionScale();
 		mWorldPosition.x += mCurrentFrameSpeed;
-		
+
 		if(player.getY() > mWorldPosition.y + CEILING_HEIGHT){
 			mWorldPosition.y = (int) (player.getY() - CEILING_HEIGHT);
 		}
@@ -262,6 +264,15 @@ public class ScreenHandler{
 		spriteBatch.end();
 	}
 
+	public void addPlatforms(Hashtable<Integer,Float> events){
+		Vector2 temp = new Vector2();
+		for(int key : events.keySet()){
+			temp.set(key, PLATFORM_HEIGHT);
+			Platform platform = new Platform((float)temp.getX(),(float)temp.getY(),100f,10f,"data/purple.png");
+			platformLayer.put(temp.getX(),platform);
+		}
+	}
+
 	public CollisionLayer getPlatforms(){
 		return platformLayer;
 	}
@@ -278,11 +289,11 @@ public class ScreenHandler{
 	public static int getSpeed(){
 		return SPEED;
 	}
-	
+
 	public static float getCurrentFrameSpeed(){
 		return mCurrentFrameSpeed;
 	}
-	
+
 	public static Vector2 getWorldPosition(){
 		return mWorldPosition;
 	}
