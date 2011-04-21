@@ -30,6 +30,7 @@ public class PeakFinder{
 	       List<Float> prunedSpectralFlux = new ArrayList<Float>();
 	       List<Float> peaks = new ArrayList<Float>();
 	       
+	       //TODO: parallelize this part!!!!
 	       while( decoder.singleSamples( samples ) > 0 )
 	       {			
 	          fft.forward( samples );

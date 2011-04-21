@@ -23,7 +23,7 @@ public class AudioAnalyzer{
 	public AudioAnalyzer(String fileLocation){
 		file = new File(fileLocation);
 		try {
-			inputStream = new BufferedInputStream(new FileInputStream(file), 8*1024);
+			inputStream = new BufferedInputStream(new FileInputStream(file), 1024);
 		} catch (FileNotFoundException e1) {
 			e1.printStackTrace();
 		}
