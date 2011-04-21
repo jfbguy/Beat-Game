@@ -43,9 +43,11 @@ public class AudioAnalyzer{
 			try{
 				output = (SampleBuffer)decoder.decodeFrame(header, bitstream);
 			}catch(Exception e){
+				//TODO find a better way to exit than empty catch
 				return 0;
 			}
 			
+			//System.out.print("samples.length " + samples.length);
 			for(int i = 0; i < samples.length; i++){
 				samples[i] = output.getBuffer()[i];
 				//System.out.print(samples[i]);
@@ -59,11 +61,13 @@ public class AudioAnalyzer{
 
 		} catch (BitstreamException e) {
 			//e.printStackTrace();
+			//TODO find a better way to exit than empty catch
 			return 0;
 		}
 
 	}
 
+	//currently unused
 	public int readSamples(float[] samples)
 	{
 

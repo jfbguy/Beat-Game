@@ -10,8 +10,8 @@ import com.badlogic.gdx.backends.jogl.JoglApplication;
 public class DesktopStarter {
 	public static void main(String[] args){
 
-		MusicData.setFile("data/music/Freezepop - Starlight (Karacter Remix).mp3");
-		PeakFinder songData = new PeakFinder(MusicData.getFileLocation());
+		MusicData.setFile("data/music/test.mp3");
+		PeakFinder songData = new PeakFinder();
 		List<Float> peaks = songData.returnPeaks();
 		MusicData.setpeaks(peaks);
 

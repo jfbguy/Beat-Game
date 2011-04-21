@@ -9,11 +9,8 @@ public class PeakFinder{
 
     public static final int THRESHOLD_WINDOW_SIZE = 10;
     public static final float MULTIPLIER = 1.5f;
-    private String fileName;
     
-    public PeakFinder(String file){
-    	fileName = file;
-    }
+    public PeakFinder(){}
     
     public List<Float> returnPeaks()
     {
