@@ -22,7 +22,7 @@ public class GameHandler implements ApplicationListener {
 	private javazoom.jl.player.Player music;
 	private ScoreBoard scoreBoard;
 	private BoostMeter boostMeter;
-	private String trackLocation = "data/music/Freezepop - Starlight (Karacter Remix).mp3";//default value, REMOVE in release
+	private String trackLocation = "data/music/weakandpowerless.mp3";//default value, REMOVE in release
 	private boolean touched;
 	private ScreenHandler screenHandler;
 
