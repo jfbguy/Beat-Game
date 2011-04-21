@@ -6,6 +6,6 @@ public class FindThreshTest {
 		MusicData.setFile("data/music/test.mp3");
 		PeakFinder george = new PeakFinder();
 		System.out.println(george.returnPeaks().toString());
-
+		System.out.println(george.returnPeaks().size());
 	}
 }
