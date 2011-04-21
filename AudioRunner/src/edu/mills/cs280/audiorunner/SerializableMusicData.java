@@ -1,8 +1,20 @@
 package edu.mills.cs280.audiorunner;
 
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+
+/******************************************
+ * SERIALIZED CLASS
+ * DO NOT CHANGE ANYTHING HERE!!!!
+ * ****************************************
+ */
+
 
 public class SerializableMusicData implements Serializable{
 
@@ -35,5 +47,85 @@ public class SerializableMusicData implements Serializable{
 
 	public static String getDefaultName(){
 		return FILE_NAME;
+	}
+	
+	public void save(){
+
+	       FileOutputStream fos = null;
+	       ObjectOutputStream out = null;
+	       try
+	       {
+	    	   fos = new FileOutputStream(SerializableMusicData.getDefaultName());
+	    	   out = new ObjectOutputStream(fos);
+	    	   out.writeObject(this);
+	    	   out.close();
+	       }
+	       catch(IOException ex)
+	       {
+	    	   ex.printStackTrace();
+	       }
+	}
+	
+	public void save(String fileName){
+
+	       FileOutputStream fos = null;
+	       ObjectOutputStream out = null;
+	       try
+	       {
+	    	   fos = new FileOutputStream(fileName);
+	    	   out = new ObjectOutputStream(fos);
+	    	   out.writeObject(this);
+	    	   out.close();
+	       }
+	       catch(IOException ex)
+	       {
+	    	   ex.printStackTrace();
+	       }
+	}
+	
+	public static SerializableMusicData load(){
+		FileInputStream fis = null;
+		ObjectInputStream in = null;
+		try
+		{
+			fis = new FileInputStream(SerializableMusicData.getDefaultName());
+			in = new ObjectInputStream(fis);
+			SerializableMusicData data = (SerializableMusicData)in.readObject();
+			in.close();
+			return data;
+		}
+		catch(IOException ex)
+		{
+			ex.printStackTrace();
+			return null;
+		}
+		catch(ClassNotFoundException ex)
+		{
+			ex.printStackTrace();
+			return null;
+		}
+	}
+	
+	public static SerializableMusicData load(String fileName){
+		FileInputStream fis = null;
+		ObjectInputStream in = null;
+		try
+		{
+			fis = new FileInputStream(fileName);
+			in = new ObjectInputStream(fis);
+			SerializableMusicData data = (SerializableMusicData)in.readObject();
+			in.close();
+			return data;
+		}
+		catch(IOException ex)
+		{
+			ex.printStackTrace();
+			return null;
+		}
+		catch(ClassNotFoundException ex)
+		{
+			ex.printStackTrace();
+			return null;
+		}
 	}
 }
