@@ -1,11 +1,6 @@
 package edu.mills.cs280.audiorunner;
 
-import java.util.List;
-
-import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.widget.ProgressBar;
 
 import com.badlogic.gdx.backends.android.AndroidApplication;
 
