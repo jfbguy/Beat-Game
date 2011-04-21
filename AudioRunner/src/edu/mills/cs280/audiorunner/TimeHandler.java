@@ -28,4 +28,8 @@ public class TimeHandler {
 	public static float getTimePerFrame(){
 		return TIMESCALE;
 	}
+	
+	public static long getWaitTime(){
+		return (long) (1000/30.0f-(System.currentTimeMillis()-currTime));
+	}
 }

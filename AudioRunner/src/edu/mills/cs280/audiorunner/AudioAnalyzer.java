@@ -28,7 +28,7 @@ public class AudioAnalyzer{
 
 	public static final int THRESHOLD_WINDOW_SIZE = 10;
 	public static final float MULTIPLIER = 1.5f;
-	private static final int bufferLimit = 100;
+	private static final int bufferLimit = 50;
 
 	//Decoder variables
 	private FFT fft;
@@ -44,6 +44,7 @@ public class AudioAnalyzer{
 	private int bufferCounter = 0;
 	private ScreenHandler screenHandler;
 	private boolean decodingDone;
+	private int bufferAnalyze = 0;
 
 	public AudioAnalyzer(String fileLocation, ScreenHandler screenHandler){
 		file = new File(fileLocation);
@@ -89,12 +90,34 @@ public class AudioAnalyzer{
 	public void decode(ScreenHandler screenHandler){
 		if(!decodingDone){
 			if(bufferCounter > bufferLimit){
-				screenHandler.addPlatforms(returnPeaks());
+				bufferAnalyze++;
+				switch(bufferAnalyze){
+				case 1:
+					runFlux();
+					break;
+				case 2:
+					spectralFlux();
+					break;
+				case 3:
+					prune();
+					break;
+				case 4:
+					screenHandler.addPlatforms(choosePeaks());
+					bufferCounter = 0;
+					spectralFlux.clear();;
+					threshold.clear();
+					prunedSpectralFlux.clear();
+					peaks.clear();
+					bufferAnalyze = 0;
+					bufferCounter = 0;
+					break;
+				}
+				/*screenHandler.addPlatforms(returnPeaks());
 				bufferCounter = 0;
 				spectralFlux.clear();;
 				threshold.clear();
 				prunedSpectralFlux.clear();
-				peaks.clear();
+				peaks.clear();*/
 			}
 			else{
 				bufferFrame();
@@ -130,11 +153,55 @@ public class AudioAnalyzer{
 
 	}
 
-	public Hashtable<Integer,Float> returnPeaks()
+	public void runFlux(){
+		float flux = 0;
+		for( int i = 0; i < spectrum.length; i++ )	
+		{
+			float value = (spectrum[i] - lastSpectrum[i]);
+			flux += value < 0? 0: value;
+		}
+		spectralFlux.add( flux );
+	}
+
+	public void spectralFlux(){
+		for( int i = 0; i < spectralFlux.size(); i++ )
+		{
+			int start = Math.max( 0, i - THRESHOLD_WINDOW_SIZE );
+			int end = Math.min( spectralFlux.size() - 1, i + THRESHOLD_WINDOW_SIZE );
+			float mean = 0;
+			for( int j = start; j <= end; j++ )
+				mean += spectralFlux.get(j);
+			mean /= (end - start);
+			threshold.add( mean * MULTIPLIER );
+		}
+	}
+
+	public void prune(){
+		for( int i = 0; i < threshold.size(); i++ )
+		{
+			if( threshold.get(i) <= spectralFlux.get(i) )
+				prunedSpectralFlux.add( spectralFlux.get(i) - threshold.get(i) );
+			else
+				prunedSpectralFlux.add( (float)0 );
+		}
+	}
+
+	public Hashtable<Integer,Float> choosePeaks(){
+		for( int i = 0; i < prunedSpectralFlux.size() - 1; i++ )
+		{
+			if( prunedSpectralFlux.get(i) > prunedSpectralFlux.get(i+1) )
+				peaks.put((int)(MusicData.music.getPosition()), prunedSpectralFlux.get(i) );
+
+		}
+
+		return peaks;
+	}
+
+	public Hashtable<Integer,Float> returnPeaks(int timeLength)
 	{
 		try{
 			//Replaces by buffer
-			/*FFT fft = new FFT( 1024, 44100 );
+			FFT fft = new FFT( 1024, 44100 );
 			fft.window( FFT.HAMMING );
 			float[] samples = new float[1024];
 			float[] spectrum = new float[1024 / 2 + 1];
@@ -158,8 +225,9 @@ public class AudioAnalyzer{
 					flux += value < 0? 0: value;
 				}
 				spectralFlux.add( flux );					
-			}*/
-			
+			}
+
+
 			float flux = 0;
 			for( int i = 0; i < spectrum.length; i++ )	
 			{
@@ -167,7 +235,8 @@ public class AudioAnalyzer{
 				flux += value < 0? 0: value;
 			}
 			spectralFlux.add( flux );
-			
+
+
 			System.out.println("=============================>   1");
 
 			for( int i = 0; i < spectralFlux.size(); i++ )
@@ -180,7 +249,7 @@ public class AudioAnalyzer{
 				mean /= (end - start);
 				threshold.add( mean * MULTIPLIER );
 			}
-			
+
 			System.out.println("=============================>   2");
 
 			//now prune the threshold sizes
@@ -191,7 +260,7 @@ public class AudioAnalyzer{
 				else
 					prunedSpectralFlux.add( (float)0 );
 			}
-			
+
 			System.out.println("=============================>   3");
 			System.out.println("=============================>   3");
 			System.out.println("=============================>   3");

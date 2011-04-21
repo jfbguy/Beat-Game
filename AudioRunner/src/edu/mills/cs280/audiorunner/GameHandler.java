@@ -65,16 +65,32 @@ public class GameHandler implements ApplicationListener {
 	public void render() {
 		TimeHandler.updateTime();
 		
+		long timer = System.currentTimeMillis();
+		long start = timer;
+		
 		if(!MusicData.music.isPlaying()){
 			MusicData.music.play();
 		}
 		
+		System.out.println("############Start: " + (System.currentTimeMillis()-timer) );
+		timer = System.currentTimeMillis();
+		
 		//screenHandler.addPlatforms(audioAnalyzer.returnPeaks(MusicData.getMusicStep()));
 		audioAnalyzer.decode(screenHandler);
 		
+		System.out.println("############Decoder: " + (System.currentTimeMillis()-timer) );
+		timer = System.currentTimeMillis();
+		
 		//LEVEL LOGIC
 		screenHandler.updateScreen(player);
+		
+		System.out.println("############ScreenHandlerUpdate: " + (System.currentTimeMillis()-timer) );
+		timer = System.currentTimeMillis();
+		
 		boostMeter.updateBoost();
+		
+		System.out.println("############boostMeterupdate: " + (System.currentTimeMillis()-timer) );
+		timer = System.currentTimeMillis();
 
 		//Input
 		if(Gdx.input.isTouched()){
@@ -93,9 +109,15 @@ public class GameHandler implements ApplicationListener {
 		else{
 			touched = false;
 		}
+		
+		System.out.println("############Input: " + (System.currentTimeMillis()-timer) );
+		timer = System.currentTimeMillis();
 
 		//PLAYER LOGIC
 		player.update(screenHandler,scoreBoard);
+		
+		System.out.println("############playerupdate: " + (System.currentTimeMillis()-timer) );
+		timer = System.currentTimeMillis();
 
 		//Clear Screen
 		Gdx.graphics.getGL10().glClearColor(0,0,0,1);
@@ -103,10 +125,26 @@ public class GameHandler implements ApplicationListener {
 
 		//draw Screen
 		screenHandler.draw(spriteBatch, player);
+		
+		System.out.println("############drawScreen: " + (System.currentTimeMillis()-timer) );
+		timer = System.currentTimeMillis();
 
 		//draw UI
 		scoreBoard.draw(spriteBatch);
 		boostMeter.draw(spriteBatch);
+		
+		System.out.println("############score and boost draw: " + (System.currentTimeMillis()-timer) );
+		timer = System.currentTimeMillis();
+		
+		
+		
+		System.out.println("############TOTALTIME: " + (System.currentTimeMillis()-start));
+		System.out.println("####################################");
+		System.out.println("####################################");
+		System.out.println("####################################");
+		
+		//while(TimeHandler.getWaitTime() > 0){}
+
 
 	}
 
