@@ -8,9 +8,14 @@ import javazoom.jl.decoder.SampleBuffer;
 public class MusicData {
 	private static String fileLocation;
 	private static List<Float> peaks;
+	private static ArrayList<float[]> samples;
 	
 	private MusicData(){
 		
+	}
+	
+	public static void setSamples(ArrayList<float[]> loadedSamples){
+		samples = loadedSamples;
 	}
 	
 	public static void setFile(String file){
