@@ -43,6 +43,8 @@ public class ScreenHandler{
 	 * Constructor
 	 */
 	public ScreenHandler(int numOfLayers, List<Float> eventList){
+		mRenderer = new ImmediateModeRenderer();
+		
 		mWorldPosition = new Vector2(0,0);
 		mSpriteLayers = new SpriteLayer[numOfLayers];
 		platformLayer = new CollisionLayer(PARALLAX[1]);
@@ -219,6 +221,13 @@ public class ScreenHandler{
 	 * @param
 	 */
 	public void draw(SpriteBatch spriteBatch, Player player){
+		mRenderer.begin(GL10.GL_LINES);
+		mRenderer.color(1, 0, 0, 1);
+		mRenderer.vertex(0, 0, 0);
+		mRenderer.color(1, 0, 0, 1);
+		mRenderer.vertex(300, 300, 0);
+		mRenderer.end();
+		
 		//Draw first half of layers rounded down
 		for(int i = mSpriteLayers.length-1; i >= mSpriteLayers.length/2; i--){
 			mSpriteLayers[i].draw(spriteBatch,mWorldPosition);
@@ -244,13 +253,6 @@ public class ScreenHandler{
 		for(int i = mSpriteLayers.length/2-1; i >= 0; i--){
 			mSpriteLayers[i].draw(spriteBatch,mWorldPosition);
 		}
-		
-		ImmediateModeRenderer renderer = new ImmediateModeRenderer();
-		renderer.begin(GL10.GL_LINE);
-		renderer.color(1, 1, 1, 1);
-		renderer.vertex(100, 100, 0);
-		renderer.vertex(100, 0, 0);
-		renderer.end();
 		 
 	}
 

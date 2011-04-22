@@ -42,9 +42,8 @@ public class LoadMusic extends Activity{
 		protected Void doInBackground(Void... params) {
 			MusicData.setFile(musicFile);
 			PeakFinder songData = new PeakFinder();
-			songData.setTestable(true);
-			List<Float> peaks = songData.returnPeaks();
-			MusicData.setpeaks(peaks);
+			//songData.setTestable(true);
+			MusicData.setpeaks(songData.returnPeaks());
 			return null;
 		}
 

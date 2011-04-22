@@ -3,6 +3,7 @@ package edu.mills.cs280.audiorunner;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.analysis.FFT;
 
 public class PeakFinder{
@@ -24,8 +25,10 @@ public class PeakFinder{
     public List<Float> returnPeaks()
     {
     	if(useTestMusicData){
-    		MusicData.setSamples(SerializableMusicData.load().getSamples());
-    		return SerializableMusicData.load().getPeaks();
+    		System.out.print("****************************" + SerializableMusicData.getDefaultName());
+    		SerializableMusicData load = SerializableMusicData.load();
+    		MusicData.setSamples(load.getSamples());
+    		return load.getPeaks();
     	}
     	
     	try{
