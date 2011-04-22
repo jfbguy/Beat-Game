@@ -3,6 +3,7 @@ package edu.mills.cs280.audiorunner;
 import java.util.List;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -243,6 +244,14 @@ public class ScreenHandler{
 		for(int i = mSpriteLayers.length/2-1; i >= 0; i--){
 			mSpriteLayers[i].draw(spriteBatch,mWorldPosition);
 		}
+		
+		ImmediateModeRenderer renderer = new ImmediateModeRenderer();
+		renderer.begin(GL10.GL_LINE);
+		renderer.color(1, 1, 1, 1);
+		renderer.vertex(100, 100, 0);
+		renderer.vertex(100, 0, 0);
+		renderer.end();
+		 
 	}
 
 	/**
