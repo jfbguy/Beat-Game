@@ -53,38 +53,7 @@ public class MusicData {
 	}
 
 	public static void loadBufferedData(){
-		System.out.println("TRYING TO LOAD!!!!");
-
-		try {
-			InputStream fis = Gdx.files.internal("data/testpeaks.ar").read();
-			ObjectInputStream in = new ObjectInputStream(fis);
-			@SuppressWarnings("unchecked")
-			List<Float> peaks = (List<Float>)in.readObject();
-			in.close();
-
-			for(float f : peaks){
-				System.out.println(f+",");
-			}
-
-			MusicData.setpeaks(peaks);
-
-		}
-		catch (Exception e) {
-			System.out.println("111111111111EXCEEEEEEEEEEEEEEEEEEPTION!!!" + e);
-		}
-
-		try {
-			InputStream fis = Gdx.files.internal("data/testsamples.ar").read();
-			ObjectInputStream in = new ObjectInputStream(fis);
-			@SuppressWarnings("unchecked")
-			ArrayList<float[]> samples = (ArrayList<float[]>)in.readObject();
-			in.close();
-			MusicData.setSamples(samples);
-
-		}
-		catch (Exception e) {
-			System.out.println("222222222222222EXCEEEEEEEEEEEEEEEEEEPTION!!!" + e);
-		}
+		
 
 
 	}

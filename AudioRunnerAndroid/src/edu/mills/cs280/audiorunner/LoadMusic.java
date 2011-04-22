@@ -1,6 +1,7 @@
 package edu.mills.cs280.audiorunner;
 
 import java.io.FileInputStream;
+import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import java.util.List;
@@ -9,6 +10,7 @@ import com.badlogic.gdx.Gdx;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.res.AssetManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
@@ -47,11 +49,37 @@ public class LoadMusic extends Activity{
 		@Override
 		protected Void doInBackground(Void... params) {
 			MusicData.setFile(musicFile);
-			//PeakFinder songData = new PeakFinder();
-			//songData.setTestable(true);
-			//MusicData.setpeaks(songData.returnPeaks());
-			
-			MusicData.loadBufferedData();
+
+			AssetManager assetManager = getAssets();
+			InputStream fis;
+			ObjectInputStream in;
+
+			try {
+				fis = assetManager.open("data/testpeaks.ar");
+				in = new ObjectInputStream(fis);
+				@SuppressWarnings("unchecked")
+				List<Float> peaks = (List<Float>)in.readObject();
+				in.close();
+
+				MusicData.setpeaks(peaks);
+
+			}
+			catch (Exception e) {
+				System.out.println(e);
+			}
+
+			try {
+				fis = assetManager.open("data/testsamples.ar");
+				in = new ObjectInputStream(fis);
+				@SuppressWarnings("unchecked")
+				ArrayList<float[]> samples = (ArrayList<float[]>)in.readObject();
+				in.close();
+				MusicData.setSamples(samples);
+
+			}
+			catch (Exception e) {
+				System.out.println(e);
+			}
 			
 			return null;
 		}
