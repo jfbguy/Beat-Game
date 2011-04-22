@@ -1,6 +1,10 @@
 package edu.mills.cs280.audiorunner;
 
+import java.io.FileInputStream;
+import java.io.ObjectInputStream;
+import java.util.ArrayList;
 import java.util.List;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -41,9 +45,43 @@ public class LoadMusic extends Activity{
 		@Override
 		protected Void doInBackground(Void... params) {
 			MusicData.setFile(musicFile);
-			PeakFinder songData = new PeakFinder();
+			//PeakFinder songData = new PeakFinder();
 			//songData.setTestable(true);
-			MusicData.setpeaks(songData.returnPeaks());
+			//MusicData.setpeaks(songData.returnPeaks());
+			
+			System.out.println("TRYING TO LOAD!!!!");
+			
+			try {
+		        FileInputStream fis = new FileInputStream("AudioRunnerAndroid/assets/data/testPeaks.ar");
+		        ObjectInputStream in = new ObjectInputStream(fis);
+		        @SuppressWarnings("unchecked")
+				List<Float> peaks = (List<Float>)in.readObject();
+		        in.close();
+		        
+		        for(float f : peaks){
+		        	System.out.println(f+",");
+		        }
+		        
+		        MusicData.setpeaks(peaks);
+		        
+		      }
+		      catch (Exception e) {
+		          System.out.println("111111111111EXCEEEEEEEEEEEEEEEEEEPTION!!!" + e);
+		      }
+		      
+		      try {
+			        FileInputStream fis = new FileInputStream("AudioRunnerAndroid/assets/data/testSamples.ar");
+			        ObjectInputStream in = new ObjectInputStream(fis);
+			        @SuppressWarnings("unchecked")
+					ArrayList<float[]> samples = (ArrayList<float[]>)in.readObject();
+			        in.close();
+			        MusicData.setSamples(samples);
+			        
+			      }
+			      catch (Exception e) {
+			          System.out.println("222222222222222EXCEEEEEEEEEEEEEEEEEEPTION!!!" + e);
+			      }
+			
 			return null;
 		}
 
