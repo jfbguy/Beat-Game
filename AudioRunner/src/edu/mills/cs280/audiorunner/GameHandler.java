@@ -47,7 +47,7 @@ public class GameHandler implements ApplicationListener {
 			music = Gdx.audio.newMusic (Gdx.files.external(trackLocation));
 		}
 
-
+		MusicData.setFile(trackLocation);
 
 		//Screen Elements
 		spriteBatch = new SpriteBatch();

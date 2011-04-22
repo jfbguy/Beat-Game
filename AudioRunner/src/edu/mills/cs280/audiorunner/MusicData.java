@@ -9,6 +9,7 @@ public class MusicData {
 	private static String fileLocation;
 	private static List<Float> peaks;
 	private static ArrayList<float[]> samples;
+	private static int duration; //the length of the music in milisec
 	
 	private MusicData(){
 		
@@ -30,7 +31,19 @@ public class MusicData {
 		return peaks;
 	}
 	
+	public static ArrayList<float[]> getSamples(){
+		return samples;
+	}
+	
 	public static String getFileLocation(){
 		return fileLocation;
+	}
+	
+	public static int getDuration(){
+		return duration;
+	}
+	
+	public static float getFrameDuration(){
+		return duration/samples.size();
 	}
 }
