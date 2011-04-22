@@ -24,8 +24,9 @@ public class PeakFinder{
     public List<Float> returnPeaks()
     {
     	if(useTestMusicData){
-    		MusicData.setSamples(SerializableMusicData.load().getSamples());
-    		return SerializableMusicData.load().getPeaks();
+    		SerializableMusicData load = SerializableMusicData.load();
+    		MusicData.setSamples(load.getSamples());
+    		return load.getPeaks();
     	}
     	
     	try{

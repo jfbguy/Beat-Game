@@ -39,6 +39,9 @@ public class ScreenHandler{
 	private CollisionLayer scoreItemLayer;
 	//private LinkedList<Particle> particles;
 
+	
+	private ImmediateModeRenderer renderer = new ImmediateModeRenderer();
+	
 	/**
 	 * Constructor
 	 */
@@ -245,13 +248,13 @@ public class ScreenHandler{
 			mSpriteLayers[i].draw(spriteBatch,mWorldPosition);
 		}
 		
-		ImmediateModeRenderer renderer = new ImmediateModeRenderer();
-		renderer.begin(GL10.GL_LINE);
-		renderer.color(1, 1, 1, 1);
-		renderer.vertex(100, 100, 0);
+		renderer.color(1, 0, 0, 1);
+		renderer.begin(GL10.GL_LINES);	
+		renderer.vertex(0, 0, 0);
 		renderer.vertex(100, 0, 0);
+		renderer.vertex(100, 100, 0);
+		renderer.vertex(0, 100, 0);
 		renderer.end();
-		 
 	}
 
 	/**

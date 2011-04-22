@@ -9,23 +9,24 @@ xmlns:android="http://schemas.android.com/apk/res/android">
         			android:layout_height="fill_parent" 
                     android:layout_width="fill_parent"
                     android:layout_weight="2"
-        			android:orientation="vertical">
+        			android:orientation="vertical"
+        			android:gravity="center_vertical">
     
 			<TextView
 			    android:id="@+id/selected_song"
 		    	android:layout_width="fill_parent"
-		    	android:layout_height="wrap_content"
+		    	android:layout_height="60dip"
 		    	android:textColor="#666666"
 		    	android:text="No Song Selected Yet"/>
             <TextView android:text="song name: " 
             		android:id="@+id/song_name" 
             		android:layout_width="fill_parent" 
-            		android:layout_height="wrap_content">
+            		android:layout_height="60dip">
             </TextView>
             <TextView android:text="song duration: " 
             		android:id="@+id/song_duration" 
             		android:layout_width="fill_parent" 
-            		android:layout_height="wrap_content">
+            		android:layout_height="60dip" android:layout_margin="2dip">
             </TextView>
             <Button android:layout_height="wrap_content" 
             		android:layout_width="fill_parent" 
