@@ -24,8 +24,9 @@ public class PeakFinder{
     public List<Float> returnPeaks()
     {
     	if(useTestMusicData){
-    		//return
+    		return SerializableMusicData.load().getPeaks();
     	}
+    	
     	try{
 	       //MP3Decoder decoder = new MP3Decoder(  new FileInputStream (fileName ) );
     	   AudioAnalyzer decoder = new AudioAnalyzer(MusicData.getFileLocation());
