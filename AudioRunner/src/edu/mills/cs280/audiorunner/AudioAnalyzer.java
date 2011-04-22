@@ -57,10 +57,10 @@ public class AudioAnalyzer{
 
 			//System.out.println("");
 			//System.out.println("samples return: " + samples.toString());
-			for(float i:samples){
-				System.out.print(i + " ");
-			}
-			System.out.println("");
+//			for(float i:samples){
+//				System.out.print(i + " ");
+//			}
+//			System.out.println("");
 			return 1;
 
 		} catch (BitstreamException e) {
