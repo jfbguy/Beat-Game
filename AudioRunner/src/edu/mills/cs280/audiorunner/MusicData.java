@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
 
 import javazoom.jl.decoder.SampleBuffer;
 
@@ -15,7 +16,8 @@ public class MusicData {
 	private static List<Float> peaks;
 	private static ArrayList<float[]> samples;
 	private static float duration; //the length of the music in milisec
-
+	private static Music music;
+	
 	private MusicData(){
 
 	}
@@ -57,8 +59,14 @@ public class MusicData {
 	}
 
 	public static void loadBufferedData(){
-		
 
-
+	}
+	
+	public static void setMusic(Music m){
+		music = m;
+	}
+	
+	public static float getPosition(){
+		return music.getPosition();
 	}
 }
