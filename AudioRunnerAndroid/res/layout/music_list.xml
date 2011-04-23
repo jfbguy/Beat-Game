@@ -9,7 +9,8 @@ xmlns:android="http://schemas.android.com/apk/res/android">
         			android:layout_height="fill_parent" 
                     android:layout_width="fill_parent"
                     android:layout_weight="2"
-        			android:orientation="vertical">
+        			android:orientation="vertical"
+        			android:gravity="center_vertical">
     
 			<TextView
 			    android:id="@+id/selected_song"
@@ -25,12 +26,18 @@ xmlns:android="http://schemas.android.com/apk/res/android">
             <TextView android:text="song duration: " 
             		android:id="@+id/song_duration" 
             		android:layout_width="fill_parent" 
-            		android:layout_height="wrap_content">
+            		android:layout_height="wrap_content" 
+            		android:layout_margin="2dip">
             </TextView>
             <Button android:layout_height="wrap_content" 
             		android:layout_width="fill_parent" 
             		android:text="Start" 
             		android:id="@+id/Start_Game_Button">
+           	</Button>
+           	<Button android:layout_height="wrap_content" 
+            		android:layout_width="fill_parent" 
+            		android:text="Start With Default Music" 
+            		android:id="@+id/Start_Game_Button_Default">
            	</Button>
         </LinearLayout>
         <LinearLayout

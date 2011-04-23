@@ -21,8 +21,8 @@ import android.widget.Toast;
 public class LoadMusic extends Activity{
 
 	public String musicFile;
-	private ProgressBar progressIndicator;
 	private LinearLayout linProgressBar;
+	private static int GAME  = 1;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -37,18 +37,24 @@ public class LoadMusic extends Activity{
 
 		linProgressBar = (LinearLayout) findViewById(R.id.lin_progress_bar);
 		linProgressBar.setVisibility(View.VISIBLE);
-		progressIndicator = (ProgressBar) findViewById(R.id.progressbar);
 
 		new decodeMusic().execute();
 
 	}
 
 
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(requestCode==GAME){
+    		finish();
+        }
+    }
 	private class decodeMusic extends AsyncTask<Void, Void, Void> {
 
 		@Override
 		protected Void doInBackground(Void... params) {
-			MusicData.setFile(musicFile);
+			if(musicFile!=null){
+				MusicData.setFile(musicFile);
+			}
 			MusicData.setDuration(298000f);	//*****NEEDS TO GET THE ACTUAL SONG DURATION!!!
 
 			AssetManager assetManager = getAssets();
@@ -92,9 +98,10 @@ public class LoadMusic extends Activity{
 					Toast.LENGTH_SHORT).show();
 
 			Intent gameIntent = new Intent(getApplicationContext(), AudioRunnerActivity.class);
-			gameIntent.putExtra("song", musicFile);
-			startActivityForResult(gameIntent, 0);
-			finish();
+			if(musicFile!=null){
+				gameIntent.putExtra("song", musicFile);
+			}
+			startActivityForResult(gameIntent, GAME);
 		}
 
 		@Override

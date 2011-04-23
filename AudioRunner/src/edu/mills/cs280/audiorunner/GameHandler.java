@@ -41,8 +41,9 @@ public class GameHandler implements ApplicationListener {
 		player = new Player(Gdx.graphics.getWidth()*.3f,ScreenHandler.GROUND_HEIGHT,PLAYER_WIDTH,PLAYER_HEIGHT);
 
 		if(trackLocation == null){
-			trackLocation = "data/music/Freezepop - Starlight (Karacter Remix).mp3";
-			music = Gdx.audio.newMusic (Gdx.files.internal(trackLocation));
+			//trackLocation = "data/music/Freezepop - Starlight (Karacter Remix).mp3";
+			trackLocation = "/mnt/sdcard/music/Freezepop - Starlight (Karacter Remix).mp3";
+			music = Gdx.audio.newMusic (Gdx.files.external(trackLocation));
 		}else{
 			music = Gdx.audio.newMusic (Gdx.files.external(MusicData.getFileLocation()));
 		}

@@ -19,7 +19,11 @@ public class AudioRunnerActivity extends AndroidApplication {
     		musicFile = extras.getString("song");
     	}
     	
-    	initialize(new GameHandler(musicFile), false);
+    	if(musicFile!=null){
+    		initialize(new GameHandler(musicFile), false);
+    	}else{
+    		initialize(new GameHandler(), false);
+    	}
     }
 
 }

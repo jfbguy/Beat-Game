@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.media.MediaPlayer;
 import android.provider.MediaStore;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -22,14 +23,14 @@ public class BrowseMusic extends Activity {
 	/** Called when the activity is first created. */
 	private ListView musiclist;
 	private TextView selectedSong,duration,name;
-	private Button startGame;
+	private Button startGame, startGameDefault;
 	private Cursor musicCursor;
 	private int musicColumnIndex;
 	private int count;
 	//MediaPlayer mMediaPlayer;
 	public String filename;
 	
-	static final private int CODE = 0;
+	static final private int LOAD_ACTIVITY = 1;
 
 	/** Called when the activity is first created. */
 	@Override
@@ -40,17 +41,20 @@ public class BrowseMusic extends Activity {
 	}
 	
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(requestCode==CODE){
-        	finish();
+        if(requestCode==LOAD_ACTIVITY){
+    		System.gc();
         }
     }
 
 	private void initMusicList() {
+		//TODO: need to check if SD Card is avaialble
+		try{
 		System.gc();
 		String[] proj = { MediaStore.Audio.Media._ID,
 				MediaStore.Audio.Media.DATA,
-				MediaStore.Audio.Media.DISPLAY_NAME,
-				MediaStore.Video.Media.DURATION };
+				MediaStore.Audio.Media.ARTIST,
+				MediaStore.Audio.Media.TITLE,
+				MediaStore.Audio.Media.DURATION };
 		musicCursor = managedQuery(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
 				proj, null, null, null);
 		selectedSong = (TextView) findViewById(R.id.selected_song);
@@ -68,18 +72,30 @@ public class BrowseMusic extends Activity {
 			
 			startGame = (Button) findViewById(R.id.Start_Game_Button);
 			startGame.setEnabled(false);
+			startGameDefault  = (Button) findViewById(R.id.Start_Game_Button_Default);
+			
 			musiclist.setAdapter(new MusicAdapter(getApplicationContext()));
 			musiclist.setOnItemClickListener(musicgridlistener);
 			
 			//start the game activity
 			startGame.setOnClickListener(new View.OnClickListener() {	
 				public void onClick(View v) {
-					Intent loadIntent = new Intent(v.getContext(), LoadMusic.class);
+					Intent loadIntent = new Intent(getApplicationContext(), LoadMusic.class);
 	                loadIntent.putExtra("song", filename);
-					//startActivityForResult(loadIntent, CODE);
-	                startActivityForResult(loadIntent, 0);
+					startActivityForResult(loadIntent, LOAD_ACTIVITY);
 				}
 			});
+			
+			startGameDefault.setOnClickListener(new View.OnClickListener() {	
+				public void onClick(View v) {
+					Intent loadIntent = new Intent(getApplicationContext(), LoadMusic.class);
+					startActivityForResult(loadIntent, LOAD_ACTIVITY);
+				}
+			});
+		}
+		}catch(NullPointerException e){//This is a poor way to handle SD Card unavailable situation.
+			Intent loadIntent = new Intent(getApplicationContext(), LoadMusic.class);
+			startActivityForResult(loadIntent, LOAD_ACTIVITY);
 		}
 	}
 
@@ -93,13 +109,15 @@ public class BrowseMusic extends Activity {
 			//needs to pass it onto GameHandler
 			filename = musicCursor.getString(musicColumnIndex);
 			selectedSong.setText(filename);
-			
+
+			//song title
 			musicColumnIndex = musicCursor
-			.getColumnIndexOrThrow(MediaStore.Audio.Media.DISPLAY_NAME);
+			.getColumnIndexOrThrow(MediaStore.Audio.Media.TITLE);
 			musicCursor.moveToPosition(position);
 			String songName = musicCursor.getString(musicColumnIndex);
-			name.setText(stripFileExtension(songName));
+			name.setText(songName);
 			
+			//duration
 			musicColumnIndex = musicCursor
 			.getColumnIndexOrThrow(MediaStore.Audio.Media.DURATION);
 			musicCursor.moveToPosition(position);
@@ -131,27 +149,27 @@ public class BrowseMusic extends Activity {
 		}
 
 		public View getView(int position, View convertView, ViewGroup parent) {
-			System.gc();
-			TextView tv = new TextView(mContext.getApplicationContext());
-			tv.setTextSize(20);
-			String id = null;
+			View v = convertView;
+            if (v == null) {
+                LayoutInflater vi = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                v = vi.inflate(R.layout.list_item, null);
+            }
+            TextView tt = (TextView) v.findViewById(R.id.toptext);
+            TextView bt = (TextView) v.findViewById(R.id.bottomtext);
 			
-			musicColumnIndex = musicCursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DISPLAY_NAME);
+			String title,artist = null;
+			
+			musicColumnIndex = musicCursor.getColumnIndexOrThrow(MediaStore.Audio.Media.TITLE);
 			musicCursor.moveToPosition(position);
-			id = musicCursor.getString(musicColumnIndex);
-			/*
-			musicColumnIndex = musicCursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DURATION);
+			title = musicCursor.getString(musicColumnIndex);
+            tt.setText(title);                            
+
+			musicColumnIndex = musicCursor.getColumnIndexOrThrow(MediaStore.Audio.Media.ARTIST);
 			musicCursor.moveToPosition(position);
-			id += "  Duration:" + musicCursor.getString(musicColumnIndex);
-			*/
-			//reuse the view for each item on the list
-			if (convertView == null) {				
-				tv.setText(id);
-			} else{
-				tv = (TextView) convertView;
-				tv.setText(id);
-			}
-			return tv;
+			artist = musicCursor.getString(musicColumnIndex);
+			bt.setText(artist);
+          
+			return v;
 		}
 	}
 	
@@ -163,7 +181,8 @@ public class BrowseMusic extends Activity {
 		return min+":"+(sec >= 10? sec: "0"+sec);
 	}
 	
-	public String stripFileExtension(String name){
-		return name.replace(".mp3","");
+	public boolean isMP3(String fileName){
+		return fileName.contains("mp3");
 	}
+
 }
