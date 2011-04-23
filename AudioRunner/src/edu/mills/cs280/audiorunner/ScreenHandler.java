@@ -330,8 +330,8 @@ public class ScreenHandler{
 			frameCounter++;
 			peak = iter.next();
 			if(peak > 800.0f){
-				Platform platform = new Platform(frameCounter*mSpeed,100.0f,10f,peak/5f,mTextures[PLATFORM],mPixmaps[PLATFORM_PIXMAP]);
-				platformLayer.put((int)(frameCounter*mSpeed),platform);
+				Platform platform = new Platform(frameCounter*frameDuration,100.0f,10f,peak/5f,mTextures[PLATFORM],mPixmaps[PLATFORM_PIXMAP]);
+				platformLayer.put((int)(frameCounter*frameDuration),platform);
 			}
 		}
 

@@ -107,6 +107,7 @@ public class SpriteLayer {
 		int parallaxPositionY = (int)(worldPosition.y*parallax);
 		int transition = (int) (SPEED*TimeHandler.getTransitionScale());
 
+		
 		//Remove past Sprites from Screen
 		for(int i = -(transition+MAX_SPRITE_SIZE); i < -MAX_SPRITE_SIZE; i++){
 			if(onScreenLayer.containsKey(i+parallaxPositionX)){

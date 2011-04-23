@@ -74,8 +74,6 @@ public class GameHandler implements ApplicationListener {
 	public void render() {
 		TimeHandler.updateTime();
 		
-		//DebugText.writeText(20, y, text)
-		
 		if(!music.isPlaying()){
 			music.play();
 		}
@@ -119,7 +117,15 @@ public class GameHandler implements ApplicationListener {
 		//draw UI
 		scoreBoard.draw(spriteBatch);
 		boostMeter.draw(spriteBatch);
-
+		
+		//DEBUG**************
+		float songtime = music.getPosition()*1000;
+		float gametime = ScreenHandler.getWorldPosition().x/ScreenHandler.getSpeed();
+		int yPos = Gdx.graphics.getHeight();
+		DebugText.writeText(50,yPos-20,"Song Time: " + Float.toString(songtime));
+		DebugText.writeText(50,yPos-40,"Game Time: " + Float.toString(gametime));
+		DebugText.writeText(50,yPos-60,"Difference: " + Float.toString(songtime - gametime));
+		DebugText.writeText(50,yPos-80,"FrameDuration: " + Float.toString(MusicData.getFrameDuration()));
 	}
 
 	@Override
