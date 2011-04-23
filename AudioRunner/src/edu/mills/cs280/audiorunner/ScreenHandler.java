@@ -62,7 +62,8 @@ public class ScreenHandler{
 	public ScreenHandler(int numOfLayers, List<Float> eventList){
 		mRenderer = new ImmediateModeRenderer();
 
-		mSpeed = MusicData.getFrameDuration()/(1000/TimeHandler.FRAMERATE)*SPEED_MULTIPLIER;
+		//mSpeed = MusicData.getFrameDuration()/(1000/TimeHandler.FRAMERATE)*SPEED_MULTIPLIER;
+		mSpeed = 5;
 		mWorldPosition = new Vector2(0,0);
 		mWorldLeadin = (int) (Gdx.graphics.getWidth()-mSpeed/2);
 		mWorldPosition.x += mWorldLeadin;

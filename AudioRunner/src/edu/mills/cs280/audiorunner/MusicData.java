@@ -1,16 +1,11 @@
 package edu.mills.cs280.audiorunner;
 
-import java.io.FileInputStream;
-import java.io.InputStream;
-import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import java.util.List;
-
-import com.badlogic.gdx.Gdx;
-
-import javazoom.jl.decoder.SampleBuffer;
+import com.badlogic.gdx.audio.Music;
 
 public class MusicData {
+	private static Music music;
 	private static String fileLocation;
 	private static List<Float> peaks;
 	private static ArrayList<float[]> samples;
@@ -18,6 +13,14 @@ public class MusicData {
 
 	private MusicData(){
 
+	}
+	
+	public static void setMusic(Music inMusic){
+		music = inMusic;
+	}
+	
+	public static float getPosition(){
+		return music.getPosition();
 	}
 
 	public static void setSamples(ArrayList<float[]> loadedSamples){

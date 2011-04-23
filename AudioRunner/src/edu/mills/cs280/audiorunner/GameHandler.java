@@ -1,16 +1,9 @@
 package edu.mills.cs280.audiorunner;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-
-import javazoom.jl.decoder.JavaLayerException;
-
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL10;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class GameHandler implements ApplicationListener {
@@ -46,6 +39,8 @@ public class GameHandler implements ApplicationListener {
 		}else{
 			music = Gdx.audio.newMusic (Gdx.files.external(MusicData.getFileLocation()));
 		}
+		
+		MusicData.setMusic(music);
 		
 
 		//Screen Elements
