@@ -29,6 +29,7 @@ public class BrowseMusic extends Activity {
 	private int count;
 	//MediaPlayer mMediaPlayer;
 	public String filename;
+	public int songDuration;
 	
 	static final private int LOAD_ACTIVITY = 1;
 
@@ -48,7 +49,6 @@ public class BrowseMusic extends Activity {
 
 	private void initMusicList() {
 		//TODO: need to check if SD Card is avaialble
-		try{
 		System.gc();
 		String[] proj = { MediaStore.Audio.Media._ID,
 				MediaStore.Audio.Media.DATA,
@@ -82,6 +82,11 @@ public class BrowseMusic extends Activity {
 				public void onClick(View v) {
 					Intent loadIntent = new Intent(getApplicationContext(), LoadMusic.class);
 	                loadIntent.putExtra("song", filename);
+	                MusicData.setFile(filename);
+	                
+	                Log.d("duration","********************"+songDuration+"*****************");
+	                
+	                MusicData.setDuration((float)songDuration);
 					startActivityForResult(loadIntent, LOAD_ACTIVITY);
 				}
 			});
@@ -89,13 +94,11 @@ public class BrowseMusic extends Activity {
 			startGameDefault.setOnClickListener(new View.OnClickListener() {	
 				public void onClick(View v) {
 					Intent loadIntent = new Intent(getApplicationContext(), LoadMusic.class);
+					MusicData.setFile("/mnt/sdcard/music/Freezepop - Starlight (Karacter Remix).mp3");
+					MusicData.setDuration(298000f);
 					startActivityForResult(loadIntent, LOAD_ACTIVITY);
 				}
 			});
-		}
-		}catch(NullPointerException e){//This is a poor way to handle SD Card unavailable situation.
-			Intent loadIntent = new Intent(getApplicationContext(), LoadMusic.class);
-			startActivityForResult(loadIntent, LOAD_ACTIVITY);
 		}
 	}
 
@@ -121,7 +124,7 @@ public class BrowseMusic extends Activity {
 			musicColumnIndex = musicCursor
 			.getColumnIndexOrThrow(MediaStore.Audio.Media.DURATION);
 			musicCursor.moveToPosition(position);
-			String songDuration = musicCursor.getString(musicColumnIndex);
+			songDuration = Integer.parseInt(musicCursor.getString(musicColumnIndex));
 			duration.setText(convertTime(songDuration));
 			
 			startGame.setEnabled(true);
@@ -173,9 +176,8 @@ public class BrowseMusic extends Activity {
 		}
 	}
 	
-	public String convertTime(String ms){
-		int milisec = Integer.parseInt(ms);
-		int s = milisec/1000;
+	public String convertTime(int ms){
+		int s = ms/1000;
 		int min = s/60;
 		int sec = s%60;
 		return min+":"+(sec >= 10? sec: "0"+sec);

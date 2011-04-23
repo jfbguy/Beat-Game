@@ -28,11 +28,9 @@ public class GameHandler implements ApplicationListener {
 	private ScreenHandler screenHandler;
 
 	public GameHandler(){
+		trackLocation = MusicData.getFileLocation();
 	}
 
-	public GameHandler(String musicFile){
-		this.trackLocation = musicFile;
-	}
 	@Override
 	public void create() {
 		touched = false;
