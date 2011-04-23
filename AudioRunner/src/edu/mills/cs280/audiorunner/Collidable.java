@@ -15,9 +15,9 @@ public class Collidable extends Sprite{
 		this.pixmap = new Pixmap(Gdx.files.internal(file));
 	}
 
-	public void loadTexture(String file){
-		this.pixmap = new Pixmap(Gdx.files.internal(file));
-		this.setTexture(new Texture(Gdx.files.internal(file)));
+	public void loadTexture(Pixmap pixmap, Texture texture){
+		this.pixmap = pixmap;
+		this.setTexture(texture);
 	}
 
 	public Pixmap getPixmap(){

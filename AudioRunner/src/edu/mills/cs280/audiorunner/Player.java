@@ -3,13 +3,17 @@ package edu.mills.cs280.audiorunner;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedList;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class Player extends Collidable {
 
 	private final float PLATFORM_CATCH = .4f;
 	private final int FRAME_COUNT = 6;
-	private final float FRAME_DELAY = MusicHandler.FRAMERATE/FRAME_COUNT/2;
+	private final float FRAME_DELAY = TimeHandler.FRAMERATE/FRAME_COUNT/2;
 	private final int SPRITE_SIZE = 64;
 	private final float GRAVITY = 1.0f;
 	public final int JUMPSPEED = 15;
@@ -23,6 +27,8 @@ public class Player extends Collidable {
 	private float mAnimCounter;
 	private int mFrameNum;
 	private int mStatus;
+	private Texture mTexture;
+	private Pixmap mPixmap;
 
 	/**
 	 * Constructor
@@ -33,8 +39,10 @@ public class Player extends Collidable {
 	 * @param float, width
 	 * @param float, height
 	 */
-	public Player(String texture, float x, float y, float width, float height) {
-		this.loadTexture(texture);
+	public Player(float x, float y, float width, float height) {
+		mTexture = new Texture(Gdx.files.internal("data/runner.png"));
+		mPixmap = new Pixmap(Gdx.files.internal("data/runner.png"));
+		this.loadTexture(mPixmap, mTexture);
 		mStartX = (int)x;
 		this.setBounds(x, y, width, height);
 		mVertVelocity = 0;
@@ -73,7 +81,7 @@ public class Player extends Collidable {
 	 * to the next frame of animation
 	 */
 	public void animate(){
-		mAnimCounter += (1.0f*MusicHandler.getTransitionScale());
+		mAnimCounter += (1.0f*TimeHandler.getTransitionScale());
 		if(mAnimCounter >= mAnimDelay) {
 			if(mFrameNum == FRAME_COUNT-1 ) {
 				mFrameNum = 0;
@@ -165,8 +173,8 @@ public class Player extends Collidable {
 	public void update(ScreenHandler screenHandler, ScoreBoard scoreBoard){
 		setPosition(mStartX+ScreenHandler.getWorldPosition().x, getY());
 		if(mStatus == AIR){
-			setPosition(getX(), getY()+mVertVelocity*MusicHandler.getTransitionScale());
-			mVertVelocity -= GRAVITY*MusicHandler.getTransitionScale();
+			setPosition(getX(), getY()+mVertVelocity*TimeHandler.getTransitionScale());
+			mVertVelocity -= GRAVITY*TimeHandler.getTransitionScale();
 		}
 		if(mVertVelocity < 0 || mStatus == PLATFORM)
 		{

@@ -10,6 +10,7 @@ import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL10;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class GameHandler implements ApplicationListener {
@@ -34,20 +35,18 @@ public class GameHandler implements ApplicationListener {
 	}
 	@Override
 	public void create() {
-
 		touched = false;
 
 		//Initiate player
-		player = new Player("data/runner.png",Gdx.graphics.getWidth()*.3f,ScreenHandler.GROUND_HEIGHT,PLAYER_WIDTH,PLAYER_HEIGHT);
+		player = new Player(Gdx.graphics.getWidth()*.3f,ScreenHandler.GROUND_HEIGHT,PLAYER_WIDTH,PLAYER_HEIGHT);
 
 		if(trackLocation == null){
 			trackLocation = "data/music/Freezepop - Starlight (Karacter Remix).mp3";
-			music = Gdx.audio.newMusic (Gdx.files.internal(MusicData.getFileLocation()));
+			music = Gdx.audio.newMusic (Gdx.files.internal(trackLocation));
 		}else{
-			music = Gdx.audio.newMusic (Gdx.files.external(trackLocation));
+			music = Gdx.audio.newMusic (Gdx.files.external(MusicData.getFileLocation()));
 		}
-
-		MusicData.setFile(trackLocation);
+		
 
 		//Screen Elements
 		spriteBatch = new SpriteBatch();
@@ -55,6 +54,10 @@ public class GameHandler implements ApplicationListener {
 		scoreBoard = new ScoreBoard();
 		boostMeter = new BoostMeter();
 		Particle.BufferParticles();
+		
+		
+		//Debug
+		DebugText.SetupDebugText(spriteBatch);
 	}
 
 	@Override
@@ -69,7 +72,9 @@ public class GameHandler implements ApplicationListener {
 
 	@Override
 	public void render() {
-		MusicHandler.updateTime();
+		TimeHandler.updateTime();
+		
+		//DebugText.writeText(20, y, text)
 		
 		if(!music.isPlaying()){
 			music.play();
@@ -78,6 +83,7 @@ public class GameHandler implements ApplicationListener {
 		//LEVEL LOGIC
 		screenHandler.updateScreen(player);
 		boostMeter.updateBoost();
+
 
 		//Input
 		if(Gdx.input.isTouched()){
@@ -97,8 +103,10 @@ public class GameHandler implements ApplicationListener {
 			touched = false;
 		}
 
+
 		//PLAYER LOGIC
 		player.update(screenHandler,scoreBoard);
+
 
 		//Clear Screen
 		Gdx.graphics.getGL10().glClearColor(0,0,0,1);
@@ -106,6 +114,7 @@ public class GameHandler implements ApplicationListener {
 
 		//draw Screen
 		screenHandler.draw(spriteBatch, player);
+
 
 		//draw UI
 		scoreBoard.draw(spriteBatch);

@@ -49,6 +49,7 @@ public class LoadMusic extends Activity{
 		@Override
 		protected Void doInBackground(Void... params) {
 			MusicData.setFile(musicFile);
+			MusicData.setDuration(298000f);	//*****NEEDS TO GET THE ACTUAL SONG DURATION!!!
 
 			AssetManager assetManager = getAssets();
 			InputStream fis;

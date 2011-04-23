@@ -14,7 +14,7 @@ public class MusicData {
 	private static String fileLocation;
 	private static List<Float> peaks;
 	private static ArrayList<float[]> samples;
-	private static int duration; //the length of the music in milisec
+	private static float duration; //the length of the music in milisec
 
 	private MusicData(){
 
@@ -43,8 +43,12 @@ public class MusicData {
 	public static String getFileLocation(){
 		return fileLocation;
 	}
+	
+	public static void setDuration(float songDuration){
+		duration = songDuration;
+	}
 
-	public static int getDuration(){
+	public static float getDuration(){
 		return duration;
 	}
 

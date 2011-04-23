@@ -1,14 +1,14 @@
 package edu.mills.cs280.audiorunner;
 
-public class MusicHandler {
+public class TimeHandler {
 	static public final float FRAMERATE = 60.0f;
-	static private final float TIMESCALE = 1000/FRAMERATE;  //Milliseconds / Desire FrameRate
+	static public final float TIMESCALE = 1000/FRAMERATE;  //Milliseconds / Desire FrameRate
 
 	static private long prevTime = 0L;
 	static private long currTime = 0L;
 	static private long timeDiff = 0L;
 
-	private MusicHandler(){
+	private TimeHandler(){
 	}
 
 	public static void updateTime(){
@@ -23,5 +23,9 @@ public class MusicHandler {
 
 	public static float getTransitionScale(){
 		return timeDiff/TIMESCALE;
+	}
+	
+	public static float getTimeOfCurrFrame(){
+		return System.currentTimeMillis() - currTime;
 	}
 }
