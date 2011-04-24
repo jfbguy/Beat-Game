@@ -6,6 +6,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 
 import javazoom.jl.decoder.Bitstream;
 import javazoom.jl.decoder.BitstreamException;
@@ -19,6 +20,11 @@ public class AudioAnalyzer{
 	private InputStream inputStream;
 	private Bitstream bitstream;
 	private Decoder decoder;
+	private float[] leftovers;
+	private boolean copyLeftovers;
+	private ArrayList<float[]> sData = SerializableMusicData.load().getSamples();
+	private float[] thisCorrectSample = sData.get(0);
+	private int samplesRead = 0;
 
 	public AudioAnalyzer(String fileLocation){
 		file = new File(fileLocation);
@@ -42,18 +48,42 @@ public class AudioAnalyzer{
 			SampleBuffer output;
 			try{
 				output = (SampleBuffer)decoder.decodeFrame(header, bitstream);
+				System.out.println(output.getBufferLength());
 			}catch(Exception e){
 				//TODO find a better way to exit than empty catch
 				return 0;
 			}
 			
+			try{
 			//System.out.print("samples.length " + samples.length);
+				for(int i = 0; i < samples.length; i++){
+					if(i==254){
+						//System.out.println(samples.length);
+					}
+					if(copyLeftovers && (i < 256)){//TODO CHECK IF OFF BY ONE!!!!!!!!!
+						samples[i]=leftovers[i];
+					}else{
+					samples[i] = output.getBuffer()[i];
+					samplesRead++;
+					//System.out.print(samples[i]);
+					}
+				}
+				copyLeftovers = false;
+				leftovers = null; //no overflow on this frame
+			}catch(Exception e){//TODO specify exception
+				//aren't enough elements in buffer to fill samples
+				leftovers = samples;
+				copyLeftovers = true;
+			}
+			
 			for(int i = 0; i < samples.length; i++){
-				samples[i] = output.getBuffer()[i];
-				//System.out.print(samples[i]);
+				if(samples[i] != thisCorrectSample[i]){
+					//System.out.println("Mismatch - Got: " + samples[i] + "   Correct: " + thisCorrectSample[i]);
+				}
 			}
 
 			bitstream.closeFrame();
+			System.out.print(samplesRead);
 
 			//System.out.println("");
 			//System.out.println("samples return: " + samples.toString());
