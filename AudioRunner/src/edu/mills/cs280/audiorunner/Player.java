@@ -67,7 +67,7 @@ public class Player extends Collidable {
 	public void draw(SpriteBatch spriteBatch){
 		spriteBatch.begin();
 		spriteBatch.draw(getTexture(),
-				getX()-ScreenHandler.getWorldPosition().x,getY()-ScreenHandler.getWorldPosition().y,
+				getX()-MusicData.getPosition(),getY()-ScreenHandler.getWorldPosition().y,
 				this.getWidth(),this.getHeight(),
 				getSpriteX(), getSpriteY(),
 				SPRITE_SIZE, SPRITE_SIZE,
@@ -171,7 +171,7 @@ public class Player extends Collidable {
 	 */
 
 	public void update(ScreenHandler screenHandler, ScoreBoard scoreBoard){
-		setPosition(mStartX+ScreenHandler.getWorldPosition().x, getY());
+		setPosition(mStartX+MusicData.getPosition(), getY());
 		if(mStatus == AIR){
 			setPosition(getX(), getY()+mVertVelocity*TimeHandler.getTransitionScale());
 			mVertVelocity -= GRAVITY*TimeHandler.getTransitionScale();

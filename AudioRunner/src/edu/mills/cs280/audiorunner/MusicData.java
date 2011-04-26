@@ -19,8 +19,8 @@ public class MusicData {
 		music = inMusic;
 	}
 	
-	public static float getPosition(){
-		return music.getPosition();
+	public static float getPosition(){	//Milliseconds should be in thousands of seconds
+		return music.getPosition()*1000;
 	}
 
 	public static void setSamples(ArrayList<float[]> loadedSamples){

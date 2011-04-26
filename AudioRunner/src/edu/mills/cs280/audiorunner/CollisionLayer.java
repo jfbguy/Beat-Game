@@ -93,7 +93,7 @@ public class CollisionLayer {
 	}
 
 	public void loadStart(int worldPosition){
-		int parallaxPosition = (int)(worldPosition*parallax);
+		int parallaxPosition = (int)(MusicData.getPosition()*parallax);
 		for(int i = -MAX_SPRITE_SIZE; i < Gdx.graphics.getWidth(); i++){
 			LinkedList<Collidable> temp;
 			if(layer.containsKey(i+parallaxPosition)){
@@ -105,7 +105,7 @@ public class CollisionLayer {
 
 	public void draw(SpriteBatch spriteBatch, Vector2 worldPosition){
 		LinkedList<Collidable> temp;
-		int parallaxPositionX = (int)(worldPosition.x*parallax);
+		int parallaxPositionX = (int)(MusicData.getPosition()*parallax);
 		int parallaxPositionY = (int)(worldPosition.y*parallax);	
 
 		//Remove past Platforms from Screen
