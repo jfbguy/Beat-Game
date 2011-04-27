@@ -18,12 +18,12 @@ public class FindThreshTest {
 		//		System.exit(7);
 		
 		ArrayList<float[]> samples = test.getSamples();
-		for(float[] ff : samples){
+		/*for(float[] ff : samples){
 			for(float f : ff){
 				System.out.print(f);
 			}
 			System.out.println();
-		}
+		}*/
 		
 		System.exit(1);
 

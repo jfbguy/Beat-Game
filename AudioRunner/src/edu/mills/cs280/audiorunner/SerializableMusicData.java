@@ -21,8 +21,8 @@ public class SerializableMusicData implements Serializable{
 	private static final long serialVersionUID = 78548954648347675L;
 	private static final String FILE_NAME = "data/testMusicData.ar";
 	
-	private  ArrayList<float[]> samples = new ArrayList<float[]>();
-	private  List<Float> peaks = new ArrayList<Float>();
+	private ArrayList<float[]> samples = new ArrayList<float[]>();
+	private List<Float> peaks = new ArrayList<Float>();
 
 	
 	public SerializableMusicData(){
@@ -30,7 +30,11 @@ public class SerializableMusicData implements Serializable{
 	}
 	
 	public void addSamples(float[] decodedSamples){
-		samples.add(decodedSamples);
+		samples.add(new float[1024]);
+		float[] ref = samples.get(samples.size()-1);
+		for(int i = 0; i < ref.length;i++){
+			ref[i] = decodedSamples[i];
+		}
 	}
 	
 	public void setPeaks(List<Float> decodedPeaks){

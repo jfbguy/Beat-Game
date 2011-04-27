@@ -43,7 +43,7 @@ public class PeakFinder {
 			List<Float> peaks = new ArrayList<Float>();
 
 			while( decoder.readSamples( samples ) > 0 )
-			{	
+			{
 				sMusicData.addSamples(samples);
 				fft.forward( samples );
 				System.arraycopy( spectrum, 0, lastSpectrum, 0, spectrum.length ); 
@@ -91,6 +91,16 @@ public class PeakFinder {
 			//       
 
 			sMusicData.setPeaks(peaks);
+			
+			/*
+			ArrayList<float[]> stuff = sMusicData.getSamples();
+			for(float[] ff : stuff){
+				for(float f : ff){
+					System.out.print(f);
+				}
+				System.out.println();
+			}*/
+			
 
 			FileOutputStream outStream;
 			ObjectOutputStream objectOutStream;
