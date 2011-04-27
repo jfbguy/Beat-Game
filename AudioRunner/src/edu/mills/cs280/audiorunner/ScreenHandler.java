@@ -242,12 +242,12 @@ public class ScreenHandler{
 	public void draw(SpriteBatch spriteBatch, Player player){
 
 		//HOW TO DRAW A LINE!!!!
-		/*mRenderer.begin(GL10.GL_LINES);
+		mRenderer.begin(GL10.GL_LINES);
 		mRenderer.color(1, 0, 0, 1);
 		mRenderer.vertex(0, 0, 0);
 		mRenderer.color(1, 0, 0, 1);
 		mRenderer.vertex(300, 300, 0);
-		mRenderer.end();*/
+		mRenderer.end();
 
 		//Draw first half of layers rounded down
 		for(int i = mSpriteLayers.length-1; i >= mSpriteLayers.length/2; i--){

@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ImmediateModeRenderer;
 
 public class GameHandler implements ApplicationListener {
 	private static final float PLAYER_WIDTH = 64;
@@ -12,6 +13,7 @@ public class GameHandler implements ApplicationListener {
 	private static final float VOLUME = .01f;
 
 	private SpriteBatch spriteBatch;
+	private ImmediateModeRenderer renderer;
 	private Player player;
 	Music music;
 	private ScoreBoard scoreBoard;
@@ -21,11 +23,9 @@ public class GameHandler implements ApplicationListener {
 	private ScreenHandler screenHandler;
 
 	public GameHandler(){
+		trackLocation = MusicData.getFileLocation();
 	}
 
-	public GameHandler(String musicFile){
-		this.trackLocation = musicFile;
-	}
 	@Override
 	public void create() {
 		touched = false;
@@ -34,20 +34,22 @@ public class GameHandler implements ApplicationListener {
 		player = new Player(Gdx.graphics.getWidth()*.3f,ScreenHandler.GROUND_HEIGHT,PLAYER_WIDTH,PLAYER_HEIGHT);
 
 		if(trackLocation == null){
-			trackLocation = "data/music/Freezepop - Starlight (Karacter Remix).mp3";
-			music = Gdx.audio.newMusic (Gdx.files.internal(trackLocation));
+			//trackLocation = "data/music/Freezepop - Starlight (Karacter Remix).mp3";
+			trackLocation = "/mnt/sdcard/music/Freezepop - Starlight (Karacter Remix).mp3";
+			music = Gdx.audio.newMusic (Gdx.files.external(trackLocation));
 		}else{
 			music = Gdx.audio.newMusic (Gdx.files.external(MusicData.getFileLocation()));
 		}
 		
 		MusicData.setMusic(music);
-		
+		MusicVisualizer.setupMusicVisualizer();
 
 		//Screen Elements
 		spriteBatch = new SpriteBatch();
 		screenHandler = new ScreenHandler(5,MusicData.getPeaks());
 		scoreBoard = new ScoreBoard();
 		boostMeter = new BoostMeter();
+		renderer = new ImmediateModeRenderer();
 		Particle.BufferParticles();
 		
 		
@@ -105,6 +107,10 @@ public class GameHandler implements ApplicationListener {
 		Gdx.graphics.getGL10().glClearColor(0,0,0,1);
 		Gdx.graphics.getGL10().glClear(GL10.GL_COLOR_BUFFER_BIT);
 
+		
+		//draw visualizer
+		MusicVisualizer.draw(renderer);
+		
 		//draw Screen
 		screenHandler.draw(spriteBatch, player);
 

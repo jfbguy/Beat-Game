@@ -38,6 +38,7 @@ public class AudioAnalyzer{
 		try {
 			Header header;
 			header = bitstream.readFrame();
+			header.calculate_framesize();
 
 			SampleBuffer output;
 			try{
