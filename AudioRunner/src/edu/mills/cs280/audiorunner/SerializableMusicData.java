@@ -30,9 +30,9 @@ public class SerializableMusicData implements Serializable{
 	}
 	
 	public void addSamples(float[] decodedSamples){
-		samples.add(new float[1024]);
+		samples.add(new float[128]);
 		float[] ref = samples.get(samples.size()-1);
-		for(int i = 0; i < ref.length;i++){
+		for(int i = 0; i < ref.length;i+=8){
 			ref[i] = decodedSamples[i];
 		}
 	}
