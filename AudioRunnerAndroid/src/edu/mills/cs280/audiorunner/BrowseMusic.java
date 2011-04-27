@@ -2,6 +2,7 @@ package edu.mills.cs280.audiorunner;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.os.Environment;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -38,7 +39,12 @@ public class BrowseMusic extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.music_list);
-		initMusicList();	
+		if(hasStorage(false)){
+			initMusicList();
+		}else{
+			Intent gameIntent = new Intent(getApplicationContext(), AudioRunnerActivity.class);
+			startActivityForResult(gameIntent, 0);
+		}
 	}
 	
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -175,6 +181,18 @@ public class BrowseMusic extends Activity {
 			return v;
 		}
 	}
+	
+    public static boolean hasStorage(boolean requireWriteAccess) {  
+        String state = Environment.getExternalStorageState();  
+      
+        if (Environment.MEDIA_MOUNTED.equals(state)) {  
+            return true;  
+        } else if (!requireWriteAccess  
+                && Environment.MEDIA_MOUNTED_READ_ONLY.equals(state)) {  
+            return true;  
+        }  
+        return false;  
+    }  
 	
 	public String convertTime(int ms){
 		int s = ms/1000;
