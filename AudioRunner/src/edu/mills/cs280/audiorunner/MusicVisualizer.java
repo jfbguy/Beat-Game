@@ -26,7 +26,7 @@ public class MusicVisualizer{
 		if(activate){
 			float[] frame = samples.get((int)(MusicData.getPosition()/MusicData.getFrameDuration()));
 
-			for(int i = 0 ; i < Gdx.graphics.getWidth() ; i++){
+			for(int i = 0 ; i < Gdx.graphics.getWidth() ; i+=10){
 				if(i<0){
 					r.color(0, 0, 0, 0);
 				}else{
