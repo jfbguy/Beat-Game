@@ -50,7 +50,7 @@ public class LoadMusic extends Activity{
 		@Override
 		protected Void doInBackground(Void... params) {
 
-			MusicData.setDuration(298000f);	//NEEDS TO GET THE ACTUAL SONG DURATION!!!
+			//MusicData.setDuration(298000f);	//NEEDS TO GET THE ACTUAL SONG DURATION!!!
 
 			AssetManager assetManager = getAssets();
 			InputStream fis;
