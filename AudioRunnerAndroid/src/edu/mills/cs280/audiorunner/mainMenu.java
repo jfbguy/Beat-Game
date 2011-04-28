@@ -20,6 +20,15 @@ public class mainMenu extends Activity{
                 startActivityForResult(myIntent, 0);
             }
         });
+        
+        Button settings = (Button) findViewById(R.id.Settings_Button);
+        settings.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                Intent thisIntent = new Intent(view.getContext(), VolumeSeekBar.class);
+                startActivityForResult(thisIntent, 0);
+            }
+        });
+        
     }
 }
  

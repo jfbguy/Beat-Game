@@ -1,35 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-      package="edu.mills.cs280.audiorunner"
-      android:versionCode="1"
-      android:versionName="1.0">
-    <uses-sdk minSdkVersion="4" targetSdkVersion="4"/>
+	package="edu.mills.cs280.audiorunner" android:versionCode="1"
+	android:versionName="1.0">
+	<uses-sdk minSdkVersion="4" targetSdkVersion="4" />
 
-    <application android:icon="@drawable/icon" android:label="@string/app_name">
-        <activity android:name=".AudioRunnerActivity"
-                  android:label="@string/app_name"
-                  android:screenOrientation="landscape"
-                  android:configChanges="keyboard|keyboardHidden|orientation">
-        </activity>
-        <activity android:name=".mainMenu"
-                  android:label="@string/app_name"
-                  android:screenOrientation="landscape"
-                  android:configChanges="keyboard|keyboardHidden|orientation">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity android:name=".BrowseMusic"
-                  android:label="@string/app_name"
-                  android:screenOrientation="landscape"
-                  android:configChanges="keyboard|keyboardHidden|orientation">
-        </activity>
-        <activity android:name=".LoadMusic"
-                  android:label="@string/app_name"
-                  android:screenOrientation="landscape"
-                  android:configChanges="keyboard|keyboardHidden|orientation">
-        </activity>
+	<application android:icon="@drawable/icon" android:label="@string/app_name">
+		<activity android:name=".AudioRunnerActivity" android:label="@string/app_name"
+			android:screenOrientation="landscape" android:configChanges="keyboard|keyboardHidden|orientation">
+		</activity>
+		<activity android:name=".mainMenu" android:label="@string/app_name"
+			android:screenOrientation="landscape" android:configChanges="keyboard|keyboardHidden|orientation">
+			<intent-filter>
+				<action android:name="android.intent.action.MAIN" />
+				<category android:name="android.intent.category.LAUNCHER" />
+			</intent-filter>
+		</activity>
+		<activity android:name=".BrowseMusic" android:label="@string/app_name"
+			android:screenOrientation="landscape" android:configChanges="keyboard|keyboardHidden|orientation">
+		</activity>
+		<activity android:name=".LoadMusic" android:label="@string/app_name"
+			android:screenOrientation="landscape" android:configChanges="keyboard|keyboardHidden|orientation">
+		</activity>
+		<activity android:name=".VolumeSeekBar" android:label="@string/app_name"
+			android:screenOrientation="landscape" android:configChanges="keyboard|keyboardHidden|orientation">
+		</activity>
+		<activity android:name=".Scores" android:label="@string/app_name"
+			android:screenOrientation="landscape" android:configChanges="keyboard|keyboardHidden|orientation">
+		</activity>
+		<activity android:name=".ScoresData" android:label="@string/app_name"
+			android:screenOrientation="landscape" android:configChanges="keyboard|keyboardHidden|orientation">
+		</activity>
 
-    </application>
+	</application>
 </manifest>
