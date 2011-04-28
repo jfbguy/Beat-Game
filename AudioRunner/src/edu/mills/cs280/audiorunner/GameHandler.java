@@ -109,7 +109,7 @@ public class GameHandler implements ApplicationListener {
 
 		
 		//draw visualizer
-		MusicVisualizer.draw(renderer);
+		//MusicVisualizer.draw(renderer);
 		
 		//draw Screen
 		screenHandler.draw(spriteBatch, player);
@@ -126,7 +126,7 @@ public class GameHandler implements ApplicationListener {
 		DebugText.writeText(50,yPos-20,"Song Time: " + Float.toString(songtime));
 		DebugText.writeText(50,yPos-40,"Game Time: " + Float.toString(gametime));
 		DebugText.writeText(50,yPos-60,"Difference: " + Float.toString(songtime - gametime));
-		DebugText.writeText(50,yPos-80,"FrameDuration: " + Float.toString(MusicData.getFrameDuration()));
+		//DebugText.writeText(50,yPos-80,"FrameDuration: " + Float.toString(MusicData.getFrameDuration()));
 	}
 
 	@Override

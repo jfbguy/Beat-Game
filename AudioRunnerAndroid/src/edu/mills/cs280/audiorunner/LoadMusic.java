@@ -34,7 +34,7 @@ public class LoadMusic extends Activity{
 		linProgressBar.setVisibility(View.VISIBLE);
 		//musicFile = MusicData.getFileLocation();
 		//songDuration = MusicData.getDuration();
-		
+
 		new decodeMusic().execute();
 
 	}
@@ -49,15 +49,15 @@ public class LoadMusic extends Activity{
 
 		@Override
 		protected Void doInBackground(Void... params) {
-	
-			// MusicData.setDuration(298000f);	NEEDS TO GET THE ACTUAL SONG DURATION!!!
+
+			MusicData.setDuration(298000f);	//NEEDS TO GET THE ACTUAL SONG DURATION!!!
 
 			AssetManager assetManager = getAssets();
 			InputStream fis;
 			ObjectInputStream in;
 
 			try {
-				fis = assetManager.open("data/testpeaks.ar");
+				fis = assetManager.open("data/testPeaks.ar");
 				in = new ObjectInputStream(fis);
 				@SuppressWarnings("unchecked")
 				List<Float> peaks = (List<Float>)in.readObject();
@@ -67,11 +67,11 @@ public class LoadMusic extends Activity{
 
 			}
 			catch (Exception e) {
-				System.out.println(e);
+				System.out.println(e + "Couldn't Load Peaks");
 			}
 
 			try {
-				fis = assetManager.open("data/testsamples.ar");
+				fis = assetManager.open("data/testSamples.ar");
 				in = new ObjectInputStream(fis);
 				@SuppressWarnings("unchecked")
 				ArrayList<float[]> samples = (ArrayList<float[]>)in.readObject();
@@ -80,9 +80,11 @@ public class LoadMusic extends Activity{
 
 			}
 			catch (Exception e) {
-				System.out.println(e);
+				System.out.println("****************************************");
+				System.out.println(e + "Couldn't Load Samples");
 			}
 			
+
 			return null;
 		}
 

@@ -61,7 +61,8 @@ public class MusicData {
 	}
 
 	public static float getFrameDuration(){
-		return duration/samples.size();
+		//return duration/samples.size();
+		return duration/23f;
 	}
 
 	public static void loadBufferedData(){
