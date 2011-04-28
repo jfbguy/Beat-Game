@@ -12,7 +12,7 @@ public class mainMenu extends Activity{
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_menu);
-        
+             
         Button start = (Button) findViewById(R.id.Start_Button);
         start.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
@@ -22,3 +22,4 @@ public class mainMenu extends Activity{
         });
     }
 }
+ 

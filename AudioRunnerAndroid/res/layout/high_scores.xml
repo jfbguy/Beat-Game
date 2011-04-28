@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:orientation="vertical"
+	android:layout_width="fill_parent" android:layout_height="fill_parent"
+	xmlns:android="http://schemas.android.com/apk/res/android">
+	<LinearLayout android:layout_height="fill_parent"
+		android:layout_width="fill_parent" android:layout_weight="5"
+		android:orientation="vertical">
+		<TextView android:layout_width="fill_parent"
+			android:layout_height="wrap_content" android:textColor="#666666"
+			android:text="High Scores" />
+	</LinearLayout>
+	<LinearLayout android:layout_height="fill_parent"
+		android:layout_width="fill_parent" android:layout_weight="1"
+		android:orientation="horizontal">
+		<LinearLayout android:layout_height="fill_parent"
+			android:layout_width="fill_parent" android:layout_weight="1"
+			android:orientation="vertical">
+			<ListView android:id="@+id/songlist"
+				android:layout_height="fill_parent" android:layout_width="fill_parent">
+			</ListView>
+		</LinearLayout>
+		<LinearLayout android:layout_height="fill_parent"
+			android:layout_width="fill_parent" android:layout_weight="1"
+			android:orientation="vertical">
+			<TextView android:id="@+id/score0" android:layout_width="fill_parent"
+				android:layout_height="wrap_content" android:textColor="#666666" />
+			<TextView android:id="@+id/score1" android:layout_width="fill_parent"
+				android:layout_height="wrap_content" android:textColor="#666666" />
+			<TextView android:id="@+id/score2" android:layout_width="fill_parent"
+				android:layout_height="wrap_content" android:textColor="#666666" />
+			<TextView android:id="@+id/score3" android:layout_width="fill_parent"
+				android:layout_height="wrap_content" android:textColor="#666666" />
+			<TextView android:id="@+id/score4" android:layout_width="fill_parent"
+				android:layout_height="wrap_content" android:textColor="#666666" />
+			<TextView android:id="@+id/score5" android:layout_width="fill_parent"
+				android:layout_height="wrap_content" android:textColor="#666666" />
+			<TextView android:id="@+id/score6" android:layout_width="fill_parent"
+				android:layout_height="wrap_content" android:textColor="#666666" />
+			<TextView android:id="@+id/score7" android:layout_width="fill_parent"
+				android:layout_height="wrap_content" android:textColor="#666666" />
+			<TextView android:id="@+id/score8" android:layout_width="fill_parent"
+				android:layout_height="wrap_content" android:textColor="#666666" />
+			<TextView android:id="@+id/score9" android:layout_width="fill_parent"
+				android:layout_height="wrap_content" android:textColor="#666666" />
+			<LinearLayout android:layout_height="fill_parent"
+				android:layout_width="fill_parent" android:layout_weight="5"
+				android:orientation="vertical">
+				<LinearLayout android:layout_height="fill_parent"
+					android:layout_width="fill_parent" android:layout_weight="5"
+					android:orientation="vertical" />
+				<Button android:id="@+id/Return_Button"
+					android:layout_height="fill_parent" android:text="Main Menu"
+					android:layout_width="fill_parent"></Button>
+			</LinearLayout>
+		</LinearLayout>
+	</LinearLayout>
+</LinearLayout>
