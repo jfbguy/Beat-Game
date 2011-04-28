@@ -70,6 +70,7 @@ public class GameHandler implements ApplicationListener {
 	@Override
 	public void render() {
 		TimeHandler.updateTime();
+		MusicData.update();
 		
 		if(!music.isPlaying()){
 			music.play();
@@ -85,7 +86,7 @@ public class GameHandler implements ApplicationListener {
 			if(!player.inAir() ){
 				if(touched == false){
 					touched = true;
-					if(player.rectTouch(Gdx.input.getX(),Gdx.graphics.getHeight() - Gdx.input.getY(),ScreenHandler.getWorldPosition())){
+					if(player.rectTouch(Gdx.input.getX(),Gdx.graphics.getHeight() - Gdx.input.getY(),MusicData.getPosition(),ScreenHandler.getWorldPosition().y)){
 						player.boostJump(scoreBoard,screenHandler,boostMeter);
 					}
 					else{

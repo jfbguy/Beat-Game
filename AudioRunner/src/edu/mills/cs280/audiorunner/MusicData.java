@@ -15,6 +15,7 @@ public class MusicData {
 	private static ArrayList<float[]> samples;
 	private static float duration; //the length of the music in milisec
 	private static Music music;
+	private static float currPosition;
 	
 	private MusicData(){
 
@@ -25,7 +26,7 @@ public class MusicData {
 	}
 	
 	public static float getPosition(){	//Milliseconds should be in thousands of seconds
-		return music.getPosition()*1000;
+		return currPosition;
 	}
 
 	public static void setSamples(ArrayList<float[]> loadedSamples){
@@ -67,5 +68,9 @@ public class MusicData {
 
 	public static void loadBufferedData(){
 
+	}
+	
+	public static void update(){
+		currPosition = music.getPosition()*1000;
 	}
 }

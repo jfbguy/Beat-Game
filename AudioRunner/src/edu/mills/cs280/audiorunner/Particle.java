@@ -176,7 +176,7 @@ public class Particle{
 			switch(p.type){
 			case FALLING:
 				spriteBatch.draw(p.getTexture(),
-						p.getX()-worldPosition.x,p.getY()-worldPosition.y,
+						p.getX()-MusicData.getPosition(),p.getY()-worldPosition.y,
 						p.size,p.size,
 						0, 0,
 						p.getTexture().getWidth(), p.getTexture().getHeight(),
@@ -184,7 +184,7 @@ public class Particle{
 				break;
 			case EXPLODING:
 				spriteBatch.draw(p.getTexture(),
-						p.getX()-worldPosition.x,p.getY()-worldPosition.y,
+						p.getX()-MusicData.getPosition(),p.getY()-worldPosition.y,
 						p.size,p.size,
 						0, 0,
 						p.getTexture().getWidth(), p.getTexture().getHeight(),

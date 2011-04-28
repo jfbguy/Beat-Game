@@ -353,7 +353,7 @@ public class ScreenHandler{
 	}
 
 	public static boolean onScreen(Vector2 pos){
-		if(pos.x-mWorldPosition.x < -ONSCREEN_BUFFER || pos.x-mWorldPosition.x > Gdx.graphics.getWidth() + ONSCREEN_BUFFER){
+		if(pos.x-MusicData.getPosition() < -ONSCREEN_BUFFER || pos.x-MusicData.getPosition() > Gdx.graphics.getWidth() + ONSCREEN_BUFFER){
 			return false;
 		}
 		if(pos.y-mWorldPosition.y < 0 || pos.y-mWorldPosition.y > Gdx.graphics.getHeight()){
@@ -364,7 +364,7 @@ public class ScreenHandler{
 	}
 
 	public static boolean onScreen(float x,float y){
-		if(x-mWorldPosition.x < -ONSCREEN_BUFFER || x-mWorldPosition.x > Gdx.graphics.getWidth() + ONSCREEN_BUFFER){
+		if(x-MusicData.getPosition() < -ONSCREEN_BUFFER || x-MusicData.getPosition() > Gdx.graphics.getWidth() + ONSCREEN_BUFFER){
 			return false;
 		}
 		if(y-mWorldPosition.y < 0 || y-mWorldPosition.y > Gdx.graphics.getHeight()){
