@@ -121,15 +121,6 @@ public class ScreenHandler{
 		//platforms
 		loadPlatforms();
 
-		//		for(int i = 0; i < 10; i++){
-		//			temp.set(i*200+1000,50);
-		//			Platform platform = new Platform((float)temp.getX(),(float)temp.getY(),100f,10f,"data/purple.png");
-		//			platformLayer.put(temp.getX(),platform);
-		//			temp.set(i*200+1000,100);
-		//			platform = new Platform((float)temp.getX(),(float)temp.getY(),100f,10f,"data/purple.png");
-		//			platformLayer.put(temp.getX(),platform);
-		//		}
-
 		//sun
 		temp.set(400,100);
 		Sprite tSprite = new Sprite(mTextures[SUN]);
@@ -339,8 +330,8 @@ public class ScreenHandler{
 				Platform platform = new Platform(
 						frameCounter*frameDuration + Gdx.graphics.getWidth(),
 						100.0f,
-						10f,
-						peak/30f
+						40f,
+						10f
 						,mTextures[PLATFORM],mPixmaps[PLATFORM_PIXMAP]);
 				platformLayer.put((int)(frameCounter*frameDuration + Gdx.graphics.getWidth()),platform);
 			}
