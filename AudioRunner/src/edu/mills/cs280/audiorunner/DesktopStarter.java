@@ -13,7 +13,7 @@ public class DesktopStarter {
 		MusicData.setFile("data/music/test.mp3");
 		PeakFinder songData = new PeakFinder();
 		List<Float> peaks = songData.returnPeaks();
-		MusicData.setpeaks(peaks);
+		//MusicData.setpeaks(peaks);
 
 		new JoglApplication(new GameHandler(),
 				"Audio Runner",

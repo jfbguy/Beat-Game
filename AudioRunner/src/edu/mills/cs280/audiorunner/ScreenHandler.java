@@ -338,6 +338,84 @@ public class ScreenHandler{
 		}
 
 	}
+	
+	public void loadPlatforms(List<Float> peaks, int frameNum){
+		peaks = MusicData.getPeaks();
+		Iterator<Float> iter = peaks.iterator();
+		
+		/*
+		float avg = 0.0f;
+		int peakCounter = 0;
+		while(iter.hasNext()){
+			peakCounter++;
+			peak = iter.next();
+			if(peak > 0.0f){
+				System.out.println(peak);
+				avg += peak;
+			}
+		}
+		avg = (avg/(float)(peakCounter));*/
+		
+		float peak = 0.0f;
+		float frameDuration = MusicData.getFrameDuration();
+		System.out.print("Frame Duration:" + frameDuration);
+		int frameCounter = 0;
+		while(iter.hasNext()){
+			System.out.print("platform! woot!");
+			frameCounter++;
+			peak = iter.next();
+			if(peak > 0.0f){
+				System.out.println(peak);
+				Platform platform = new Platform(
+						(frameCounter+frameNum)*frameDuration + Gdx.graphics.getWidth(),
+						100.0f,
+						40f,
+						10f
+						,mTextures[PLATFORM],mPixmaps[PLATFORM_PIXMAP]);
+				platformLayer.put((int)((frameCounter+frameNum)*frameDuration + Gdx.graphics.getWidth()),platform);
+			}
+		}
+
+	}
+	
+	public void addPlatforms(List<Float> peaks, int frameNum){
+		peaks = MusicData.getPeaks();
+		Iterator<Float> iter = peaks.iterator();
+		
+		/*
+		float avg = 0.0f;
+		int peakCounter = 0;
+		while(iter.hasNext()){
+			peakCounter++;
+			peak = iter.next();
+			if(peak > 0.0f){
+				System.out.println(peak);
+				avg += peak;
+			}
+		}
+		avg = (avg/(float)(peakCounter));*/
+		
+		float peak = 0.0f;
+		float frameDuration = MusicData.getFrameDuration();
+		System.out.print("Frame Duration:" + frameDuration);
+		int frameCounter = 0;
+		while(iter.hasNext()){
+			System.out.print("platform! woot!");
+			frameCounter++;
+			peak = iter.next();
+			if(peak > 0.0f){
+				System.out.println(peak);
+				Platform platform = new Platform(
+						(frameCounter+frameNum)*frameDuration + Gdx.graphics.getWidth(),
+						100.0f,
+						40f,
+						10f
+						,mTextures[PLATFORM],mPixmaps[PLATFORM_PIXMAP]);
+				platformLayer.put((int)((frameCounter+frameNum)*frameDuration + Gdx.graphics.getWidth()),platform);
+			}
+		}
+
+	}
 
 	public static float getSpeed(){
 		return mSpeed;

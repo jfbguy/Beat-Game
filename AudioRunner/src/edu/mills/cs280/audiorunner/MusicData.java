@@ -18,6 +18,9 @@ public class MusicData {
 	private static float currPosition;
 	private static float frameDuration = 0;
 	public static int sampleCounter = 0;
+	private static AudioAnalyzer analyzer;
+	private static int peaksLoaded = 0;
+	
 	
 	private MusicData(){
 
@@ -35,16 +38,30 @@ public class MusicData {
 		samples = loadedSamples;
 	}
 
-	public static void setFile(String file){
+	public static void setFile(String file){	//Set file location and create analyzer
 		fileLocation = file;
+		analyzer = new AudioAnalyzer(file);
+		peaks = new ArrayList<Float>();
+	}
+	
+	public static void decode(){
+		analyzer.decode();
 	}
 
-	public static void setpeaks(List<Float> inPeaks){
+	public static void setPeaks(List<Float> inPeaks){
 		peaks = inPeaks;
+	}
+	
+	public static void addPeaks(List<Float> inPeaks){
+		peaks.addAll(inPeaks);
 	}
 
 	public static List<Float> getPeaks(){
 		return peaks;
+	}
+	
+	public static void loadPeaks(){	//**call to load peaks
+		peaksLoaded
 	}
 
 	public static ArrayList<float[]> getSamples(){

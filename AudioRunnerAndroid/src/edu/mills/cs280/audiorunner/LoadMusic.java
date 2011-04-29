@@ -54,9 +54,12 @@ public class LoadMusic extends Activity{
 			//MusicData.setDuration(298000f);	//NEEDS TO GET THE ACTUAL SONG DURATION!!!
 			
 			MusicData.setFile(musicFile);
-			PeakFinder songData = new PeakFinder();
-			List<Float> peaks = songData.returnPeaks();
-			MusicData.setpeaks(peaks);
+			//PeakFinder songData = new PeakFinder();
+			//List<Float> peaks = songData.returnPeaks();
+			//MusicData.setPeaks(peaks);
+			while(MusicData.getPeaks().isEmpty()){
+				MusicData.decode();
+			}
 			System.out.println(5);	
 			return null;
 			/*
