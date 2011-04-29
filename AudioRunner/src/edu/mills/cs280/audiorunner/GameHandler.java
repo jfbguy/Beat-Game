@@ -34,9 +34,9 @@ public class GameHandler implements ApplicationListener {
 		player = new Player(Gdx.graphics.getWidth()*.3f,ScreenHandler.GROUND_HEIGHT,PLAYER_WIDTH,PLAYER_HEIGHT);
 
 		if(trackLocation == null){
-			//trackLocation = "data/music/Freezepop - Starlight (Karacter Remix).mp3";
-			trackLocation = "/mnt/sdcard/music/Freezepop - Starlight (Karacter Remix).mp3";
-			music = Gdx.audio.newMusic (Gdx.files.external(trackLocation));
+			trackLocation = "data/music/Freezepop - Starlight (Karacter Remix).mp3";
+			//trackLocation = "/mnt/sdcard/music/Freezepop - Starlight (Karacter Remix).mp3";
+			music = Gdx.audio.newMusic (Gdx.files.internal(trackLocation));
 		}else{
 			music = Gdx.audio.newMusic (Gdx.files.external(MusicData.getFileLocation()));
 		}
@@ -127,7 +127,8 @@ public class GameHandler implements ApplicationListener {
 		DebugText.writeText(50,yPos-20,"Song Time: " + Float.toString(songtime));
 		DebugText.writeText(50,yPos-40,"Game Time: " + Float.toString(gametime));
 		DebugText.writeText(50,yPos-60,"Difference: " + Float.toString(songtime - gametime));
-		//DebugText.writeText(50,yPos-80,"FrameDuration: " + Float.toString(MusicData.getFrameDuration()));
+		DebugText.writeText(50,yPos-80,"FrameDuration: " + Float.toString(MusicData.getFrameDuration()));
+		DebugText.writeText(50,yPos-100,"Peak #: " + Float.toString(MusicData.getPeaks().size()));
 	}
 
 	@Override

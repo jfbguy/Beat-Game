@@ -327,14 +327,22 @@ public class ScreenHandler{
 		avg = (avg/(float)(peakCounter));*/
 		
 		float peak = 0.0f;
-		float frameDuration = MusicData.getDuration();
+		float frameDuration = MusicData.getFrameDuration();
+		System.out.print("Frame Duration:" + frameDuration);
 		int frameCounter = 0;
 		while(iter.hasNext()){
+			System.out.print("platform! woot!");
 			frameCounter++;
 			peak = iter.next();
-			if(peak > 800.0f){
-				Platform platform = new Platform(frameCounter*frameDuration,100.0f,10f,peak/5f,mTextures[PLATFORM],mPixmaps[PLATFORM_PIXMAP]);
-				platformLayer.put((int)(frameCounter*frameDuration),platform);
+			if(peak > 0.0f){
+				System.out.println(peak);
+				Platform platform = new Platform(
+						frameCounter*frameDuration + Gdx.graphics.getWidth(),
+						100.0f,
+						10f,
+						peak/30f
+						,mTextures[PLATFORM],mPixmaps[PLATFORM_PIXMAP]);
+				platformLayer.put((int)(frameCounter*frameDuration + Gdx.graphics.getWidth()),platform);
 			}
 		}
 

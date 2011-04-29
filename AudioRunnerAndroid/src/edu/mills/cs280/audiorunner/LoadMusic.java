@@ -32,8 +32,8 @@ public class LoadMusic extends Activity{
 
 		linProgressBar = (LinearLayout) findViewById(R.id.lin_progress_bar);
 		linProgressBar.setVisibility(View.VISIBLE);
-		//musicFile = MusicData.getFileLocation();
-		//songDuration = MusicData.getDuration();
+		musicFile = MusicData.getFileLocation();
+		songDuration = MusicData.getDuration();
 
 		new decodeMusic().execute();
 
@@ -47,10 +47,19 @@ public class LoadMusic extends Activity{
     }
 	private class decodeMusic extends AsyncTask<Void, Void, Void> {
 
+		
 		@Override
 		protected Void doInBackground(Void... params) {
 
 			//MusicData.setDuration(298000f);	//NEEDS TO GET THE ACTUAL SONG DURATION!!!
+			
+			MusicData.setFile(musicFile);
+			PeakFinder songData = new PeakFinder();
+			List<Float> peaks = songData.returnPeaks();
+			MusicData.setpeaks(peaks);
+			System.out.println(5);	
+			return null;
+			/*
 
 			AssetManager assetManager = getAssets();
 			InputStream fis;
@@ -85,7 +94,7 @@ public class LoadMusic extends Activity{
 			}
 			
 
-			return null;
+			return null;*/
 		}
 
 		@Override

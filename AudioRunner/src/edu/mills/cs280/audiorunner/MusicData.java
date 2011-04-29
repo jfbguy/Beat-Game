@@ -16,6 +16,8 @@ public class MusicData {
 	private static float duration; //the length of the music in milisec
 	private static Music music;
 	private static float currPosition;
+	private static float frameDuration = 0;
+	public static int sampleCounter = 0;
 	
 	private MusicData(){
 
@@ -60,10 +62,15 @@ public class MusicData {
 	public static float getDuration(){
 		return duration;
 	}
+	
+	public static void setFrameDuration(float fd){
+		frameDuration = fd;
+	}
 
 	public static float getFrameDuration(){
-		//return duration/samples.size();
-		return duration/23f;
+		return duration/sampleCounter;
+		//return frameDuration;
+		//return 26f;
 	}
 
 	public static void loadBufferedData(){
