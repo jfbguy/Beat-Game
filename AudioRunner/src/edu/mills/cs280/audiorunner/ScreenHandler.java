@@ -119,7 +119,7 @@ public class ScreenHandler{
 		}
 
 		//platforms
-		loadPlatforms();
+		MusicData.loadPlatforms(this);
 
 		//sun
 		temp.set(400,100);
@@ -340,9 +340,7 @@ public class ScreenHandler{
 	}
 	
 	public void loadPlatforms(List<Float> peaks, int frameNum){
-		peaks = MusicData.getPeaks();
-		Iterator<Float> iter = peaks.iterator();
-		
+
 		/*
 		float avg = 0.0f;
 		int peakCounter = 0;
@@ -355,13 +353,29 @@ public class ScreenHandler{
 			}
 		}
 		avg = (avg/(float)(peakCounter));*/
-		
+		System.out.println(peaks.size() + " > " + frameNum);
 		float peak = 0.0f;
 		float frameDuration = MusicData.getFrameDuration();
-		System.out.print("Frame Duration:" + frameDuration);
+		for(int i = frameNum; i < peaks.size(); i++){
+			
+			if(peak > 0.0f){
+				System.out.print(peak + ",");
+				Platform platform = new Platform(
+						i*frameDuration + Gdx.graphics.getWidth(),
+						100.0f,
+						40f,
+						10f
+						,mTextures[PLATFORM],mPixmaps[PLATFORM_PIXMAP]);
+				platformLayer.put((int)(i*frameDuration + Gdx.graphics.getWidth()),platform);
+			}
+		}
+		System.out.println();
+		/*
+		Iterator<Float> iter = peaks.iterator();
+		float peak = 0.0f;
+		float frameDuration = MusicData.getFrameDuration();
 		int frameCounter = 0;
 		while(iter.hasNext()){
-			System.out.print("platform! woot!");
 			frameCounter++;
 			peak = iter.next();
 			if(peak > 0.0f){
@@ -374,7 +388,7 @@ public class ScreenHandler{
 						,mTextures[PLATFORM],mPixmaps[PLATFORM_PIXMAP]);
 				platformLayer.put((int)((frameCounter+frameNum)*frameDuration + Gdx.graphics.getWidth()),platform);
 			}
-		}
+		}*/
 
 	}
 	

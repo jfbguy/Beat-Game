@@ -49,8 +49,7 @@ public class PeakFinder{
 			float value = 0.0f;
 			float flux = 0;
 			while( decoder.singleSamples( samples ) > 0 )
-			{		
-				MusicData.sampleCounter++;
+			{
 				fft.forward( samples );
 				if(flip){
 					System.arraycopy( fft.getSpectrum(), 0, spectrum, 0, spectrum.length );

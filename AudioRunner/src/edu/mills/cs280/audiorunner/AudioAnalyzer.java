@@ -26,7 +26,7 @@ public class AudioAnalyzer{
 	private Bitstream bitstream;
 	private Decoder decoder;
 
-	*/
+	
 	public AudioAnalyzer(String fileLocation){
 		file = new File(fileLocation);
 		try {
@@ -38,7 +38,7 @@ public class AudioAnalyzer{
 
 		decoder = new Decoder();
 	}
-/*
+
 	public int singleSamples(float[] samples)
 	{
 
@@ -130,7 +130,7 @@ public class AudioAnalyzer{
 
 	public static final int THRESHOLD_WINDOW_SIZE = 10;
 	public static final float MULTIPLIER = 1.5f;
-	private static final int bufferLimit = 200;
+	private static int bufferLimit = 500;
 
 	//Decoder variables
 	private FFT fft;
@@ -140,17 +140,14 @@ public class AudioAnalyzer{
 	private List<Float> spectralFlux;
 	private List<Float> threshold;
 	private List<Float> prunedSpectralFlux;
-	//private Hashtable<Integer,Float> peaks;
 	private ArrayList<Float> peaks;
 
-	private float frameTime = 0;
 	private int bufferCounter = 0;
-	private ScreenHandler screenHandler;
 	private boolean decodingDone;
 	private int bufferAnalyze = 0;
 	private Boolean flip = true;
 
-	public AudioAnalyzer(String fileLocation, ScreenHandler screenHandler){
+	public AudioAnalyzer(String fileLocation){
 		file = new File(fileLocation);
 		try {
 			inputStream = new BufferedInputStream(new FileInputStream(file), 1024);
@@ -167,9 +164,8 @@ public class AudioAnalyzer{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		this.screenHandler = screenHandler;
-
-
+		
+		
 		fft = new FFT( 1024, 44100 );
 		fft.window( FFT.HAMMING );
 		samples = new float[1024];
@@ -195,22 +191,17 @@ public class AudioAnalyzer{
 					prune();
 					break;
 				case 3:
+					choosePeaks();
 					MusicData.addPeaks(peaks);
-					bufferCounter = 0;
 					spectralFlux.clear();;
 					threshold.clear();
 					prunedSpectralFlux.clear();
 					peaks.clear();
 					bufferAnalyze = 0;
 					bufferCounter = 0;
+					bufferLimit = 200;
 					break;
 				}
-				//screenHandler.addPlatforms(returnPeaks());
-				//bufferCounter = 0;
-				//spectralFlux.clear();;
-				//threshold.clear();
-				//prunedSpectralFlux.clear();
-				//peaks.clear();
 			}
 			else{
 				bufferFrame();
@@ -227,8 +218,6 @@ public class AudioAnalyzer{
 		float value = 0.0f;
 		float flux = 0.0f;
 		if(singleSamples( samples ) > 0){
-
-			MusicData.sampleCounter++;
 			fft.forward( samples );
 			if(flip){
 				System.arraycopy( fft.getSpectrum(), 0, spectrum, 0, spectrum.length );
@@ -283,15 +272,15 @@ public class AudioAnalyzer{
 		}
 	}
 
-	public ArrayList<Float> choosePeaks(){
+	public void choosePeaks(){
 		for( int i = 0; i < prunedSpectralFlux.size() - 1; i++ )
 		{
 			if( prunedSpectralFlux.get(i) > prunedSpectralFlux.get(i+1) )
 				peaks.add(prunedSpectralFlux.get(i) );
+			else
+				peaks.add(0.0f);
 
 		}
-
-		return peaks;
 	}
 	
 	public int singleSamples(float[] samples)

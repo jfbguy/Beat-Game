@@ -17,19 +17,18 @@ public class MusicData {
 	private static Music music;
 	private static float currPosition;
 	private static float frameDuration = 0;
-	public static int sampleCounter = 0;
 	private static AudioAnalyzer analyzer;
-	private static int peaksLoaded = 0;
-	
-	
+	private static int platforms = 0;
+
+
 	private MusicData(){
 
 	}
-	
+
 	public static void setMusic(Music inMusic){
 		music = inMusic;
 	}
-	
+
 	public static float getPosition(){	//Milliseconds should be in thousands of seconds
 		return currPosition;
 	}
@@ -43,7 +42,7 @@ public class MusicData {
 		analyzer = new AudioAnalyzer(file);
 		peaks = new ArrayList<Float>();
 	}
-	
+
 	public static void decode(){
 		analyzer.decode();
 	}
@@ -51,17 +50,23 @@ public class MusicData {
 	public static void setPeaks(List<Float> inPeaks){
 		peaks = inPeaks;
 	}
-	
+
 	public static void addPeaks(List<Float> inPeaks){
 		peaks.addAll(inPeaks);
+		//for(Float peak : inPeaks){
+		//	peaks.add(peak);
+		//}
 	}
 
 	public static List<Float> getPeaks(){
 		return peaks;
 	}
-	
-	public static void loadPeaks(){	//**call to load peaks
-		peaksLoaded
+
+	public static void loadPlatforms(ScreenHandler screenHandler){	//**call to load peaks
+		if(peaks.size() > platforms){
+			screenHandler.loadPlatforms(peaks, platforms);
+			platforms = peaks.size();
+		}
 	}
 
 	public static ArrayList<float[]> getSamples(){
@@ -71,7 +76,7 @@ public class MusicData {
 	public static String getFileLocation(){
 		return fileLocation;
 	}
-	
+
 	public static void setDuration(float songDuration){
 		duration = songDuration;
 	}
@@ -79,22 +84,23 @@ public class MusicData {
 	public static float getDuration(){
 		return duration;
 	}
-	
+
 	public static void setFrameDuration(float fd){
 		frameDuration = fd;
 	}
 
 	public static float getFrameDuration(){
-		return duration/sampleCounter;
-		//return frameDuration;
-		//return 26f;
+		//return duration/sampleCounter;
+		return frameDuration;
 	}
 
 	public static void loadBufferedData(){
 
 	}
-	
-	public static void update(){
+
+	public static void update(ScreenHandler scr){
 		currPosition = music.getPosition()*1000;
+		MusicData.decode();
+		MusicData.loadPlatforms(scr);
 	}
 }

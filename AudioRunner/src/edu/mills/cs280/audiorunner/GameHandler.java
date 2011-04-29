@@ -69,12 +69,12 @@ public class GameHandler implements ApplicationListener {
 
 	@Override
 	public void render() {
-		TimeHandler.updateTime();
-		MusicData.update();
-		
 		if(!music.isPlaying()){
 			music.play();
 		}
+		
+		TimeHandler.updateTime();
+		MusicData.update(screenHandler);
 		
 		//LEVEL LOGIC
 		screenHandler.updateScreen(player);
@@ -121,14 +121,12 @@ public class GameHandler implements ApplicationListener {
 		boostMeter.draw(spriteBatch);
 		
 		//DEBUG**************
-		float songtime = music.getPosition()*1000;
-		float gametime = ScreenHandler.getWorldPosition().x/ScreenHandler.getSpeed();
 		int yPos = Gdx.graphics.getHeight();
-		DebugText.writeText(50,yPos-20,"Song Time: " + Float.toString(songtime));
-		DebugText.writeText(50,yPos-40,"Game Time: " + Float.toString(gametime));
-		DebugText.writeText(50,yPos-60,"Difference: " + Float.toString(songtime - gametime));
-		DebugText.writeText(50,yPos-80,"FrameDuration: " + Float.toString(MusicData.getFrameDuration()));
-		DebugText.writeText(50,yPos-100,"Peak #: " + Float.toString(MusicData.getPeaks().size()));
+		DebugText.writeText(50,yPos-20,"Song Time: " + Float.toString(MusicData.getPosition()));
+		DebugText.writeText(50,yPos-40,"FrameDuration: " + Float.toString(MusicData.getFrameDuration()));
+		DebugText.writeText(50,yPos-60,"Peak #: " + Float.toString(MusicData.getPeaks().size()));
+		DebugText.writeText(50,yPos-80,"Platforms Loaded Up To: " + Float.toString(MusicData.getPeaks().size()*MusicData.getFrameDuration()));
+		DebugText.writeText(50,yPos-100,"FPS: " + Float.toString(Gdx.graphics.getFramesPerSecond()));
 	}
 
 	@Override
@@ -138,7 +136,7 @@ public class GameHandler implements ApplicationListener {
 
 	@Override
 	public void resume() {
-		music.notify();
+		music.play();
 	}
 
 }
