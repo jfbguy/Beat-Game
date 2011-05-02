@@ -1,7 +1,11 @@
 package edu.mills.cs280.audiorunner;
 
+import java.awt.Color;
+import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.List;
+
+import javazoom.jl.decoder.MP3Decoder;
 
 import com.badlogic.gdx.audio.analysis.FFT;
 
@@ -88,7 +92,7 @@ public class PeakFinder{
 	//       System.out.println(prunedSpectralFlux.toString());
 	//       System.out.println(peaks.toString());
 	//       System.out.println("size = " + peaks.size());
-	//       
+	//       	       
 	       
 	       decoder.dispose();
 	       
