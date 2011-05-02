@@ -24,12 +24,13 @@ public class PeakFinder{
 	//and prunes them by creating an average threshold of amplitude
 	public List<Float> returnPeaks()
 	{
-		if(useTestMusicData){
-    		//System.out.print("****************************" + SerializableMusicData.getDefaultName());
-    		SerializableMusicData load = SerializableMusicData.load();
-    		MusicData.setSamples(load.getSamples());
-    		return load.getPeaks();
-    	}
+		//this breaks threading - do not un comment
+//		if(useTestMusicData){
+//    		//System.out.print("****************************" + SerializableMusicData.getDefaultName());
+//    		SerializableMusicData load = SerializableMusicData.load();
+//    		MusicData.setSamples(load.getSamples());
+//    		return load.getPeaks();
+//    	}
 
 		try{
 			//MP3Decoder decoder = new MP3Decoder(  new FileInputStream (fileName ) );
