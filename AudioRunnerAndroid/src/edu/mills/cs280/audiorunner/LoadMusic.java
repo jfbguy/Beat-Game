@@ -5,9 +5,7 @@ import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import java.util.List;
-
 import com.badlogic.gdx.Gdx;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.content.res.AssetManager;
