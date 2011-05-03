@@ -19,6 +19,7 @@ public class MusicData {
 	private static float frameDuration = 0;
 	private static AudioAnalyzer analyzer;
 	private static int platforms = 0;
+	public static int frameCounter = 0;
 
 
 	private MusicData(){
@@ -53,9 +54,6 @@ public class MusicData {
 
 	public static void addPeaks(List<Float> inPeaks){
 		peaks.addAll(inPeaks);
-		//for(Float peak : inPeaks){
-		//	peaks.add(peak);
-		//}
 	}
 
 	public static List<Float> getPeaks(){

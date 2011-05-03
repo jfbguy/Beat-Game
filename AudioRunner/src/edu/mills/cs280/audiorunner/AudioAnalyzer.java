@@ -20,108 +20,6 @@ import com.badlogic.gdx.audio.analysis.FFT;
 
 public class AudioAnalyzer{
 
-	/*
-	private File file;
-	private InputStream inputStream;
-	private Bitstream bitstream;
-	private Decoder decoder;
-
-	
-	public AudioAnalyzer(String fileLocation){
-		file = new File(fileLocation);
-		try {
-			inputStream = new BufferedInputStream(new FileInputStream(file), 1024);
-		} catch (FileNotFoundException e1) {
-			e1.printStackTrace();
-		}
-		bitstream = new Bitstream(inputStream);
-
-		decoder = new Decoder();
-	}
-
-	public int singleSamples(float[] samples)
-	{
-
-		try {
-			Header header;
-			header = bitstream.readFrame();
-
-			SampleBuffer output;
-			try{
-				output = (SampleBuffer)decoder.decodeFrame(header, bitstream);
-			}catch(Exception e){
-				//TODO find a better way to exit than empty catch
-				return 0;
-			}
-			
-			//System.out.print("samples.length " + samples.length);
-			for(int i = 0; i < samples.length; i++){
-				samples[i] = output.getBuffer()[i];
-				//System.out.print(samples[i]);
-			}
-
-			bitstream.closeFrame();
-
-			//System.out.println("");
-
-			return 1;
-
-		} catch (BitstreamException e) {
-			//e.printStackTrace();
-			//TODO find a better way to exit than empty catch
-			return 0;
-		}
-
-	}
-
-	//currently unused
-	public int readSamples(float[] samples)
-	{
-
-		boolean done = false;
-
-		try {
-
-			while(!done){
-				Header header;
-				header = bitstream.readFrame();
-
-				SampleBuffer output;
-				try{
-					output = (SampleBuffer)decoder.decodeFrame(header, bitstream);
-				}catch(Exception e){
-					break;
-				}
-
-				for(short e : output.getBuffer()){
-					System.out.print(e + " , ");
-				}
-
-				bitstream.closeFrame();
-
-				System.out.println();
-			}
-
-			System.out.println("SUCCESS!!!");
-
-			return 1;
-
-		} catch (BitstreamException e) {
-			//e.printStackTrace();
-			return 0;
-		}
-
-	}
-	*/
-	public void dispose(){
-		try {
-			inputStream.close();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-	
 	private File file;
 	private InputStream inputStream;
 	private Bitstream bitstream;
@@ -130,7 +28,7 @@ public class AudioAnalyzer{
 
 	public static final int THRESHOLD_WINDOW_SIZE = 10;
 	public static final float MULTIPLIER = 1.5f;
-	private static int bufferLimit = 500;
+	private int bufferLimit = (int) (MusicData.getDuration()/MusicData.getFrameDuration()/4f);
 
 	//Decoder variables
 	private FFT fft;
@@ -164,8 +62,8 @@ public class AudioAnalyzer{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		
+
+
 		fft = new FFT( 1024, 44100 );
 		fft.window( FFT.HAMMING );
 		samples = new float[1024];
@@ -178,7 +76,7 @@ public class AudioAnalyzer{
 
 		decodingDone = false;
 	}
-	
+
 	public void decode(){
 		if(!decodingDone){
 			if(bufferCounter > bufferLimit){
@@ -193,7 +91,7 @@ public class AudioAnalyzer{
 				case 3:
 					choosePeaks();
 					MusicData.addPeaks(peaks);
-					spectralFlux.clear();;
+					spectralFlux.clear();
 					threshold.clear();
 					prunedSpectralFlux.clear();
 					peaks.clear();
@@ -265,8 +163,10 @@ public class AudioAnalyzer{
 	public void prune(){
 		for( int i = 0; i < threshold.size(); i++ )
 		{
-			if( threshold.get(i) <= spectralFlux.get(i) )
+			if( threshold.get(i) <= spectralFlux.get(i) ){
 				prunedSpectralFlux.add( spectralFlux.get(i) - threshold.get(i) );
+				System.out.println(prunedSpectralFlux.get(prunedSpectralFlux.size()-1));
+			}
 			else
 				prunedSpectralFlux.add( (float)0 );
 		}
@@ -275,14 +175,16 @@ public class AudioAnalyzer{
 	public void choosePeaks(){
 		for( int i = 0; i < prunedSpectralFlux.size() - 1; i++ )
 		{
-			if( prunedSpectralFlux.get(i) > prunedSpectralFlux.get(i+1) )
+			if( prunedSpectralFlux.get(i) > prunedSpectralFlux.get(i+1) ){
 				peaks.add(prunedSpectralFlux.get(i) );
-			else
-				peaks.add(0.0f);
+		}
+			else{
+				peaks.add((float) 0);
+			}
 
 		}
 	}
-	
+
 	public int singleSamples(float[] samples)
 	{
 
@@ -297,7 +199,7 @@ public class AudioAnalyzer{
 				//TODO find a better way to exit than empty catch
 				return 0;
 			}
-			
+
 			//System.out.print("samples.length " + samples.length);
 			for(int i = 0; i < samples.length; i++){
 				samples[i] = output.getBuffer()[i];
@@ -317,167 +219,14 @@ public class AudioAnalyzer{
 		}
 
 	}
-
-	/*
-	public Hashtable<Integer,Float> returnPeaks(int timeLength)
-	{
-		try{
-			//Replaces by buffer
-			FFT fft = new FFT( 1024, 44100 );
-			fft.window( FFT.HAMMING );
-			float[] samples = new float[1024];
-			float[] spectrum = new float[1024 / 2 + 1];
-			float[] lastSpectrum = new float[1024 / 2 + 1];
-			List<Float> spectralFlux = new ArrayList<Float>( );
-			List<Float> threshold = new ArrayList<Float>( );
-			List<Float> prunedSpectralFlux = new ArrayList<Float>();
-			Hashtable<Integer,Float> peaks = new Hashtable<Integer,Float>();
-
-			for(int j = 0; j < timeLength; j++)
-			{
-				singleSamples( samples );
-				fft.forward( samples );
-				System.arraycopy( spectrum, 0, lastSpectrum, 0, spectrum.length ); 
-				System.arraycopy( fft.getSpectrum(), 0, spectrum, 0, spectrum.length );
-
-				float flux = 0;
-				for( int i = 0; i < spectrum.length; i++ )	
-				{
-					float value = (spectrum[i] - lastSpectrum[i]);
-					flux += value < 0? 0: value;
-				}
-				spectralFlux.add( flux );					
-			}
-
-
-			float flux = 0;
-			for( int i = 0; i < spectrum.length; i++ )	
-			{
-				float value = (spectrum[i] - lastSpectrum[i]);
-				flux += value < 0? 0: value;
-			}
-			spectralFlux.add( flux );
-
-
-			System.out.println("=============================>   1");
-
-			for( int i = 0; i < spectralFlux.size(); i++ )
-			{
-				int start = Math.max( 0, i - THRESHOLD_WINDOW_SIZE );
-				int end = Math.min( spectralFlux.size() - 1, i + THRESHOLD_WINDOW_SIZE );
-				float mean = 0;
-				for( int j = start; j <= end; j++ )
-					mean += spectralFlux.get(j);
-				mean /= (end - start);
-				threshold.add( mean * MULTIPLIER );
-			}
-
-			System.out.println("=============================>   2");
-
-			//now prune the threshold sizes
-			for( int i = 0; i < threshold.size(); i++ )
-			{
-				if( threshold.get(i) <= spectralFlux.get(i) )
-					prunedSpectralFlux.add( spectralFlux.get(i) - threshold.get(i) );
-				else
-					prunedSpectralFlux.add( (float)0 );
-			}
-
-			System.out.println("=============================>   3");
-			System.out.println("=============================>   3");
-			System.out.println("=============================>   3");
-			System.out.println("=============================>   3");
-			System.out.println("=============================>   3");
-			MusicData.music.getPosition();
-			System.out.println("=============================>   4");
-
-			//and finally choose the peaks
-			for( int i = 0; i < prunedSpectralFlux.size() - 1; i++ )
-			{
-				if( prunedSpectralFlux.get(i) > prunedSpectralFlux.get(i+1) )
-					peaks.put((int)(MusicData.music.getPosition()), prunedSpectralFlux.get(i) );
-
-			}
-			//       System.out.println(prunedSpectralFlux.toString());
-			//       System.out.println(peaks.toString());
-			//       System.out.println("size = " + peaks.size());
-			//
-			System.out.println("***************************************************");
-			System.out.println("**********************Success**********************");
-			System.out.println("***************************************************");
-
-			return peaks;
-
-			//       Plot plot = new Plot( "Spectral Flux", 1024, 512 );
-			//       plot.plot( spectralFlux, 1, Color.red );		
-			//       plot.plot( threshold, 1, Color.green ) ;
-			//       new PlaybackVisualizer( plot, 1024, new MP3Decoder( new FileInputStream( fileName ) ) );
-			//       
-		}catch(Exception e){
-			System.out.println("FILE FAILED TO LOAD");
-			return null;
+	
+	public void dispose(){
+		try {
+			inputStream.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-
 	}
 
-	
-	/*
-	
-
-	public static byte[] decode(String path, int startMs, int maxMs)
-	throws IOException {
-		ByteArrayOutputStream outStream = new ByteArrayOutputStream(1024);
-
-		float totalMs = 0;
-		boolean seeking = true;
-
-		File file = new File(path);
-		InputStream inputStream = new BufferedInputStream(new FileInputStream(file), 8 * 1024);
-		try {
-			Bitstream bitstream = new Bitstream(inputStream);
-			Decoder decoder = new Decoder();
-
-			boolean done = false;
-			while (! done) {
-				Header frameHeader = bitstream.readFrame();
-				if (frameHeader == null) {
-					done = true;
-				} else {
-					totalMs += frameHeader.ms_per_frame();
-					if (totalMs >= startMs) {
-						seeking = false;
-					}
-
-					if (! seeking) {
-						SampleBuffer output = (SampleBuffer) decoder.decodeFrame(frameHeader, bitstream);
-						//if (output.getSampleFrequency() != 44100
-						//		|| output.getChannelCount() != 2) {
-						//	throw new DecoderException("mono or non-44100 MP3 not supported", throwableFromStop);
-						//}
-
-						short[] pcm = output.getBuffer();
-						for (short s : pcm) {
-							outStream.write(s & 0xff);
-							outStream.write((s >> 8 ) & 0xff);
-						}
-					}
-
-					if (totalMs >= (startMs + maxMs)) {
-						done = true;
-					}
-				}
-				bitstream.closeFrame();
-			}
-
-			return outStream.toByteArray();
-		} catch (BitstreamException e) {
-			throw new IOException("Bitstream error: " + e);
-		} catch (DecoderException e) {
-			//Log.w(TAG, "Decoder error", e);
-			//throw new DecoderException(e);
-		}
-		return null;
-
-
-	}*/
 }
