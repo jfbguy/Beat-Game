@@ -34,8 +34,15 @@ public class MusicData {
 		return currPosition;
 	}
 
-	public static void setSamples(ArrayList<float[]> loadedSamples){
-		samples = loadedSamples;
+	//public static void setSamples(ArrayList<float[]> loadedSamples){
+	//	samples = loadedSamples;
+	//}
+	
+	public static void addSamples(float[] addSamples){
+		if(samples == null){
+			samples = new ArrayList<float[]>();
+		}
+		samples.add(addSamples);
 	}
 
 	public static void setFile(String file){	//Set file location and create analyzer

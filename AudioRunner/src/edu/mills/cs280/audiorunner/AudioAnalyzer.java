@@ -39,6 +39,7 @@ public class AudioAnalyzer{
 	private List<Float> threshold;
 	private List<Float> prunedSpectralFlux;
 	private ArrayList<Float> peaks;
+	private float[] tempSamples;
 
 	private int bufferCounter = 0;
 	private boolean decodingDone;
@@ -139,6 +140,12 @@ public class AudioAnalyzer{
 				spectralFlux.add( flux );
 				flip = !flip;
 			}
+			
+			tempSamples = new float[128];
+			for(int i = 0; i < tempSamples.length; i++){
+				tempSamples[i] = samples[i*8];
+			}
+			MusicData.addSamples(tempSamples);
 
 		}
 		else{
