@@ -26,6 +26,7 @@ public class MusicVisualizer{
 		activate = true;
 	}
 
+	/*
 	public static void draw2(SpriteBatch sb){
 		if(activate){
 			float[] frame = samples.get((int)(MusicData.getPosition()/MusicData.getFrameDuration()));
@@ -58,7 +59,7 @@ public class MusicVisualizer{
 				sb.end();
 			}
 		}
-	}
+	}*/
 	
 	public static void draw(ImmediateModeRenderer r){
 		if(activate){
@@ -80,7 +81,6 @@ public class MusicVisualizer{
 			}
 			System.out.println();
 			float scaler = sum/vSample.length + min ; //sum+min*frame.length/frame.length
-			Gdx.gl.glClear(GL.GL_COLOR_BUFFER_BIT);
 			
 			int ratio = (int)Gdx.graphics.getWidth()/vSample.length;//vSample.length is 128
 			Gdx.gl.glLineWidth(80);

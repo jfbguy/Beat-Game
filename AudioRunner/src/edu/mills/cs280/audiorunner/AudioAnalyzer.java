@@ -26,6 +26,7 @@ public class AudioAnalyzer{
 	private Decoder decoder;
 	private Header header;
 
+	public static final int SAMPLE_FRACTION = 8;
 	public static final int THRESHOLD_WINDOW_SIZE = 10;
 	public static final float MULTIPLIER = 1.5f;
 	private int bufferLimit = (int) (MusicData.getDuration()/MusicData.getFrameDuration()/4f);
@@ -141,9 +142,9 @@ public class AudioAnalyzer{
 				flip = !flip;
 			}
 			
-			tempSamples = new float[128];
+			tempSamples = new float[samples.length/SAMPLE_FRACTION];
 			for(int i = 0; i < tempSamples.length; i++){
-				tempSamples[i] = samples[i*8];
+				tempSamples[i] = samples[i*SAMPLE_FRACTION];
 			}
 			MusicData.addSamples(tempSamples);
 
@@ -172,7 +173,6 @@ public class AudioAnalyzer{
 		{
 			if( threshold.get(i) <= spectralFlux.get(i) ){
 				prunedSpectralFlux.add( spectralFlux.get(i) - threshold.get(i) );
-				System.out.println(prunedSpectralFlux.get(prunedSpectralFlux.size()-1));
 			}
 			else
 				prunedSpectralFlux.add( (float)0 );
