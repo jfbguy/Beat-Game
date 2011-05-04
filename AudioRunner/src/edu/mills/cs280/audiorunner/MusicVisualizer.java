@@ -26,7 +26,7 @@ public class MusicVisualizer{
 		activate = true;
 	}
 
-	/*
+	
 	public static void draw2(SpriteBatch sb){
 		if(activate){
 			float[] frame = samples.get((int)(MusicData.getPosition()/MusicData.getFrameDuration()));
@@ -59,16 +59,14 @@ public class MusicVisualizer{
 				sb.end();
 			}
 		}
-	}*/
+	}
 	
 	public static void draw(ImmediateModeRenderer r){
 		if(activate){
+			//TODO java.lang.IndexOutOfBoundsException: Invalid index 382, size is 382
 			float[] frame = samples.get((int)(MusicData.getPosition()/MusicData.getFrameDuration()));
-			for(int i = 0; i < frame.length; i++){
-				vSample[i] += frame[i];
-				vSample[i] %= Gdx.graphics.getHeight();
-				vSample[i] /= 4f;
-			}
+			System.out.println("frame length:"+frame.length);
+			System.arraycopy(frame, 0, vSample, 0, vSample.length);
 			
 			float sum = 0;
 			float min = 0;
@@ -79,22 +77,29 @@ public class MusicVisualizer{
 					min = f;
 				}
 			}
-			System.out.println();
-			float scaler = sum/vSample.length + min ; //sum+min*frame.length/frame.length
+			//System.out.println();
+			//System.out.println("***************min****************:"+min);
+			//System.out.println("***************sum****************:"+sum);
 			
-			int ratio = (int)Gdx.graphics.getWidth()/vSample.length;//vSample.length is 128
-			Gdx.gl.glLineWidth(80);
+			float scaler = (sum/vSample.length)+Math.abs(min); //sum+min*frame.length/frame.length
+			//System.out.println("***************scaler****************:"+scaler);
+			int ratio = (int)(Gdx.graphics.getWidth()/vSample.length);//vSample.length is 128
+			//System.out.println("***************ratio****************:"+ratio);
+
+			Gdx.gl.glLineWidth(10);
 			
-			for(int i = 0 ; i < vSample.length ; i+=ratio){
-				
-				float data = vSample[i]/scaler;
-				r.color(1-data, 0.5f*data, data, 1);
+			float prevData = 0;
+			float data = 0;
+			for(int i = 0 ; i < vSample.length ; i++){	
+				data = (vSample[i]+Math.abs(min))/scaler;
+				System.out.println(i+": "+data);
+				r.color(1, 1, 1, 1);
 				r.begin(GL10.GL_LINES);
-				r.vertex(i*ratio, 20, 0);
-				float x = 0.1f*Gdx.graphics.getHeight()*(data+min);
-				r.vertex(i*ratio, x+20, 0);	
+				r.vertex(i*ratio, 0, 0);
+				float y = 0.5f*Gdx.graphics.getHeight()*(data+prevData);
+				r.vertex(i*ratio, y, 0);	
 				r.end();	
-				//System.out.println(i+": "+x);
+				//System.out.println(i+": "+y);
 			}
 		}
 	}
