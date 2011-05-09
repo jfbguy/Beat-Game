@@ -209,7 +209,7 @@ public class ScreenHandler{
 
 	/**
 	 * Updates current screen with level data from processed audio.
-	 * For the moment, it just updatesthe world position.
+	 * For the moment, it just updates the world position.
 	 * Need to add added platforms, sprites, change ground, etc
 	 */
 	public void updateScreen(Player player){	//Updates level depending on music and how player is doing

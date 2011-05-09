@@ -16,7 +16,7 @@ public class Player extends Collidable {
 	private final float FRAME_DELAY = TimeHandler.FRAMERATE/FRAME_COUNT/2;
 	private final int SPRITE_SIZE = 64;
 	private final float GRAVITY = 1.0f;
-	public final int JUMPSPEED = 15;
+	public final int JUMPSPEED = 10;
 	public final int TERMINAL_VELOCITY = -5;
 	private final int GROUND = 0;
 	private final int AIR = 1;
@@ -243,10 +243,14 @@ public class Player extends Collidable {
 		 * upon synching with song
 		 * 
 		 */
-		int jumpscore = this.JUMPSPEED;	//DEBUG
-		boostMeter.addBoost(jumpscore);		//DEBUG
+		int jumpscore = (int)MusicData.getPeaks().get((int)(MusicData.getPosition()/MusicData.getFrameDuration())).floatValue();
+		
+		if(jumpscore > 0.0f){
+			jumpscore = 7;
+			boostMeter.addBoost(jumpscore);
+		}
 
-		this.jump(jumpscore);
+		this.jump(this.JUMPSPEED + jumpscore);
 		//Score add according to jump, will change with music scoring method
 		scoreBoard.addFloaterScore((int)this.getX(),(int)this.getY(),jumpscore);
 		//and create particles to show if jump is special
@@ -260,7 +264,7 @@ public class Player extends Collidable {
 		 * 
 		 */
 		float boost = boostMeter.boost();
-		int jumpscore = (int) (this.JUMPSPEED*boost);	//DEBUG
+		int jumpscore = (int) (this.JUMPSPEED*boost);
 
 		this.jump(this.JUMPSPEED*boost);
 		//Score add according to jump, will change with music scoring method

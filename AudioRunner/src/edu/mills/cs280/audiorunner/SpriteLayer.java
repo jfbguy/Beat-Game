@@ -104,22 +104,23 @@ public class SpriteLayer {
 	public void draw(SpriteBatch spriteBatch, Vector2 worldPosition){
 		LinkedList<Sprite> temp;
 		int parallaxPositionX = (int)(MusicData.getPosition()*parallax);
+		int prevParallaxPositionX = (int)(MusicData.getPrevPosition()*parallax);
 		int parallaxPositionY = (int)(worldPosition.y*parallax);
-		int transition = (int) (ScreenHandler.getCurrentFrameSpeed());
+		//int transition = (int) (ScreenHandler.getCurrentFrameSpeed());
 		
 		//Remove past Sprites from Screen
-		for(int i = -(transition+MAX_SPRITE_SIZE); i < -MAX_SPRITE_SIZE; i++){
-			if(onScreenLayer.containsKey((int)(i+parallaxPositionX))){
-				onScreenLayer.remove(i+parallaxPositionX);
+		for(int i = prevParallaxPositionX-MAX_SPRITE_SIZE; i < parallaxPositionX-MAX_SPRITE_SIZE; i++){
+			if(onScreenLayer.containsKey((int)(i))){
+				onScreenLayer.remove(i);
 			}
 		}
 
 		//Add new onScreen Sprites
-		for(int i = Gdx.graphics.getWidth()-transition; i < Gdx.graphics.getWidth()+SPEED; i++){ 
-			if(layer.containsKey(i+parallaxPositionX+Gdx.graphics.getWidth())){	
-				if(!onScreenLayer.containsKey(i+parallaxPositionX+Gdx.graphics.getWidth())){
-					temp = layer.get(i+parallaxPositionX+Gdx.graphics.getWidth());
-					onScreenLayer.put(i+parallaxPositionX+Gdx.graphics.getWidth(),temp);
+		for(int i = prevParallaxPositionX+Gdx.graphics.getWidth(); i < parallaxPositionX+Gdx.graphics.getWidth(); i++){ 
+			if(layer.containsKey(i)){	
+				if(!onScreenLayer.containsKey(i)){
+					temp = layer.get(i);
+					onScreenLayer.put(i,temp);
 				}
 			}
 		}

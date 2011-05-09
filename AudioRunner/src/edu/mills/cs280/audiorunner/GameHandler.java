@@ -8,19 +8,20 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ImmediateModeRenderer;
 
 public class GameHandler implements ApplicationListener {
-	private static final float PLAYER_WIDTH = 64;
-	private static final float PLAYER_HEIGHT = 64;
 	private static final float VOLUME = .01f;
 
 	private SpriteBatch spriteBatch;
 	private ImmediateModeRenderer renderer;
 	private Player player;
+	private static float playerWidth;
+	private static float playerHeight;
 	Music music;
 	private ScoreBoard scoreBoard;
 	private BoostMeter boostMeter;
 	private String trackLocation;
 	private boolean touched;
 	private ScreenHandler screenHandler;
+	
 
 	public GameHandler(){
 		trackLocation = MusicData.getFileLocation();
@@ -31,7 +32,9 @@ public class GameHandler implements ApplicationListener {
 		touched = false;
 
 		//Initiate player
-		player = new Player(Gdx.graphics.getWidth()*.3f,ScreenHandler.GROUND_HEIGHT,PLAYER_WIDTH,PLAYER_HEIGHT);
+		playerWidth = Gdx.graphics.getWidth()*.1f;
+		playerHeight = Gdx.graphics.getWidth()*.1f;
+		player = new Player(Gdx.graphics.getWidth()*.3f,ScreenHandler.GROUND_HEIGHT,playerWidth,playerHeight);
 
 		if(trackLocation == null){
 			trackLocation = "data/music/Freezepop - Starlight (Karacter Remix).mp3";

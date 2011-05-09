@@ -16,6 +16,7 @@ public class MusicData {
 	private static float duration; //the length of the music in milisec
 	private static Music music;
 	private static float currPosition;
+	private static float prevPosition;
 	private static float frameDuration = 0;
 	private static AudioAnalyzer analyzer;
 	private static int platforms = 0;
@@ -32,6 +33,10 @@ public class MusicData {
 
 	public static float getPosition(){	//Milliseconds should be in thousands of seconds
 		return currPosition;
+	}
+	
+	public static float getPrevPosition(){	//Milliseconds should be in thousands of seconds
+		return prevPosition;
 	}
 
 	//public static void setSamples(ArrayList<float[]> loadedSamples){
@@ -104,6 +109,7 @@ public class MusicData {
 	}
 
 	public static void update(ScreenHandler scr){
+		prevPosition = currPosition;
 		currPosition = music.getPosition()*1000;
 		MusicData.decode();
 		MusicData.loadPlatforms(scr);

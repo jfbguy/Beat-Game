@@ -61,10 +61,10 @@ public class Collidable extends Sprite{
 
 
 		// Rectangle Check
-		if (this.getX() > collidable.getX() + collidable.getWidth() - worldPosition){
+		if (this.getX() > collidable.getX() + collidable.getWidth() - (int)MusicData.getPosition()){
 			return(false);
 		}
-		if (this.getX() + this.getWidth() < collidable.getX() - worldPosition){
+		if (this.getX() + this.getWidth() < collidable.getX() - (int)MusicData.getPosition()){
 			return(false);
 		}
 		if (this.getY() > collidable.getY() + collidable.getHeight()){
