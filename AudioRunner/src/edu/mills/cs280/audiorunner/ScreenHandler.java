@@ -42,11 +42,11 @@ public class ScreenHandler{
 	//TODO Synch platform occurrences with music
 	private final int PLATFORM_STEP_SIZE = 200;//These will be defined by screensize/music synch
 	private final int PLATFORMS_START = 1000;
-	private final int PLATFORM_Y = 100;//This will be defined by...something
+	private final int PLATFORM_Y = 50;//This will be defined by...something
 	private final float PLATFORM_HEIGHT = 10f;
 	private final float PLATFORM_MIN_WIDTH = 100f;
-	private final float PLATFORM_MAX_FRAMES = 500;
-	private final float PLATFORM_GAP = 100f;
+	private final float PLATFORM_MAX_FRAMES = 5;
+	private final float PLATFORM_GAP = 1000f;
 
 	private static float mSpeed;
 	private static float mCurrentFrameSpeed;
@@ -317,32 +317,40 @@ public class ScreenHandler{
 		float frameDuration = MusicData.getFrameDuration();
 		int framesHeld = 0, frameHeldAt = 0;
 		//dummy platform, in case error causes to use without init
-		Platform heldPlatform = new Platform(
+		Platform dummyPlatform = new Platform(
 				0,0,0,0,mTextures[PLATFORM],mPixmaps[PLATFORM_PIXMAP]);
+		Platform heldPlatform = dummyPlatform;
 		
 		for(int i = frameNum; i < peaks.size(); i++){
 				
 			if(framesHeld > PLATFORM_MAX_FRAMES){
 				float newWidth = ((i - frameHeldAt) * frameDuration) - PLATFORM_GAP -1;
-				heldPlatform.setSize(newWidth, 10f);
-				platformLayer.put((int)heldPlatform.getX(),heldPlatform);
+				//heldPlatform.setPosition(i*frameDuration+Gdx.graphics.getWidth(), PLATFORM_Y);
+				//heldPlatform.setSize(newWidth, 10f);
+				heldPlatform.setSize(PLATFORM_MIN_WIDTH,PLATFORM_HEIGHT *10);
+				platformLayer.put((int)(heldPlatform.getX()),heldPlatform);
+				heldPlatform = dummyPlatform;
 				framesHeld = 0;
 			}
 			if(peaks.get(i) > 0.0f){
-				//System.out.print(peak + ",");
+				System.out.print(peaks.get(i) + ",");
 				if(framesHeld > 0){
 					float newWidth = ((i - frameHeldAt) * frameDuration) - PLATFORM_GAP - 1;
+					//heldPlatform.setPosition(i*frameDuration+Gdx.graphics.getWidth(), PLATFORM_Y);
 					heldPlatform.setSize(newWidth, 10f);
-					platformLayer.put((int)heldPlatform.getX(),heldPlatform);
+					platformLayer.put((int)(heldPlatform.getX()),heldPlatform);
+					heldPlatform = dummyPlatform;
 					framesHeld = 0;
 				}
+				float yAdjust = (peaks.get(i) % 50);
 				Platform platform = new Platform(
 						i*frameDuration + Gdx.graphics.getWidth(),
-						PLATFORM_Y,
+						PLATFORM_Y + yAdjust,
 						PLATFORM_MIN_WIDTH,
 						PLATFORM_HEIGHT
 						,mTextures[PLATFORM],mPixmaps[PLATFORM_PIXMAP]);
 				heldPlatform = platform;
+				framesHeld = 1;
 				//platformLayer.put((int)(i*frameDuration + Gdx.graphics.getWidth()),platform);
 			}
 			if(framesHeld > 0){
