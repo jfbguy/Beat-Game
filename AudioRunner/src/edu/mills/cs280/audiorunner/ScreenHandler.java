@@ -42,7 +42,11 @@ public class ScreenHandler{
 	//TODO Synch platform occurrences with music
 	private final int PLATFORM_STEP_SIZE = 200;//These will be defined by screensize/music synch
 	private final int PLATFORMS_START = 1000;
-	private final int PLATFORM_HEIGHT = 100;//This will be defined by...something
+	private final int PLATFORM_Y = 100;//This will be defined by...something
+	private final float PLATFORM_HEIGHT = 10f;
+	private final float PLATFORM_MIN_WIDTH = 100f;
+	private final float PLATFORM_MAX_FRAMES = 500;
+	private final float PLATFORM_GAP = 100f;
 
 	private static float mSpeed;
 	private static float mCurrentFrameSpeed;
@@ -311,17 +315,38 @@ public class ScreenHandler{
 		avg = (avg/(float)(peakCounter));*/
 		
 		float frameDuration = MusicData.getFrameDuration();
+		int framesHeld = 0, frameHeldAt = 0;
+		//dummy platform, in case error causes to use without init
+		Platform heldPlatform = new Platform(
+				0,0,0,0,mTextures[PLATFORM],mPixmaps[PLATFORM_PIXMAP]);
+		
 		for(int i = frameNum; i < peaks.size(); i++){
-			
+				
+			if(framesHeld > PLATFORM_MAX_FRAMES){
+				float newWidth = ((i - frameHeldAt) * frameDuration) - PLATFORM_GAP -1;
+				heldPlatform.setSize(newWidth, 10f);
+				platformLayer.put((int)heldPlatform.getX(),heldPlatform);
+				framesHeld = 0;
+			}
 			if(peaks.get(i) > 0.0f){
 				//System.out.print(peak + ",");
+				if(framesHeld > 0){
+					float newWidth = ((i - frameHeldAt) * frameDuration) - PLATFORM_GAP - 1;
+					heldPlatform.setSize(newWidth, 10f);
+					platformLayer.put((int)heldPlatform.getX(),heldPlatform);
+					framesHeld = 0;
+				}
 				Platform platform = new Platform(
 						i*frameDuration + Gdx.graphics.getWidth(),
-						100.0f,
-						40f,
-						10f
+						PLATFORM_Y,
+						PLATFORM_MIN_WIDTH,
+						PLATFORM_HEIGHT
 						,mTextures[PLATFORM],mPixmaps[PLATFORM_PIXMAP]);
-				platformLayer.put((int)(i*frameDuration + Gdx.graphics.getWidth()),platform);
+				heldPlatform = platform;
+				//platformLayer.put((int)(i*frameDuration + Gdx.graphics.getWidth()),platform);
+			}
+			if(framesHeld > 0){
+				framesHeld++;
 			}
 		}
 		//System.out.println();
