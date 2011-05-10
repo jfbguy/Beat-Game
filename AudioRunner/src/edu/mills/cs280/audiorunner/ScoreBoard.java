@@ -83,6 +83,10 @@ public class ScoreBoard {
 	public void addCountingScore(int points){
 		mNewScore = mScore + points;
 	}
+	
+	public int getScore(){
+		return mScore;
+	}
 
 	/**
 	 * Adds some points to the score

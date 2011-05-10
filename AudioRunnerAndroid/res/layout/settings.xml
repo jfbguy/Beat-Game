@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+ xmlns:android="http://schemas.android.com/apk/res/android"
+
+
+       android:orientation="vertical"
+       android:layout_width="fill_parent"
+       android:layout_height="fill_parent">
+
+ <TextView
+       android:layout_gravity="center_vertical|center_horizontal|center"
+       android:text="Settings"
+       android:textColor="#666666"
+       android:id="@+id/title_text"
+       android:gravity="center_vertical|center_horizontal"
+       android:layout_height="wrap_content"
+       android:padding="10px"
+       android:layout_width="fill_parent"
+       android:textSize="30px">
+   </TextView>
+
+   <TextView
+               android:layout_gravity="center_vertical|center_horizontal|center"
+               android:layout_width="fill_parent"
+               android:layout_height="wrap_content"
+               android:gravity="center_vertical|center_horizontal"
+               android:id="@+id/seekbarvalue"
+               android:text="volume: 50"
+               android:textSize="15px"
+       />
+
+
+
+       <SeekBar
+               android:layout_height="wrap_content"
+               android:progress="50"
+               android:id="@+id/seekbar"
+               android:max="100"
+               android:layout_width="fill_parent"
+               android:layout_margin="10px">
+       </SeekBar>
+
+
+       <Button
+               android:layout_gravity="center_vertical|center_horizontal|center"
+               android:text="High Scores"
+               android:id="@+id/Highscores_Button"
+               android:gravity="center_vertical|center_horizontal"
+               android:textSize="14px"
+               android:layout_height="40px"
+               android:layout_width="175px">
+       </Button>
+
+
+</LinearLayout>

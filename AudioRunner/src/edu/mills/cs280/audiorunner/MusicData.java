@@ -10,6 +10,8 @@ import com.badlogic.gdx.audio.Music;
 import javazoom.jl.decoder.SampleBuffer;
 
 public class MusicData {
+	private static int finalScore = 0;
+	private static String songName;
 	private static String fileLocation;
 	private static List<Float> peaks;
 	private static ArrayList<float[]> samples;
@@ -26,7 +28,23 @@ public class MusicData {
 	private MusicData(){
 
 	}
-
+	
+	public static void setScore(int score) {
+		finalScore = score;
+	}
+	
+	public static int getScore() {
+		return finalScore;
+	}
+	
+	public static void setName(String name) {
+		songName = name;
+	}
+	
+	public static String getName() {
+		return songName;
+	}
+	
 	public static void setMusic(Music inMusic){
 		music = inMusic;
 	}

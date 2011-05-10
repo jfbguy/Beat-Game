@@ -79,10 +79,10 @@ public class Collidable extends Sprite{
 	
 	public boolean rectTouch(int x, int y, float wX, float wY){
 		// Rectangle Check
-		if (this.getX() + this.getWidth() + this.getWidth() - wX < x ){
+		if (this.getX() + this.getWidth() - wX < x ){
 			return(false);
 		}
-		if (this.getX() + this.getWidth() - wX > x){
+		if (this.getX() - wX > x){
 			return(false);
 		}
 		if (this.getY() - wY > y){
