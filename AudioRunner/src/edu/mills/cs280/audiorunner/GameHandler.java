@@ -114,7 +114,8 @@ public class GameHandler implements ApplicationListener {
 
 		
 		//draw visualizer
-		MusicVisualizer.draw(renderer);
+		MusicVisualizer.draw(spriteBatch);
+		//MusicVisualizer.draw1(renderer);
 		
 		//draw Screen
 		screenHandler.draw(spriteBatch, player);
