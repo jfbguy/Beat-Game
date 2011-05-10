@@ -25,7 +25,7 @@
     </Button>
     <Button 
         android:text="Setting"
-        android:id="@+id/Quit_Button"
+        android:id="@+id/Setting_Button"
         android:layout_width="250px"
         android:textSize="18px"
         android:layout_height="55px"
