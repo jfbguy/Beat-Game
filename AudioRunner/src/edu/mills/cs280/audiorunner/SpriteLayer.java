@@ -8,8 +8,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class SpriteLayer {
-	private static final int MAX_SPRITE_SIZE = 256;
-	private static final int SPEED = 5;
+	private static final int MAX_SPRITE_SIZE = 512;
 
 	private Hashtable<Integer,LinkedList<Sprite>> layer;
 	private Hashtable<Integer,LinkedList<Sprite>> onScreenLayer;
@@ -130,43 +129,16 @@ public class SpriteLayer {
 		for(LinkedList<Sprite> list : onScreenLayer.values()){
 			for(Sprite sprite : list)
 			{
-				spriteBatch.draw(sprite.getTexture(),sprite.getX()-parallaxPositionX, sprite.getY()-parallaxPositionY);
+				spriteBatch.draw(sprite.getTexture(),
+						(float) (sprite.getX()-parallaxPositionX),						//Draw at X position
+						(float) (sprite.getY()-parallaxPositionY),						//Draw at Y position
+						sprite.getWidth(),sprite.getHeight(),							//Size of collidable
+						0, 0,															//Get part of texture
+						sprite.getTexture().getWidth(), sprite.getTexture().getHeight(),//Size of gotten part
+						false,false);	
 			}
 		}
 		spriteBatch.end();
-
-		/*
-		LinkedList<Sprite> temp;
-		int parallaxPositionX = (int)(worldPosition.x*parallax);
-		int parallaxPositionY = (int)(worldPosition.y*parallax);
-		int transition = (int) (SPEED*TimeHandler.getTransitionScale());
-		
-		//Remove past Sprites from Screen
-		for(int i = -(transition+MAX_SPRITE_SIZE); i < -MAX_SPRITE_SIZE; i++){
-			if(onScreenLayer.containsKey(i+parallaxPositionX)){
-				onScreenLayer.remove(i+parallaxPositionX);
-			}
-		}
-
-		//Add new onScreen Sprites
-		for(int i = Gdx.graphics.getWidth()-transition; i < Gdx.graphics.getWidth()+SPEED; i++){ 
-			if(layer.containsKey(i+parallaxPositionX+Gdx.graphics.getWidth())){	
-				if(!onScreenLayer.containsKey(i+parallaxPositionX+Gdx.graphics.getWidth())){
-					temp = layer.get(i+parallaxPositionX+Gdx.graphics.getWidth());
-					onScreenLayer.put(i+parallaxPositionX+Gdx.graphics.getWidth(),temp);
-				}
-			}
-		}
-
-		spriteBatch.begin();
-		//Draw Screen
-		for(LinkedList<Sprite> list : onScreenLayer.values()){
-			for(Sprite sprite : list)
-			{
-				spriteBatch.draw(sprite.getTexture(),sprite.getX()-parallaxPositionX, sprite.getY()-parallaxPositionY);
-			}
-		}
-		spriteBatch.end();*/
 	}
 
 }

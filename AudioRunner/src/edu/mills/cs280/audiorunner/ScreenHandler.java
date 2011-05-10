@@ -20,29 +20,24 @@ public class ScreenHandler{
 
 	private final float[] PARALLAX = {1.5f,1.0f,.4f,.06f,.001f};
 
-	private final String MOUNTAIN_FILE = "data/mountain.png";
 	private final String SUN_FILE = "data/sun.png";
-	private final String POWERLINES_FILE = "data/powerlines.png";
-	private final String GROUND_FILE = "data/gradient_BW_1D.png";
 	private final String PLATFORM_FILE = "data/purple.png";
-	private final String SCOREITEM_FILE = "data/yellow.png";
+	private final String TREE_FILE = "data/tree.png";
+	private final String RAINBOW_FILE = "data/rainbow.png";
+	private final String CARROT_FILE = "data/carrot.png";
+	private final String GROUND_FILE = "data/gradient_BW_1D.png";
 
 	private final int NUM_OF_TEXTURES = 6;		//UPDATE THIS IF YOU ADD A TEXTURE!!!
-	private final int MOUNTAIN = 0;	//Texture Constants, each needs to be different!
-	private final int SUN = 1;
-	private final int POWERLINES = 2;
-	private final int GROUND = 3;
-	private final int PLATFORM = 4;
-	private final int SCOREITEM = 5;
+	private final int SUN = 0;
+	private final int GROUND = 1;
+	private final int PLATFORM = 2;
+	private final int TREE = 3;
+	private final int RAINBOW = 4;
+	private final int CARROT = 5;
 
 	private final int NUM_OF_PIXMAPS = 2;		//UPDATE THIS IF YOU ADD A PIXMAP!!!
-	private final int SCOREITEM_PIXMAP = 0;
-	private final int PLATFORM_PIXMAP = 1;
-
-	//TODO Synch platform occurrences with music
-	private final int PLATFORM_STEP_SIZE = 200;//These will be defined by screensize/music synch
-	private final int PLATFORMS_START = 1000;
-	private final int PLATFORM_HEIGHT = 100;//This will be defined by...something
+	private final int PLATFORM_PIXMAP = 0;
+	private final int CARROT_PIXMAP = 1;
 
 	private static float mSpeed;
 	private static float mCurrentFrameSpeed;
@@ -59,7 +54,7 @@ public class ScreenHandler{
 	/**
 	 * Constructor
 	 */
-	public ScreenHandler(int numOfLayers, List<Float> eventList){
+	public ScreenHandler(int numOfLayers){
 		mRenderer = new ImmediateModeRenderer();
 
 		//mSpeed = MusicData.getFrameDuration()/(1000/TimeHandler.FRAMERATE)*SPEED_MULTIPLIER;
@@ -79,17 +74,17 @@ public class ScreenHandler{
 
 		//load sprites
 		mTextures = new Texture[NUM_OF_TEXTURES];
-		mTextures[MOUNTAIN] = new Texture(Gdx.files.internal(MOUNTAIN_FILE));
 		mTextures[SUN] = new Texture(Gdx.files.internal(SUN_FILE));
-		mTextures[POWERLINES] = new Texture(Gdx.files.internal(POWERLINES_FILE));
-		mTextures[GROUND] = new Texture(Gdx.files.internal(GROUND_FILE));
 		mTextures[PLATFORM] = new Texture(Gdx.files.internal(PLATFORM_FILE));
-		mTextures[SCOREITEM] = new Texture(Gdx.files.internal(SCOREITEM_FILE));
+		mTextures[TREE] = new Texture(Gdx.files.internal(TREE_FILE));
+		mTextures[CARROT] = new Texture(Gdx.files.internal(CARROT_FILE));
+		mTextures[RAINBOW] = new Texture(Gdx.files.internal(RAINBOW_FILE));
+		mTextures[GROUND] = new Texture(Gdx.files.internal(GROUND_FILE));
 
 		//load pixmaps - these are needed for pixel perfect collisions
 		mPixmaps = new Pixmap[NUM_OF_PIXMAPS];
-		mPixmaps[SCOREITEM_PIXMAP] = new Pixmap(Gdx.files.internal(SCOREITEM_FILE));
-		mPixmaps[PLATFORM_PIXMAP] = new Pixmap(Gdx.files.internal(SCOREITEM_FILE));
+		mPixmaps[PLATFORM_PIXMAP] = new Pixmap(Gdx.files.internal(PLATFORM_FILE));
+		mPixmaps[CARROT_PIXMAP] = new Pixmap(Gdx.files.internal(CARROT_FILE));
 
 		//************************************************************************************************
 		//************** DEBUG level load ****************************************************************
@@ -97,24 +92,24 @@ public class ScreenHandler{
 		//************************************************************************************************
 		Vector2 temp = new Vector2();
 		for(int i = 0; i < 80; i++){
-			temp.set(i*mTextures[POWERLINES].getWidth(),0);
-			Sprite tSprite = new Sprite(mTextures[POWERLINES]);
-			tSprite.setPosition(temp.getX(), temp.getY());
+			temp.set(i*mTextures[TREE].getWidth(),0);
+			Sprite tSprite = new Sprite(mTextures[TREE]);
+			tSprite.setBounds(temp.getX(), temp.getY(), Gdx.graphics.getHeight()*.8f, Gdx.graphics.getHeight()*.8f);
 			mSpriteLayers[0].put(temp.getX(),tSprite);
 		}
 
 		for(int i = 0; i < 20; i++){
 			temp.set(i*400,0);
-			Sprite tSprite = new Sprite(mTextures[MOUNTAIN]);
-			tSprite.setPosition(temp.getX(), temp.getY());
+			Sprite tSprite = new Sprite(mTextures[RAINBOW]);
+			tSprite.setBounds(temp.getX(), temp.getY(), Gdx.graphics.getHeight()*.8f, Gdx.graphics.getHeight()*.8f);
 			mSpriteLayers[3].put(temp.getX(),tSprite);
 		}
 
 		//Score Items
 		for(int i = 0; i < 300; i++){
 			temp.set(i*30,150);
-			ScoreItem scoreItem = new ScoreItem((float)temp.getX(),(float)temp.getY(),10f,10f,mTextures[SCOREITEM],mPixmaps[SCOREITEM_PIXMAP],10);
-			scoreItem.setPosition(temp.getX(), temp.getY());
+			ScoreItem scoreItem = new ScoreItem((float)temp.getX(),(float)temp.getY(),32f,32f,mTextures[CARROT],mPixmaps[CARROT_PIXMAP],10);
+			scoreItem.setBounds(temp.getX(), temp.getY(), Gdx.graphics.getHeight()*.05f, Gdx.graphics.getHeight()*.05f);
 			scoreItemLayer.put(temp.getX(),scoreItem);
 		}
 
@@ -124,79 +119,7 @@ public class ScreenHandler{
 		//sun
 		temp.set(400,100);
 		Sprite tSprite = new Sprite(mTextures[SUN]);
-		tSprite.setPosition(temp.getX(), temp.getY());
-		mSpriteLayers[4].put(temp.getX(),tSprite);
-		//************************************************************************************
-		//************************************************************************************
-
-		//Load start of Level Layers
-		for(int i = 0; i < mSpriteLayers.length; i++){
-			mSpriteLayers[i].loadStart(mWorldPosition);
-		}
-	}
-
-	public ScreenHandler(int numOfLayers){
-		mWorldPosition = new Vector2(0,0);
-		mSpriteLayers = new SpriteLayer[numOfLayers];
-		platformLayer = new CollisionLayer(PARALLAX[1]);
-		scoreItemLayer = new CollisionLayer(PARALLAX[1]);
-		//particles = new LinkedList<Particle>();
-
-		//Declare all SpriteLayers
-		for(int i = 0; i < mSpriteLayers.length; i++){
-			mSpriteLayers[i] = new SpriteLayer(PARALLAX[i]);
-		}
-
-		//load sprites
-		mTextures = new Texture[NUM_OF_TEXTURES];
-		mTextures[MOUNTAIN] = new Texture(Gdx.files.internal("data/mountain.png"));
-		mTextures[SUN] = new Texture(Gdx.files.internal("data/sun.png"));
-		mTextures[POWERLINES] = new Texture(Gdx.files.internal("data/powerlines.png"));
-		mTextures[GROUND] = new Texture(Gdx.files.internal("data/gradient_BW_1D.png"));
-		mTextures[PLATFORM] = new Texture(Gdx.files.internal("data/purple.png"));
-		mTextures[SCOREITEM] = new Texture(Gdx.files.internal("data/yellow.png"));
-
-		//************************************************************************************************
-		//************** DEBUG level load ****************************************************************
-		///***** Will be replaced with what the audio algorithm does *************************************
-		//************************************************************************************************
-		Vector2 temp = new Vector2();
-		for(int i = 0; i < 80; i++){
-			temp.set(i*mTextures[POWERLINES].getWidth(),0);
-			Sprite tSprite = new Sprite(mTextures[POWERLINES]);
-			tSprite.setPosition(temp.getX(), temp.getY());
-			mSpriteLayers[0].put(temp.getX(),tSprite);
-		}
-
-		for(int i = 0; i < 20; i++){
-			temp.set(i*400,0);
-			Sprite tSprite = new Sprite(mTextures[MOUNTAIN]);
-			tSprite.setPosition(temp.getX(), temp.getY());
-			mSpriteLayers[3].put(temp.getX(),tSprite);
-		}
-
-		//Score Items
-		for(int i = 0; i < 300; i++){
-			temp.set(i*30,150);
-			ScoreItem scoreItem = new ScoreItem((float)temp.getX(),(float)temp.getY(),10f,10f,mTextures[SCOREITEM],mPixmaps[SCOREITEM_PIXMAP],10);
-			scoreItem.setPosition(temp.getX(), temp.getY());
-			scoreItemLayer.put(temp.getX(),scoreItem);
-		}
-
-		//platforms
-		for(int i = 0; i < 10; i++){
-			temp.set(i*200+1000,50);
-			Platform platform = new Platform((float)temp.getX(),(float)temp.getY(),100f,10f,mTextures[PLATFORM],mPixmaps[PLATFORM_PIXMAP]);
-			platformLayer.put(temp.getX(),platform);
-			temp.set(i*200+1000,100);
-			platform = new Platform((float)temp.getX(),(float)temp.getY(),100f,10f,mTextures[PLATFORM],mPixmaps[PLATFORM_PIXMAP]);
-			platformLayer.put(temp.getX(),platform);
-		}
-
-		//sun
-		temp.set(400,100);
-		Sprite tSprite = new Sprite(mTextures[SUN]);
-		tSprite.setPosition(temp.getX(), temp.getY());
+		tSprite.setBounds(temp.getX(), temp.getY(), Gdx.graphics.getHeight()*.4f, Gdx.graphics.getHeight()*.4f);
 		mSpriteLayers[4].put(temp.getX(),tSprite);
 		//************************************************************************************
 		//************************************************************************************
@@ -312,7 +235,6 @@ public class ScreenHandler{
 		
 		float frameDuration = MusicData.getFrameDuration();
 		for(int i = frameNum; i < peaks.size(); i++){
-			
 			if(peaks.get(i) > 0.0f){
 				//System.out.print(peak + ",");
 				Platform platform = new Platform(
