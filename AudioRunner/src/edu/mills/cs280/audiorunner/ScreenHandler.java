@@ -36,8 +36,19 @@ public class ScreenHandler{
 	private final int CARROT = 5;
 
 	private final int NUM_OF_PIXMAPS = 2;		//UPDATE THIS IF YOU ADD A PIXMAP!!!
+
 	private final int PLATFORM_PIXMAP = 0;
 	private final int CARROT_PIXMAP = 1;
+
+	//TODO Synch platform occurrences with music
+	private final int PLATFORM_STEP_SIZE = 200;//These will be defined by screensize/music synch
+	private final int PLATFORMS_START = 1000;
+	private final int PLATFORM_Y = 50;//This will be defined by...something
+	private final float PLATFORM_HEIGHT = 10f;
+	private final float PLATFORM_MIN_WIDTH = 100f;
+	private final float PLATFORM_MAX_FRAMES = 5;
+	private final float PLATFORM_MAX_WIDTH= 500;
+	private final float PLATFORM_GAP = 1000f;
 
 	private static float mSpeed;
 	private static float mCurrentFrameSpeed;
@@ -186,10 +197,11 @@ public class ScreenHandler{
 		Particle.updateParticles();
 		Particle.draw(spriteBatch, mWorldPosition);
 
-		//Draw second half of layers rounded down
-		for(int i = mSpriteLayers.length/2-1; i >= 0; i--){
-			mSpriteLayers[i].draw(spriteBatch,mWorldPosition);
-		}
+		//TODO UNCOMMENT
+//		//Draw second half of layers rounded down
+//		for(int i = mSpriteLayers.length/2-1; i >= 0; i--){
+//			mSpriteLayers[i].draw(spriteBatch,mWorldPosition);
+//		}
 
 	}
 
@@ -234,16 +246,50 @@ public class ScreenHandler{
 		avg = (avg/(float)(peakCounter));*/
 		
 		float frameDuration = MusicData.getFrameDuration();
+		int framesHeld = 0, frameHeldAt = 0;
+		//dummy platform, in case error causes to use without init
+		Platform dummyPlatform = new Platform(
+				0,0,0,0,mTextures[PLATFORM],mPixmaps[PLATFORM_PIXMAP]);
+		Platform heldPlatform = dummyPlatform;
+		
 		for(int i = frameNum; i < peaks.size(); i++){
+				
+			//if detect a peak, finish any ongoing platforms and ready a new one
 			if(peaks.get(i) > 0.0f){
-				//System.out.print(peak + ",");
+//				System.out.print(peaks.get(i) + ",");
+				if(framesHeld > 0){
+					float newWidth = ((i - frameHeldAt) * frameDuration) - PLATFORM_GAP - 1;
+					//heldPlatform.setPosition(i*frameDuration+Gdx.graphics.getWidth(), PLATFORM_Y);
+					heldPlatform.setSize(newWidth, 10f);
+					platformLayer.put((int)(heldPlatform.getX()),heldPlatform);
+					framesHeld = 0;
+				}
+				//float yAdjust = (peaks.get(i) % 50);
+				float yAdjust = (peaks.get(i) % 50);
 				Platform platform = new Platform(
 						i*frameDuration + Gdx.graphics.getWidth(),
-						100.0f,
-						40f,
-						10f
+						PLATFORM_Y + yAdjust,
+						PLATFORM_MIN_WIDTH,
+						PLATFORM_HEIGHT
 						,mTextures[PLATFORM],mPixmaps[PLATFORM_PIXMAP]);
-				platformLayer.put((int)(i*frameDuration + Gdx.graphics.getWidth()),platform);
+				heldPlatform = platform;
+				framesHeld = 1;
+				frameHeldAt = i;
+				//platformLayer.put((int)(i*frameDuration + Gdx.graphics.getWidth()),platform);
+			}
+			
+			//if platform longer than max, end it and start anew
+			if(framesHeld*frameDuration > PLATFORM_MAX_WIDTH){
+				float newWidth = ((i - frameHeldAt) * frameDuration) -1;
+				//heldPlatform.setPosition(i*frameDuration+Gdx.graphics.getWidth(), PLATFORM_Y);
+				//heldPlatform.setSize(newWidth, 10f);
+				heldPlatform.setSize(PLATFORM_MIN_WIDTH,PLATFORM_HEIGHT *10);
+				platformLayer.put((int)(heldPlatform.getX()),heldPlatform);
+				framesHeld = 0;
+				
+			}
+			if(framesHeld > 0){
+				framesHeld++;
 			}
 		}
 		//System.out.println();
