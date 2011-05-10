@@ -254,15 +254,7 @@ public class ScreenHandler{
 		
 		for(int i = frameNum; i < peaks.size(); i++){
 				
-			if(framesHeld*frameDuration > PLATFORM_MAX_WIDTH){
-				float newWidth = ((i - frameHeldAt) * frameDuration) -1;
-				//heldPlatform.setPosition(i*frameDuration+Gdx.graphics.getWidth(), PLATFORM_Y);
-				//heldPlatform.setSize(newWidth, 10f);
-				heldPlatform.setSize(PLATFORM_MIN_WIDTH,PLATFORM_HEIGHT *10);
-				platformLayer.put((int)(heldPlatform.getX()),heldPlatform);
-				framesHeld = 0;
-			}
-
+			//if detect a peak, finish any ongoing platforms and ready a new one
 			if(peaks.get(i) > 0.0f){
 //				System.out.print(peaks.get(i) + ",");
 				if(framesHeld > 0){
@@ -282,7 +274,19 @@ public class ScreenHandler{
 						,mTextures[PLATFORM],mPixmaps[PLATFORM_PIXMAP]);
 				heldPlatform = platform;
 				framesHeld = 1;
+				frameHeldAt = i;
 				//platformLayer.put((int)(i*frameDuration + Gdx.graphics.getWidth()),platform);
+			}
+			
+			//if platform longer than max, end it and start anew
+			if(framesHeld*frameDuration > PLATFORM_MAX_WIDTH){
+				float newWidth = ((i - frameHeldAt) * frameDuration) -1;
+				//heldPlatform.setPosition(i*frameDuration+Gdx.graphics.getWidth(), PLATFORM_Y);
+				//heldPlatform.setSize(newWidth, 10f);
+				heldPlatform.setSize(PLATFORM_MIN_WIDTH,PLATFORM_HEIGHT *10);
+				platformLayer.put((int)(heldPlatform.getX()),heldPlatform);
+				framesHeld = 0;
+				
 			}
 			if(framesHeld > 0){
 				framesHeld++;
