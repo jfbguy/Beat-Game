@@ -267,10 +267,11 @@ public class ScreenHandler{
 		Particle.updateParticles();
 		Particle.draw(spriteBatch, mWorldPosition);
 
-		//Draw second half of layers rounded down
-		for(int i = mSpriteLayers.length/2-1; i >= 0; i--){
-			mSpriteLayers[i].draw(spriteBatch,mWorldPosition);
-		}
+		//TODO UNCOMMENT
+//		//Draw second half of layers rounded down
+//		for(int i = mSpriteLayers.length/2-1; i >= 0; i--){
+//			mSpriteLayers[i].draw(spriteBatch,mWorldPosition);
+//		}
 
 	}
 
@@ -342,7 +343,8 @@ public class ScreenHandler{
 					heldPlatform = dummyPlatform;
 					framesHeld = 0;
 				}
-				float yAdjust = (peaks.get(i) % 50);
+				//float yAdjust = (peaks.get(i) % 50);
+				float yAdjust = ((i) % 50);
 				Platform platform = new Platform(
 						i*frameDuration + Gdx.graphics.getWidth(),
 						PLATFORM_Y + yAdjust,
