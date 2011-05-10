@@ -46,6 +46,7 @@ public class GameHandler implements ApplicationListener {
 		
 		MusicData.setMusic(music);
 		MusicVisualizer.setupMusicVisualizer();
+		music.setLooping(false);
 
 		//Screen Elements
 		spriteBatch = new SpriteBatch();
@@ -139,7 +140,6 @@ public class GameHandler implements ApplicationListener {
 
 	@Override
 	public void resume() {
-		music.play();
 	}
 
 }

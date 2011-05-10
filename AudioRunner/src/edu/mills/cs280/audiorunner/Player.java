@@ -246,25 +246,27 @@ public class Player extends Collidable {
 			if(jumpscore > 0.0f){
 				jumpscore = 7;
 				boostMeter.addBoost(jumpscore);
+				scoreBoard.addFloaterScore((int)(this.getX()-MusicData.getPosition()),(int)this.getY(),jumpscore);
+				Particle.createJumpParticles(this,jumpscore);
 			}
 		}
 
 		this.jump(this.JUMPSPEED);
 		//Score add according to jump, will change with music scoring method
-		scoreBoard.addFloaterScore((int)this.getX(),(int)this.getY(),jumpscore);
 		//and create particles to show if jump is special
-		Particle.createJumpParticles(this,jumpscore);
 	}
 
 	public void boostJump(ScoreBoard scoreBoard, ScreenHandler screenHandler, BoostMeter boostMeter){
+		if(boostMeter.getBoost() > 0.0f){
+			int jumpscore = (int)MusicData.getPeaks().get((int)(MusicData.getPosition()/MusicData.getFrameDuration())).floatValue();
+			float boost = boostMeter.boost();
+			jumpscore = (int) (this.JUMPSPEED*boost);
+			//Score add according to jump, will change with music scoring method
+			scoreBoard.addFloaterScore((int)(this.getX()-MusicData.getPosition()),(int)this.getY(),jumpscore);
+			//and create particles to show if jump is special
+			Particle.createJumpParticles(this,jumpscore);
+			this.jump(jumpscore);
+		}
 
-		float boost = boostMeter.boost();
-		int jumpscore = (int) (this.JUMPSPEED*boost);
-
-		this.jump(jumpscore);
-		//Score add according to jump, will change with music scoring method
-		scoreBoard.addFloaterScore((int)this.getX(),(int)this.getY(),jumpscore);
-		//and create particles to show if jump is special
-		Particle.createJumpParticles(this,jumpscore);
 	}
 }

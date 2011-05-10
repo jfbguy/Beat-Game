@@ -94,14 +94,14 @@ public class ScreenHandler{
 		for(int i = 0; i < 80; i++){
 			temp.set(i*mTextures[TREE].getWidth(),0);
 			Sprite tSprite = new Sprite(mTextures[TREE]);
-			tSprite.setBounds(temp.getX(), temp.getY(), Gdx.graphics.getHeight()*.8f, Gdx.graphics.getHeight()*.8f);
+			tSprite.setBounds(temp.getX(), temp.getY(), Gdx.graphics.getWidth()*.3f, Gdx.graphics.getHeight()*.7f);
 			mSpriteLayers[0].put(temp.getX(),tSprite);
 		}
 
 		for(int i = 0; i < 20; i++){
 			temp.set(i*400,0);
 			Sprite tSprite = new Sprite(mTextures[RAINBOW]);
-			tSprite.setBounds(temp.getX(), temp.getY(), Gdx.graphics.getHeight()*.8f, Gdx.graphics.getHeight()*.8f);
+			tSprite.setBounds(temp.getX(), temp.getY(), Gdx.graphics.getWidth()*.5f, Gdx.graphics.getHeight()*1.0f);
 			mSpriteLayers[3].put(temp.getX(),tSprite);
 		}
 
@@ -109,7 +109,7 @@ public class ScreenHandler{
 		for(int i = 0; i < 300; i++){
 			temp.set(i*30,150);
 			ScoreItem scoreItem = new ScoreItem((float)temp.getX(),(float)temp.getY(),32f,32f,mTextures[CARROT],mPixmaps[CARROT_PIXMAP],10);
-			scoreItem.setBounds(temp.getX(), temp.getY(), Gdx.graphics.getHeight()*.05f, Gdx.graphics.getHeight()*.05f);
+			scoreItem.setBounds(temp.getX(), temp.getY(), Gdx.graphics.getHeight()*.1f, Gdx.graphics.getHeight()*.1f);
 			scoreItemLayer.put(temp.getX(),scoreItem);
 		}
 

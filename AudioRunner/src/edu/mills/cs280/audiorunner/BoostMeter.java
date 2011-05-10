@@ -50,6 +50,10 @@ public class BoostMeter {
 		mReduction = REDUCTION_RATE;
 	}
 	
+	public float getBoost(){
+		return mValue;
+	}
+	
 	public float boost(){
 		float rVal;
 		if(mValue == MAX_METER_VALUE){
