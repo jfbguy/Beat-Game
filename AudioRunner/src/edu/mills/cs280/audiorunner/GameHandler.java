@@ -49,7 +49,7 @@ public class GameHandler implements ApplicationListener {
 
 		//Screen Elements
 		spriteBatch = new SpriteBatch();
-		screenHandler = new ScreenHandler(5,MusicData.getPeaks());
+		screenHandler = new ScreenHandler(5);
 		scoreBoard = new ScoreBoard();
 		boostMeter = new BoostMeter();
 		renderer = new ImmediateModeRenderer();

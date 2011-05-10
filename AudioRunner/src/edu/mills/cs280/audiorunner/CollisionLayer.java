@@ -4,6 +4,7 @@ import java.util.Hashtable;
 import java.util.LinkedList;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class CollisionLayer {
@@ -106,21 +107,23 @@ public class CollisionLayer {
 	public void draw(SpriteBatch spriteBatch, Vector2 worldPosition){
 		LinkedList<Collidable> temp;
 		int parallaxPositionX = (int)(MusicData.getPosition()*parallax);
-		int parallaxPositionY = (int)(worldPosition.y*parallax);	
-
-		//Remove past Platforms from Screen
-		for(int i = -(SPEED+MAX_SPRITE_SIZE); i < -MAX_SPRITE_SIZE; i++){
-			if(onScreenLayer.containsKey(i+parallaxPositionX)){
-				onScreenLayer.remove(i+parallaxPositionX);
+		int prevParallaxPositionX = (int)(MusicData.getPrevPosition()*parallax);
+		int parallaxPositionY = (int)(worldPosition.y*parallax);
+		//int transition = (int) (ScreenHandler.getCurrentFrameSpeed());
+		
+		//Remove past Sprites from Screen
+		for(int i = prevParallaxPositionX-MAX_SPRITE_SIZE; i < parallaxPositionX-MAX_SPRITE_SIZE; i++){
+			if(onScreenLayer.containsKey((int)(i))){
+				onScreenLayer.remove(i);
 			}
 		}
 
-		//Add new onScreen Platforms
-		for(int i = Gdx.graphics.getWidth()-SPEED; i < Gdx.graphics.getWidth()+SPEED; i++){ 
-			if(layer.containsKey(i+parallaxPositionX+Gdx.graphics.getWidth())){	
-				if(!onScreenLayer.containsKey(i+parallaxPositionX+Gdx.graphics.getWidth())){
-					temp = layer.get(i+parallaxPositionX+Gdx.graphics.getWidth());
-					onScreenLayer.put(i+parallaxPositionX+Gdx.graphics.getWidth(),temp);
+		//Add new onScreen Sprites
+		for(int i = prevParallaxPositionX+Gdx.graphics.getWidth(); i < parallaxPositionX+Gdx.graphics.getWidth(); i++){ 
+			if(layer.containsKey(i)){	
+				if(!onScreenLayer.containsKey(i)){
+					temp = layer.get(i);
+					onScreenLayer.put(i,temp);
 				}
 			}
 		}

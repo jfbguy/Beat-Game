@@ -187,7 +187,7 @@ public class Player extends Collidable {
 						if(this.getX() + this.getWidth() * PLATFORM_CATCH >= platform.getX()
 								&& (this.getX() + this.getWidth() * PLATFORM_CATCH <= platform.getX() + platform.getWidth())
 								|| (this.getX() + this.getWidth() * (1-PLATFORM_CATCH) >= platform.getX()
-								&& this.getX() + this.getWidth() * (1-PLATFORM_CATCH) <= platform.getX() + platform.getWidth())){
+										&& this.getX() + this.getWidth() * (1-PLATFORM_CATCH) <= platform.getX() + platform.getWidth())){
 							mStatus = PLATFORM;
 							mVertVelocity = 0;
 						}
@@ -219,7 +219,7 @@ public class Player extends Collidable {
 			mStatus = GROUND;
 			setPosition(getX(),ScreenHandler.GROUND_HEIGHT);
 		}
-		
+
 		animate();
 
 	}
@@ -236,37 +236,32 @@ public class Player extends Collidable {
 			mStatus = AIR;
 		}
 	}
-	
+
 	public void jump(ScoreBoard scoreBoard, ScreenHandler screenHandler, BoostMeter boostMeter){
-		/* TODO 
-		 * Calculate amount of points player gets for the jump now based
-		 * upon synching with song
-		 * 
-		 */
+
 		int jumpscore = (int)MusicData.getPeaks().get((int)(MusicData.getPosition()/MusicData.getFrameDuration())).floatValue();
-		
-		if(jumpscore > 0.0f){
-			jumpscore = 7;
-			boostMeter.addBoost(jumpscore);
+		for(int i = (int)(MusicData.getPosition()/MusicData.getFrameDuration()-MusicData.getFrameDuration()*2);
+		i < (int)(MusicData.getPosition()/MusicData.getFrameDuration()+MusicData.getFrameDuration()*2);
+		i += MusicData.getFrameDuration()){
+			if(jumpscore > 0.0f){
+				jumpscore = 7;
+				boostMeter.addBoost(jumpscore);
+			}
 		}
 
-		this.jump(this.JUMPSPEED + jumpscore);
+		this.jump(this.JUMPSPEED);
 		//Score add according to jump, will change with music scoring method
 		scoreBoard.addFloaterScore((int)this.getX(),(int)this.getY(),jumpscore);
 		//and create particles to show if jump is special
 		Particle.createJumpParticles(this,jumpscore);
 	}
-	
+
 	public void boostJump(ScoreBoard scoreBoard, ScreenHandler screenHandler, BoostMeter boostMeter){
-		/* TODO 
-		 * Calculate amount of points player gets for the jump now based
-		 * upon synching with song
-		 * 
-		 */
+
 		float boost = boostMeter.boost();
 		int jumpscore = (int) (this.JUMPSPEED*boost);
 
-		this.jump(this.JUMPSPEED*boost);
+		this.jump(jumpscore);
 		//Score add according to jump, will change with music scoring method
 		scoreBoard.addFloaterScore((int)this.getX(),(int)this.getY(),jumpscore);
 		//and create particles to show if jump is special
