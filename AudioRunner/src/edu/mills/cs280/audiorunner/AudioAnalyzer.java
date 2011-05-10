@@ -29,7 +29,7 @@ public class AudioAnalyzer{
 	public static final int SAMPLE_FRACTION = 8;
 	public static final int THRESHOLD_WINDOW_SIZE = 10;
 	public static final float MULTIPLIER = 1.5f;
-	private int bufferLimit = (int) (MusicData.getDuration()/MusicData.getFrameDuration()/4f);
+	private int bufferLimit = (int) (MusicData.getDuration()/MusicData.getFrameDuration());
 
 	//Decoder variables
 	private FFT fft;
@@ -99,7 +99,6 @@ public class AudioAnalyzer{
 					peaks.clear();
 					bufferAnalyze = 0;
 					bufferCounter = 0;
-					bufferLimit = 200;
 					break;
 				}
 			}

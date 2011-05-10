@@ -15,6 +15,7 @@ public class GameHandler implements ApplicationListener {
 	private Player player;
 	private static float playerWidth;
 	private static float playerHeight;
+	private static boolean gameStarted = false;
 	Music music;
 	private ScoreBoard scoreBoard;
 	private BoostMeter boostMeter;
@@ -30,6 +31,7 @@ public class GameHandler implements ApplicationListener {
 	@Override
 	public void create() {
 		touched = false;
+		//Gdx.input.setCatchBackKey(true);
 
 		//Initiate player
 		playerWidth = Gdx.graphics.getWidth()*.1f;
@@ -46,6 +48,7 @@ public class GameHandler implements ApplicationListener {
 		
 		MusicData.setMusic(music);
 		MusicVisualizer.setupMusicVisualizer();
+		music.setLooping(false);
 
 		//Screen Elements
 		spriteBatch = new SpriteBatch();
@@ -72,8 +75,15 @@ public class GameHandler implements ApplicationListener {
 
 	@Override
 	public void render() {
+			
 		if(!music.isPlaying()){
-			music.play();
+			if(gameStarted){
+				MusicData.setScore(scoreBoard.getScore());
+			}
+			else{
+				gameStarted = true;
+				music.play();
+			}
 		}
 		
 		TimeHandler.updateTime();
@@ -113,7 +123,7 @@ public class GameHandler implements ApplicationListener {
 
 		
 		//draw visualizer
-		MusicVisualizer.draw(renderer);
+		//MusicVisualizer.draw(renderer);
 		
 		//draw Screen
 		screenHandler.draw(spriteBatch, player);
