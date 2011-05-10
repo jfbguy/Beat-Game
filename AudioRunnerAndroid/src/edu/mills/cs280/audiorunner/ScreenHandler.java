@@ -197,11 +197,10 @@ public class ScreenHandler{
 		Particle.updateParticles();
 		Particle.draw(spriteBatch, mWorldPosition);
 
-		//TODO UNCOMMENT
-//		//Draw second half of layers rounded down
-//		for(int i = mSpriteLayers.length/2-1; i >= 0; i--){
-//			mSpriteLayers[i].draw(spriteBatch,mWorldPosition);
-//		}
+		//Draw second half of layers rounded down
+		for(int i = mSpriteLayers.length/2-1; i >= 0; i--){
+			mSpriteLayers[i].draw(spriteBatch,mWorldPosition);
+		}
 
 	}
 

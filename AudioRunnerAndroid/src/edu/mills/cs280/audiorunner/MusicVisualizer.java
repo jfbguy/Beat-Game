@@ -3,8 +3,6 @@ package edu.mills.cs280.audiorunner;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
-import javax.media.opengl.GL;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.Texture;

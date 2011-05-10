@@ -60,7 +60,9 @@ public class LoadMusic extends Activity{
 			while(MusicData.getPeaks().isEmpty()){
 				MusicData.decode();
 			}
-			System.out.println(5);	
+			
+			MainMenu.mp.stop();	//Stops main menu music
+			MainMenu.mp.release();
 			return null;
 			/*
 
