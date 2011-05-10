@@ -31,7 +31,7 @@ public class BrowseMusic extends Activity {
 	//MediaPlayer mMediaPlayer;
 	public String filename;
 	public int songDuration;
-	
+
 	static final private int LOAD_ACTIVITY = 1;
 
 	/** Called when the activity is first created. */
@@ -46,12 +46,12 @@ public class BrowseMusic extends Activity {
 			startActivityForResult(gameIntent, 0);
 		}
 	}
-	
+
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(requestCode==LOAD_ACTIVITY){
-    		System.gc();
-        }
-    }
+		if(requestCode==LOAD_ACTIVITY){
+			System.gc();
+		}
+	}
 
 	private void initMusicList() {
 		//TODO: need to check if SD Card is avaialble
@@ -72,31 +72,31 @@ public class BrowseMusic extends Activity {
 			count = musicCursor.getCount();
 			musiclist = (ListView) findViewById(R.id.PhoneMusicList);
 			//musiclist.layout(0, 0,getWindowManager().getDefaultDisplay().getWidth(), (int) (0.7*getWindowManager().getDefaultDisplay().getHeight()) );
-			
+
 			duration = (TextView) findViewById(R.id.song_duration);
 			name = (TextView)findViewById(R.id.song_name);
-			
+
 			startGame = (Button) findViewById(R.id.Start_Game_Button);
 			startGame.setEnabled(false);
 			startGameDefault  = (Button) findViewById(R.id.Start_Game_Button_Default);
-			
+
 			musiclist.setAdapter(new MusicAdapter(getApplicationContext()));
 			musiclist.setOnItemClickListener(musicgridlistener);
-			
+
 			//start the game activity
 			startGame.setOnClickListener(new View.OnClickListener() {	
 				public void onClick(View v) {
 					Intent loadIntent = new Intent(getApplicationContext(), LoadMusic.class);
-	                loadIntent.putExtra("song", filename);
-	                MusicData.setFile(filename);
-	                
-	                Log.d("duration","********************"+songDuration+"*****************");
-	                
-	                MusicData.setDuration((float)songDuration);
+					loadIntent.putExtra("song", filename);
+					MusicData.setFile(filename);
+					MusicData.setName(MediaStore.Audio.Media.TITLE);
+					Log.d("duration","********************"+songDuration+"*****************");
+
+					MusicData.setDuration((float)songDuration);
 					startActivityForResult(loadIntent, LOAD_ACTIVITY);
 				}
 			});
-			
+
 			startGameDefault.setOnClickListener(new View.OnClickListener() {	
 				public void onClick(View v) {
 					Intent loadIntent = new Intent(getApplicationContext(), LoadMusic.class);
@@ -125,22 +125,22 @@ public class BrowseMusic extends Activity {
 			musicCursor.moveToPosition(position);
 			String songName = musicCursor.getString(musicColumnIndex);
 			name.setText(songName);
-			
+
 			//duration
 			musicColumnIndex = musicCursor
 			.getColumnIndexOrThrow(MediaStore.Audio.Media.DURATION);
 			musicCursor.moveToPosition(position);
 			songDuration = Integer.parseInt(musicCursor.getString(musicColumnIndex));
 			duration.setText(convertTime(songDuration));
-			
+
 			startGame.setEnabled(true);
 		}
-		
+
 	};
 
 	public class MusicAdapter extends BaseAdapter {
 		private Context mContext;
-		
+
 		public MusicAdapter(Context c) {
 			mContext = c;
 		}
@@ -159,50 +159,51 @@ public class BrowseMusic extends Activity {
 
 		public View getView(int position, View convertView, ViewGroup parent) {
 			View v = convertView;
-            if (v == null) {
-                LayoutInflater vi = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                v = vi.inflate(R.layout.list_item, null);
-            }
-            TextView tt = (TextView) v.findViewById(R.id.toptext);
-            TextView bt = (TextView) v.findViewById(R.id.bottomtext);
-			
+			if (v == null) {
+				LayoutInflater vi = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+				v = vi.inflate(R.layout.list_item, null);
+			}
+			TextView tt = (TextView) v.findViewById(R.id.toptext);
+			TextView bt = (TextView) v.findViewById(R.id.bottomtext);
+
 			String title,artist = null;
-			
+
 			musicColumnIndex = musicCursor.getColumnIndexOrThrow(MediaStore.Audio.Media.TITLE);
 			musicCursor.moveToPosition(position);
 			title = musicCursor.getString(musicColumnIndex);
-            tt.setText(title);                            
+			tt.setText(title);                            
 
 			musicColumnIndex = musicCursor.getColumnIndexOrThrow(MediaStore.Audio.Media.ARTIST);
 			musicCursor.moveToPosition(position);
 			artist = musicCursor.getString(musicColumnIndex);
 			bt.setText(artist);
-          
+
 			return v;
 		}
 	}
-	
-    public static boolean hasStorage(boolean requireWriteAccess) {  
-        String state = Environment.getExternalStorageState();  
-      
-        if (Environment.MEDIA_MOUNTED.equals(state)) {  
-            return true;  
-        } else if (!requireWriteAccess  
-                && Environment.MEDIA_MOUNTED_READ_ONLY.equals(state)) {  
-            return true;  
-        }  
-        return false;  
-    }  
-	
+
+	public static boolean hasStorage(boolean requireWriteAccess) {  
+		String state = Environment.getExternalStorageState();  
+
+		if (Environment.MEDIA_MOUNTED.equals(state)) {  
+			return true;  
+		} else if (!requireWriteAccess  
+				&& Environment.MEDIA_MOUNTED_READ_ONLY.equals(state)) {  
+			return true;  
+		}  
+		return false;  
+	}  
+
 	public String convertTime(int ms){
 		int s = ms/1000;
 		int min = s/60;
 		int sec = s%60;
 		return min+":"+(sec >= 10? sec: "0"+sec);
 	}
-	
+
 	public boolean isMP3(String fileName){
 		return fileName.contains("mp3");
 	}
+
 
 }
