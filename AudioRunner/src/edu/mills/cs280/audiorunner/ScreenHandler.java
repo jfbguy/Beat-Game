@@ -344,7 +344,7 @@ public class ScreenHandler{
 					framesHeld = 0;
 				}
 				//float yAdjust = (peaks.get(i) % 50);
-				float yAdjust = ((i) % 50);
+				float yAdjust = (peaks.get(i) % 50);
 				Platform platform = new Platform(
 						i*frameDuration + Gdx.graphics.getWidth(),
 						PLATFORM_Y + yAdjust,
