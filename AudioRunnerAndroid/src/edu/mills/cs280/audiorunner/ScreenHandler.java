@@ -148,9 +148,13 @@ public class ScreenHandler{
 			scoreItem.setBounds(temp.getX(), temp.getY(), Gdx.graphics.getHeight()*.1f, Gdx.graphics.getHeight()*.1f);
 			scoreItemLayer.put(temp.getX(),scoreItem);
 		}
+		
+		//variable to set where on screen music syncs to
+		float synchOffset = Gdx.graphics.getWidth();
 
 		//platforms
 		MusicData.loadPlatforms(this);
+		
 
 		//sun
 		temp.set(400,100);
