@@ -1,10 +1,10 @@
 package edu.mills.cs280.audiorunner;
 
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -27,8 +27,10 @@ public class ScreenHandler{
 	private final String CARROT_FILE = "data/carrot.png";
 	private final String GROUND_FILE = "data/gradient_BW_1D.png";
 	private final String CYAN_FILE = "data/cyan.png";
+	private final String GREEN_FILE = "data/green.png";
+	private final String YELLOW_FILE = "data/yellow.png";
 
-	private final int NUM_OF_TEXTURES = 7;		//UPDATE THIS IF YOU ADD A TEXTURE!!!
+	private final int NUM_OF_TEXTURES = 9;		//UPDATE THIS IF YOU ADD A TEXTURE!!!
 	private final int SUN = 0;
 	private final int GROUND = 1;
 	private final int PLATFORM = 2;
@@ -36,23 +38,25 @@ public class ScreenHandler{
 	private final int RAINBOW = 4;
 	private final int CARROT = 5;
 	private final int CYAN = 6;
+	private final int GREEN = 7;
+	private final int YELLOW = 8;
 	
-	private final int NUM_OF_PIXMAPS = 3;		//UPDATE THIS IF YOU ADD A PIXMAP!!!
+	private final int NUM_OF_PIXMAPS = 5;		//UPDATE THIS IF YOU ADD A PIXMAP!!!
 
 	private final int PLATFORM_PIXMAP = 0;
 	private final int CARROT_PIXMAP = 1;
 	private final int CYAN_PIXMAP = 2;
+	private final int GREEN_PIXMAP = 3;
+	private final int YELLOW_PIXMAP = 4;
 
 	//TODO Synch platform occurrences with music
-	private final int PLATFORM_STEP_SIZE = 200;//These will be defined by screensize/music synch
-	private final int PLATFORMS_START = 1000;
-	private final int PLATFORM_Y = 50;//This will be defined by...something
+	private final int PLATFORM_Y = 50;//starting y, before alteration
 	private final float PLATFORM_HEIGHT = 10f;
 	private final float PLATFORM_MIN_WIDTH = 100f;
-	private final float PLATFORM_MAX_FRAMES = 5;
 	private final float PLATFORM_MAX_WIDTH= 500;
 	private final float PLATFORM_GAP = 30f;
-
+	private final int NUM_PLATFORM_COLORS = 4;
+	
 	private static float mSpeed;
 	private static float mCurrentFrameSpeed;
 	ImmediateModeRenderer mRenderer;
@@ -64,6 +68,8 @@ public class ScreenHandler{
 	private CollisionLayer platformLayer;
 	private CollisionLayer scoreItemLayer;
 	//private LinkedList<Particle> particles;
+	private int[] platformColors = new int[NUM_PLATFORM_COLORS];
+	private int[] platformPixmaps = new int[NUM_PLATFORM_COLORS];
 
 	/**
 	 * Constructor
@@ -95,12 +101,26 @@ public class ScreenHandler{
 		mTextures[RAINBOW] = new Texture(Gdx.files.internal(RAINBOW_FILE));
 		mTextures[GROUND] = new Texture(Gdx.files.internal(GROUND_FILE));
 		mTextures[CYAN] = new Texture(Gdx.files.internal(CYAN_FILE));
+		mTextures[GREEN] = new Texture(Gdx.files.internal(GREEN_FILE));
+		mTextures[YELLOW] = new Texture(Gdx.files.internal(YELLOW_FILE));
 		
 		//load pixmaps - these are needed for pixel perfect collisions
 		mPixmaps = new Pixmap[NUM_OF_PIXMAPS];
 		mPixmaps[PLATFORM_PIXMAP] = new Pixmap(Gdx.files.internal(PLATFORM_FILE));
 		mPixmaps[CARROT_PIXMAP] = new Pixmap(Gdx.files.internal(CARROT_FILE));
 		mPixmaps[CYAN_PIXMAP] = new Pixmap(Gdx.files.internal(CYAN_FILE));
+		mPixmaps[GREEN_PIXMAP] = new Pixmap(Gdx.files.internal(GREEN_FILE));
+		mPixmaps[YELLOW_PIXMAP] = new Pixmap(Gdx.files.internal(CYAN_FILE));
+		
+		//store platform colors so they can be retrieved later
+		platformColors[0]=PLATFORM;
+		platformColors[1]=CYAN;
+		platformColors[2]=GREEN;
+		platformColors[3]=YELLOW;
+		platformPixmaps[0]=PLATFORM_PIXMAP;
+		platformPixmaps[1]=CYAN_PIXMAP;
+		platformPixmaps[2]=GREEN_PIXMAP;
+		platformPixmaps[3]=YELLOW_PIXMAP;
 
 		//************************************************************************************************
 		//************** DEBUG level load ****************************************************************
@@ -272,13 +292,18 @@ public class ScreenHandler{
 					platformLayer.put((int)(heldPlatform.getX()),heldPlatform);
 					framesHeld = 0;
 				}else{
+					//choose height and color based on peak magnitude (essentially random)
 					float yAdjust = (peaks.get(i) % 50);
+					int colorIndex = (peaks.get(i).intValue() % NUM_PLATFORM_COLORS);
+					int color = platformColors[colorIndex];//translate to texture ID
+					int pixMap = platformPixmaps[colorIndex];// " " pixmap ID
+					
 					Platform platform = new Platform(
 							i*frameDuration + Gdx.graphics.getWidth(),
 							PLATFORM_Y + yAdjust,
 							PLATFORM_MIN_WIDTH,
 							PLATFORM_HEIGHT
-							,mTextures[PLATFORM],mPixmaps[PLATFORM_PIXMAP]);
+							,mTextures[color],mPixmaps[pixMap]);
 					heldPlatform = platform;
 					framesHeld = 1;
 					frameHeldAt = i;
