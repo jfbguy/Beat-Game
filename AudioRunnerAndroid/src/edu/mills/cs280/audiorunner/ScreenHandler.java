@@ -13,12 +13,12 @@ import com.badlogic.gdx.graphics.glutils.ImmediateModeRenderer;
 
 public class ScreenHandler{
 
-	private static final float SPEED_MULTIPLIER = 6;
+	private static final float SPEED_MULTIPLIER = 6;//TODO remove
 	private static final float ONSCREEN_BUFFER = .2f*Gdx.graphics.getWidth();
 	public static final float GROUND_HEIGHT = Gdx.graphics.getHeight()*.1f;
 	public static final float CEILING_HEIGHT = Gdx.graphics.getHeight()*.7f;
 
-	private final float[] PARALLAX = {1.5f,1.0f,.4f,.06f,.001f};
+	private final float[] PARALLAX = {1.5f,0.8f,.4f,.06f,.001f};
 
 	private final String SUN_FILE = "data/sun.png";
 	private final String PLATFORM_FILE = "data/purple.png";
@@ -26,19 +26,22 @@ public class ScreenHandler{
 	private final String RAINBOW_FILE = "data/rainbow.png";
 	private final String CARROT_FILE = "data/carrot.png";
 	private final String GROUND_FILE = "data/gradient_BW_1D.png";
+	private final String CYAN_FILE = "data/cyan.png";
 
-	private final int NUM_OF_TEXTURES = 6;		//UPDATE THIS IF YOU ADD A TEXTURE!!!
+	private final int NUM_OF_TEXTURES = 7;		//UPDATE THIS IF YOU ADD A TEXTURE!!!
 	private final int SUN = 0;
 	private final int GROUND = 1;
 	private final int PLATFORM = 2;
 	private final int TREE = 3;
 	private final int RAINBOW = 4;
 	private final int CARROT = 5;
-
-	private final int NUM_OF_PIXMAPS = 2;		//UPDATE THIS IF YOU ADD A PIXMAP!!!
+	private final int CYAN = 6;
+	
+	private final int NUM_OF_PIXMAPS = 3;		//UPDATE THIS IF YOU ADD A PIXMAP!!!
 
 	private final int PLATFORM_PIXMAP = 0;
 	private final int CARROT_PIXMAP = 1;
+	private final int CYAN_PIXMAP = 2;
 
 	//TODO Synch platform occurrences with music
 	private final int PLATFORM_STEP_SIZE = 200;//These will be defined by screensize/music synch
@@ -48,7 +51,7 @@ public class ScreenHandler{
 	private final float PLATFORM_MIN_WIDTH = 100f;
 	private final float PLATFORM_MAX_FRAMES = 5;
 	private final float PLATFORM_MAX_WIDTH= 500;
-	private final float PLATFORM_GAP = 1000f;
+	private final float PLATFORM_GAP = 30f;
 
 	private static float mSpeed;
 	private static float mCurrentFrameSpeed;
@@ -91,11 +94,13 @@ public class ScreenHandler{
 		mTextures[CARROT] = new Texture(Gdx.files.internal(CARROT_FILE));
 		mTextures[RAINBOW] = new Texture(Gdx.files.internal(RAINBOW_FILE));
 		mTextures[GROUND] = new Texture(Gdx.files.internal(GROUND_FILE));
-
+		mTextures[CYAN] = new Texture(Gdx.files.internal(CYAN_FILE));
+		
 		//load pixmaps - these are needed for pixel perfect collisions
 		mPixmaps = new Pixmap[NUM_OF_PIXMAPS];
 		mPixmaps[PLATFORM_PIXMAP] = new Pixmap(Gdx.files.internal(PLATFORM_FILE));
 		mPixmaps[CARROT_PIXMAP] = new Pixmap(Gdx.files.internal(CARROT_FILE));
+		mPixmaps[CYAN_PIXMAP] = new Pixmap(Gdx.files.internal(CYAN_FILE));
 
 		//************************************************************************************************
 		//************** DEBUG level load ****************************************************************
@@ -258,23 +263,27 @@ public class ScreenHandler{
 //				System.out.print(peaks.get(i) + ",");
 				if(framesHeld > 0){
 					float newWidth = ((i - frameHeldAt) * frameDuration) - PLATFORM_GAP - 1;
+					newWidth = Math.max(newWidth,PLATFORM_MIN_WIDTH);
+					//					if(newWidth <= PLATFORM_MIN_WIDTH){
+//						newWidth = PLATFORM
+//					}
 					//heldPlatform.setPosition(i*frameDuration+Gdx.graphics.getWidth(), PLATFORM_Y);
 					heldPlatform.setSize(newWidth, 10f);
 					platformLayer.put((int)(heldPlatform.getX()),heldPlatform);
 					framesHeld = 0;
+				}else{
+					float yAdjust = (peaks.get(i) % 50);
+					Platform platform = new Platform(
+							i*frameDuration + Gdx.graphics.getWidth(),
+							PLATFORM_Y + yAdjust,
+							PLATFORM_MIN_WIDTH,
+							PLATFORM_HEIGHT
+							,mTextures[PLATFORM],mPixmaps[PLATFORM_PIXMAP]);
+					heldPlatform = platform;
+					framesHeld = 1;
+					frameHeldAt = i;
+					//platformLayer.put((int)(i*frameDuration + Gdx.graphics.getWidth()),platform);
 				}
-				//float yAdjust = (peaks.get(i) % 50);
-				float yAdjust = (peaks.get(i) % 50);
-				Platform platform = new Platform(
-						i*frameDuration + Gdx.graphics.getWidth(),
-						PLATFORM_Y + yAdjust,
-						PLATFORM_MIN_WIDTH,
-						PLATFORM_HEIGHT
-						,mTextures[PLATFORM],mPixmaps[PLATFORM_PIXMAP]);
-				heldPlatform = platform;
-				framesHeld = 1;
-				frameHeldAt = i;
-				//platformLayer.put((int)(i*frameDuration + Gdx.graphics.getWidth()),platform);
 			}
 			
 			//if platform longer than max, end it and start anew
@@ -282,7 +291,7 @@ public class ScreenHandler{
 				float newWidth = ((i - frameHeldAt) * frameDuration) -1;
 				//heldPlatform.setPosition(i*frameDuration+Gdx.graphics.getWidth(), PLATFORM_Y);
 				//heldPlatform.setSize(newWidth, 10f);
-				heldPlatform.setSize(PLATFORM_MIN_WIDTH,PLATFORM_HEIGHT *10);
+				heldPlatform.setSize(PLATFORM_MAX_WIDTH,PLATFORM_HEIGHT);
 				platformLayer.put((int)(heldPlatform.getX()),heldPlatform);
 				framesHeld = 0;
 				
