@@ -13,12 +13,12 @@ import com.badlogic.gdx.graphics.glutils.ImmediateModeRenderer;
 
 public class ScreenHandler{
 
-	private static final float SPEED_MULTIPLIER = 6;
+	private static final float SPEED_MULTIPLIER = 6;//TODO remove
 	private static final float ONSCREEN_BUFFER = .2f*Gdx.graphics.getWidth();
 	public static final float GROUND_HEIGHT = Gdx.graphics.getHeight()*.1f;
 	public static final float CEILING_HEIGHT = Gdx.graphics.getHeight()*.7f;
 
-	private final float[] PARALLAX = {1.5f,1.0f,.4f,.06f,.001f};
+	private final float[] PARALLAX = {1.5f,0.8f,.4f,.06f,.001f};
 
 	private final String SUN_FILE = "data/sun.png";
 	private final String PLATFORM_FILE = "data/purple.png";
@@ -26,19 +26,22 @@ public class ScreenHandler{
 	private final String RAINBOW_FILE = "data/rainbow.png";
 	private final String CARROT_FILE = "data/carrot.png";
 	private final String GROUND_FILE = "data/gradient_BW_1D.png";
+	private final String CYAN_FILE = "data/cyan.png";
 
-	private final int NUM_OF_TEXTURES = 6;		//UPDATE THIS IF YOU ADD A TEXTURE!!!
+	private final int NUM_OF_TEXTURES = 7;		//UPDATE THIS IF YOU ADD A TEXTURE!!!
 	private final int SUN = 0;
 	private final int GROUND = 1;
 	private final int PLATFORM = 2;
 	private final int TREE = 3;
 	private final int RAINBOW = 4;
 	private final int CARROT = 5;
-
-	private final int NUM_OF_PIXMAPS = 2;		//UPDATE THIS IF YOU ADD A PIXMAP!!!
+	private final int CYAN = 6;
+	
+	private final int NUM_OF_PIXMAPS = 3;		//UPDATE THIS IF YOU ADD A PIXMAP!!!
 
 	private final int PLATFORM_PIXMAP = 0;
 	private final int CARROT_PIXMAP = 1;
+	private final int CYAN_PIXMAP = 2;
 
 	//TODO Synch platform occurrences with music
 	private final int PLATFORM_STEP_SIZE = 200;//These will be defined by screensize/music synch
@@ -48,7 +51,13 @@ public class ScreenHandler{
 	private final float PLATFORM_MIN_WIDTH = 100f;
 	private final float PLATFORM_MAX_FRAMES = 5;
 	private final float PLATFORM_MAX_WIDTH= 500;
-	private final float PLATFORM_GAP = 1000f;
+	private final float PLATFORM_GAP = 30f;
+	
+	//carrot info
+	private final float CARROT_Y_OFFSET = 30f;
+	private final float CARROT_DIMENSIONS = 32f;
+	private final int CARROT_POINTS = 10;
+	private final float CARROT_DELAY = 30f;
 
 	private static float mSpeed;
 	private static float mCurrentFrameSpeed;
@@ -91,11 +100,13 @@ public class ScreenHandler{
 		mTextures[CARROT] = new Texture(Gdx.files.internal(CARROT_FILE));
 		mTextures[RAINBOW] = new Texture(Gdx.files.internal(RAINBOW_FILE));
 		mTextures[GROUND] = new Texture(Gdx.files.internal(GROUND_FILE));
-
+		mTextures[CYAN] = new Texture(Gdx.files.internal(CYAN_FILE));
+		
 		//load pixmaps - these are needed for pixel perfect collisions
 		mPixmaps = new Pixmap[NUM_OF_PIXMAPS];
 		mPixmaps[PLATFORM_PIXMAP] = new Pixmap(Gdx.files.internal(PLATFORM_FILE));
 		mPixmaps[CARROT_PIXMAP] = new Pixmap(Gdx.files.internal(CARROT_FILE));
+		mPixmaps[CYAN_PIXMAP] = new Pixmap(Gdx.files.internal(CYAN_FILE));
 
 		//************************************************************************************************
 		//************** DEBUG level load ****************************************************************
@@ -116,13 +127,13 @@ public class ScreenHandler{
 			mSpriteLayers[3].put(temp.getX(),tSprite);
 		}
 
-		//Score Items
-		for(int i = 0; i < 300; i++){
-			temp.set(i*30,150);
-			ScoreItem scoreItem = new ScoreItem((float)temp.getX(),(float)temp.getY(),32f,32f,mTextures[CARROT],mPixmaps[CARROT_PIXMAP],10);
-			scoreItem.setBounds(temp.getX(), temp.getY(), Gdx.graphics.getHeight()*.1f, Gdx.graphics.getHeight()*.1f);
-			scoreItemLayer.put(temp.getX(),scoreItem);
-		}
+//		//Score Items
+//		for(int i = 0; i < 300; i++){
+//			temp.set(i*30,150);
+//			ScoreItem scoreItem = new ScoreItem((float)temp.getX(),(float)temp.getY(),32f,32f,mTextures[CARROT],mPixmaps[CARROT_PIXMAP],10);
+//			scoreItem.setBounds(temp.getX(), temp.getY(), Gdx.graphics.getHeight()*.1f, Gdx.graphics.getHeight()*.1f);
+//			scoreItemLayer.put(temp.getX(),scoreItem);
+//		}
 
 		//platforms
 		MusicData.loadPlatforms(this);
@@ -244,7 +255,7 @@ public class ScreenHandler{
 		}
 		avg = (avg/(float)(peakCounter));*/
 		
-		float frameDuration = MusicData.getFrameDuration();
+		float frameDuration = MusicData.getFrameDuration(), stopCarrotsFor = 0;
 		int framesHeld = 0, frameHeldAt = 0;
 		//dummy platform, in case error causes to use without init
 		Platform dummyPlatform = new Platform(
@@ -256,25 +267,51 @@ public class ScreenHandler{
 			//if detect a peak, finish any ongoing platforms and ready a new one
 			if(peaks.get(i) > 0.0f){
 //				System.out.print(peaks.get(i) + ",");
+				float yAdjust = (peaks.get(i) % 50);
+				
 				if(framesHeld > 0){
 					float newWidth = ((i - frameHeldAt) * frameDuration) - PLATFORM_GAP - 1;
+					newWidth = Math.max(newWidth,PLATFORM_MIN_WIDTH);
+					//					if(newWidth <= PLATFORM_MIN_WIDTH){
+//						newWidth = PLATFORM
+//					}
 					//heldPlatform.setPosition(i*frameDuration+Gdx.graphics.getWidth(), PLATFORM_Y);
 					heldPlatform.setSize(newWidth, 10f);
 					platformLayer.put((int)(heldPlatform.getX()),heldPlatform);
 					framesHeld = 0;
 				}
-				//float yAdjust = (peaks.get(i) % 50);
-				float yAdjust = (peaks.get(i) % 50);
-				Platform platform = new Platform(
-						i*frameDuration + Gdx.graphics.getWidth(),
-						PLATFORM_Y + yAdjust,
-						PLATFORM_MIN_WIDTH,
-						PLATFORM_HEIGHT
-						,mTextures[PLATFORM],mPixmaps[PLATFORM_PIXMAP]);
-				heldPlatform = platform;
-				framesHeld = 1;
-				frameHeldAt = i;
-				//platformLayer.put((int)(i*frameDuration + Gdx.graphics.getWidth()),platform);
+				//only create a new platform if you weren't holding a platform
+				//if this is NOT in an else loop, platforms overlap, not sure why
+				//in meantime, we may unecessarily cull some platforms in exchange for no overlap
+				else{
+					Platform platform = new Platform(
+							i*frameDuration + Gdx.graphics.getWidth(),
+							PLATFORM_Y + yAdjust,
+							PLATFORM_MIN_WIDTH,
+							PLATFORM_HEIGHT
+							,mTextures[PLATFORM],mPixmaps[PLATFORM_PIXMAP]);
+					heldPlatform = platform;
+					framesHeld = 1;
+					frameHeldAt = i;
+					//platformLayer.put((int)(i*frameDuration + Gdx.graphics.getWidth()),platform);
+				}
+				
+				//regardless, set a score item whenever there is a peak
+				//this places on every peak, ends up not looking very good
+//				ScoreItem scoreItem = new ScoreItem(
+//						i*frameDuration + Gdx.graphics.getWidth(),
+//						PLATFORM_Y + yAdjust + CARROT_Y_OFFSET,
+//						CARROT_DIMENSIONS,
+//						CARROT_DIMENSIONS,
+//						mTextures[CARROT],
+//						mPixmaps[CARROT_PIXMAP],
+//						CARROT_POINTS);
+//				scoreItem.setBounds(i*frameDuration + Gdx.graphics.getWidth(),
+//						PLATFORM_Y + yAdjust + CARROT_Y_OFFSET,
+//						Gdx.graphics.getHeight()*.1f, //TODO what is magic number??
+//						Gdx.graphics.getHeight()*.1f);
+//				Float x = frameDuration;
+//				scoreItemLayer.put((i*x.intValue() + Gdx.graphics.getWidth()),scoreItem);
 			}
 			
 			//if platform longer than max, end it and start anew
@@ -282,18 +319,40 @@ public class ScreenHandler{
 				float newWidth = ((i - frameHeldAt) * frameDuration) -1;
 				//heldPlatform.setPosition(i*frameDuration+Gdx.graphics.getWidth(), PLATFORM_Y);
 				//heldPlatform.setSize(newWidth, 10f);
-				heldPlatform.setSize(PLATFORM_MIN_WIDTH,PLATFORM_HEIGHT *10);
+				heldPlatform.setSize(PLATFORM_MAX_WIDTH,PLATFORM_HEIGHT);
 				platformLayer.put((int)(heldPlatform.getX()),heldPlatform);
 				framesHeld = 0;
-				
 			}
+			
+			//make carrots if there is a platform going
+			if(framesHeld > 0 && stopCarrotsFor <=0){
+				
+				ScoreItem scoreItem = new ScoreItem(
+						i*frameDuration + Gdx.graphics.getWidth(),
+						heldPlatform.getY()+ CARROT_Y_OFFSET,
+						CARROT_DIMENSIONS,
+						CARROT_DIMENSIONS,
+						mTextures[CARROT],
+						mPixmaps[CARROT_PIXMAP],
+						CARROT_POINTS);
+				scoreItem.setBounds(i*frameDuration + Gdx.graphics.getWidth(),
+						heldPlatform.getY() + CARROT_Y_OFFSET,
+						Gdx.graphics.getHeight()*.1f, //TODO what is magic number??
+						Gdx.graphics.getHeight()*.1f);
+				Float x = frameDuration;
+				scoreItemLayer.put((i*x.intValue() + Gdx.graphics.getWidth()),scoreItem);
+				stopCarrotsFor = CARROT_DELAY;
+			}
+				
+			//increment # frames that have passed since held began
+			//decrement distance to stop carrots for
 			if(framesHeld > 0){
 				framesHeld++;
 			}
+			if(stopCarrotsFor>0){
+				stopCarrotsFor -= frameDuration;
+			}
 		}
-		//System.out.println();
-
-
 	}
 
 	public static float getSpeed(){
