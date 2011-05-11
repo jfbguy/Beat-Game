@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.Button;
 
 public class MainMenu extends Activity{
+	private static final boolean menuMusic = false;
 	static MediaPlayer mp;
 	
     @Override
@@ -30,8 +31,10 @@ public class MainMenu extends Activity{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		mp.start();
-		mp.setLooping(true);
+		if(menuMusic){
+			mp.start();
+			mp.setLooping(true);
+		}
         
         Button start = (Button) findViewById(R.id.Start_Button);
         start.setOnClickListener(new View.OnClickListener() {
