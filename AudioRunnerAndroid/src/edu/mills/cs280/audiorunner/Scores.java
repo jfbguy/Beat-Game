@@ -30,6 +30,9 @@ public class Scores extends Activity {
 	private ScoresData scores;
 	String playerName; 
 	
+	/**
+	 * Initializes the activity
+	 */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);

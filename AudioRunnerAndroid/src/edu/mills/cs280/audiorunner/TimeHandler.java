@@ -1,5 +1,6 @@
 package edu.mills.cs280.audiorunner;
 
+
 public class TimeHandler {
 	static public final float FRAMERATE = 60.0f;
 	static public final float TIMESCALE = 1000/FRAMERATE;  //Milliseconds / Desire FrameRate
@@ -21,6 +22,10 @@ public class TimeHandler {
 		}
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
 	public static float getTransitionScale(){
 		return timeDiff/TIMESCALE;
 	}
