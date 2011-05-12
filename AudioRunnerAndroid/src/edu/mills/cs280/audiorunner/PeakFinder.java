@@ -11,7 +11,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.analysis.FFT;
 
 /**
- * This class
+ * This class gets a list of peaks (event data) from the mp3 decoder
  * @author Trevor Adams
  *
  */
