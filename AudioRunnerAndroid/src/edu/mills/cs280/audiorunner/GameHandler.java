@@ -78,7 +78,7 @@ public class GameHandler implements ApplicationListener {
 			
 		if(!music.isPlaying()){
 			if(gameStarted){
-				MusicData.setScore(scoreBoard.getScore());
+				pause();
 			}
 			else{
 				gameStarted = true;

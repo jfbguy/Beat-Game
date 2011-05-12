@@ -110,6 +110,7 @@ public class LoadMusic extends Activity{
 
 			Intent gameIntent = new Intent(getApplicationContext(), AudioRunnerActivity.class);
 			startActivityForResult(gameIntent, GAME);
+			
 		}
 
 		@Override

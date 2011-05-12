@@ -22,6 +22,7 @@ import android.util.Log;
 
 public class BrowseMusic extends Activity {
 	/** Called when the activity is first created. */
+	private boolean exitFlag = false;
 	private ListView musiclist;
 	private TextView selectedSong,duration,name;
 	private Button startGame, startGameDefault;
@@ -86,6 +87,7 @@ public class BrowseMusic extends Activity {
 			//start the game activity
 			startGame.setOnClickListener(new View.OnClickListener() {	
 				public void onClick(View v) {
+					exitFlag = true;
 					Intent loadIntent = new Intent(getApplicationContext(), LoadMusic.class);
 					loadIntent.putExtra("song", filename);
 					MusicData.setFile(filename);
@@ -99,6 +101,7 @@ public class BrowseMusic extends Activity {
 
 			startGameDefault.setOnClickListener(new View.OnClickListener() {	
 				public void onClick(View v) {
+					exitFlag = true;
 					Intent loadIntent = new Intent(getApplicationContext(), LoadMusic.class);
 					MusicData.setFile("/mnt/sdcard/music/Freezepop - Starlight (Karacter Remix).mp3");
 					MusicData.setDuration(298000f);
@@ -203,6 +206,17 @@ public class BrowseMusic extends Activity {
 
 	public boolean isMP3(String fileName){
 		return fileName.contains("mp3");
+	}
+	
+	public void onResume() {
+		super.onResume();
+		
+		if (exitFlag) {
+			System.out.println("asdfasfasdfasdfasddfasfasdfd");
+			exitFlag = false;
+		}
+		//System.out.println(MusicData.getName());
+		//System.out.println(MusicData.getScore());
 	}
 
 

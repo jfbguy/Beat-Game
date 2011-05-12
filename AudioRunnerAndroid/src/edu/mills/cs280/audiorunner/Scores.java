@@ -36,13 +36,13 @@ public class Scores extends Activity {
 		setContentView(R.layout.high_scores);
 		scores = new ScoresData(this);
 
-		// if (MusicData.getScore() > 0) {
-		// addScore(MusicData.getName(), MusicData.getScore());
-		// MusicData.setScore(0);
-		// }
-		// else {
-		//	showSongList();
-	    // }
+		 if (MusicData.getScore() > 0) {
+		 addScore(MusicData.getName(), MusicData.getScore());
+		 MusicData.setScore(0);
+		 }
+		 else {
+			showSongList();
+	    }
 
 		Button settings = (Button) findViewById(R.id.Return_Button);
 		settings.setOnClickListener(new View.OnClickListener() {
@@ -62,7 +62,7 @@ public class Scores extends Activity {
 	 * @param song The song's name
 	 * @param score The score to be added to the database
 	 */
-	private void addScore(final String song, final int score) {
+	public void addScore(final String song, final int score) {
 
 		AlertDialog.Builder alert = new AlertDialog.Builder(this);
 		alert.setMessage("Your Name");

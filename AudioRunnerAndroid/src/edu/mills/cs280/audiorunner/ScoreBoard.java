@@ -12,7 +12,7 @@ public class ScoreBoard {
 	private final float FLOATER_SPEED = .03f;
 
 	private Texture mNumbersTexture;
-	private int mScore;
+	private static int mScore;
 	private float mDrawSize;	//Size to draw font on screen
 	private float mNewScore;
 	private LinkedList<ScoreFloater> floaters;
@@ -88,7 +88,7 @@ public class ScoreBoard {
 	 * Retrieves score 
 	 * @return score
 	 */
-	public int getScore(){
+	public static int getScore(){
 		return mScore;
 	}
 
