@@ -15,22 +15,46 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 public class Collidable extends Sprite{
 	Pixmap pixmap;
 
+	/**
+	 * Default Constructor
+	 */
 	public Collidable(){
 	}
 
+	/**
+	 * 
+	 * @param file location of texture file
+	 */
 	public Collidable(String file){
 		this.pixmap = new Pixmap(Gdx.files.internal(file));
 	}
 
+	/**
+	 * Sets pixmap and texture files
+	 * 
+	 * @param pixmap
+	 * @param texture
+	 */
 	public void loadTexture(Pixmap pixmap, Texture texture){
 		this.pixmap = pixmap;
 		this.setTexture(texture);
 	}
 
+	/**
+	 * Gets Pixmap file
+	 * 
+	 * @return pixmap
+	 */
 	public Pixmap getPixmap(){
 		return pixmap;
 	}
 
+	/**
+	 * Implements PIxel Perfect Collision
+	 * 
+	 * @param collidable collidable to check if touching this collidable
+	 * @return True if touching
+	 */
 	public boolean pixelCollides(Collidable collidable){
 		// Rectangle Check
 		if (this.getX() > collidable.getX() + collidable.getWidth()){
@@ -64,6 +88,13 @@ public class Collidable extends Sprite{
 		return false;
 	}
 	
+	/**
+	 * Rectangular Collision
+	 * 
+	 * @param collidable collidable to check if touching this collidable
+	 * @param worldPosition position of level currently
+	 * @return true if rectangle of images touch
+	 */
 	public boolean rectCollides(Collidable collidable, int worldPosition){
 
 
@@ -84,6 +115,15 @@ public class Collidable extends Sprite{
 		return true;
 	}
 	
+	/**
+	 * Rectangular Collision
+	 * 
+	 * @param x x position of rect to check
+	 * @param y y position of rect to check
+	 * @param wX worldPosition x
+	 * @param wY worldposition y
+	 * @return
+	 */
 	public boolean rectTouch(int x, int y, float wX, float wY){
 		// Rectangle Check
 		//I have no idea why I have to add width twice for proper jump touch
