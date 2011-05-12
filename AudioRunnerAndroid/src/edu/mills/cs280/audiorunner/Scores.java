@@ -21,6 +21,11 @@ import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
+/**
+ * Handles the scores generated at the end of the game.
+ * @author Dave 
+ *
+ */
 public class Scores extends Activity {
 	private ScoresData scores;
 	String playerName; 
@@ -50,9 +55,15 @@ public class Scores extends Activity {
 
 	}
 
+	
+	/**
+	 * Adds a new High score to High Scores Database
+	 * 
+	 * @param song The song's name
+	 * @param score The score to be added to the database
+	 */
 	private void addScore(final String song, final int score) {
 
-		
 		AlertDialog.Builder alert = new AlertDialog.Builder(this);
 		alert.setMessage("Your Name");
 		final EditText input = new EditText(this);
@@ -124,7 +135,12 @@ public class Scores extends Activity {
 		alert.show();
 		
 	}
-
+	
+	/**
+	 * Returns a list of scores that have been added to the scoreList array.  
+	 * @param song The song's name
+	 * @return the generated score list
+	 */
 	private ArrayList<Integer> getScores(String song) {
 		ArrayList<Integer> scoreList = new ArrayList<Integer>();
 		final String[] QUERY = { _ID, "title", "score0", "score1", "score2",
@@ -152,6 +168,11 @@ public class Scores extends Activity {
 		return scoreList;
 	}
 
+	/**
+	 * Returns a list of player's names that have been added to the nameList array. 
+	 * @param song The song's name	
+	 * @return the generated name list
+	 */
 	private ArrayList<String> getNames(String song) {
 
 		ArrayList<String> nameList = new ArrayList<String>();
@@ -186,7 +207,7 @@ public class Scores extends Activity {
 		db.close();
 		return nameList;
 	}
-
+	
 	private void showSongList() {
 		final String[] QUERY = { _ID, "title" };
 		final String[] FROM = { "title" };

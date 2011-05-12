@@ -5,7 +5,11 @@ import android.os.Bundle;
 
 import com.badlogic.gdx.backends.android.AndroidApplication;
 
- 
+ /**
+  * Starts game by calling GameHandler
+  * @author tadams
+  *
+  */
 public class AudioRunnerActivity extends AndroidApplication {
 
 	@Override

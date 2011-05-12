@@ -84,6 +84,10 @@ public class ScoreBoard {
 		mNewScore = mScore + points;
 	}
 	
+	/**
+	 * Retrieves score 
+	 * @return score
+	 */
 	public int getScore(){
 		return mScore;
 	}
@@ -98,7 +102,7 @@ public class ScoreBoard {
 	}
 
 	/**
-	 * Nested ScoreFloater Class for adding scores that float eventually to the scorboard
+	 * Nested ScoreFloater Class for adding scores that float eventually to the score board
 	 * 
 	 * @param  Integer, X position to start
 	 * @param  Integer, Y position to start
@@ -111,10 +115,20 @@ public class ScoreBoard {
 		private float posY;
 		private int points;
 		
+		/**
+		 * Returns the current position of X and Y
+		 * @return the position of X and Y at the specified position
+		 */
 		public Vector2 getCurrentPosition(){
 			return new Vector2((int)posX,(int)posY);
 		}
 
+		/**
+		 * 
+		 * @param x Assigns position of X to x
+		 * @param y Assigns position of Y to y
+		 * @param points Assigns points to points
+		 */
 		public ScoreFloater(int x, int y, int points){
 			posX = x;
 			posY = y;

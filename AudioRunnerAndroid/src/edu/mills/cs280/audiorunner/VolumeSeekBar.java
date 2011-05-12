@@ -10,8 +10,16 @@ import android.widget.Button;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-public class VolumeSeekBar extends Activity {
 
+
+/**
+ * VolumeSeekBar class handles the volume seek bar in the settings page of the application. 
+ * The AudioManager class provides access to volume mode control.
+ * @author jvizcain
+ *
+ */
+public class VolumeSeekBar extends Activity {
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -30,7 +38,7 @@ public class VolumeSeekBar extends Activity {
 		volControl.setMax(maxVolume);
 		volControl.setProgress(curVolume);
 		volControl.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-
+			
 			@Override
 			public void onProgressChanged(SeekBar seekBar, int progress,
 					boolean fromUser) {

@@ -9,7 +9,17 @@ import com.badlogic.gdx.audio.Music;
 
 import javazoom.jl.decoder.SampleBuffer;
 
+/**
+ * Single location for storing all data about music. Betrays roots
+ * as a serializable class to store music data offline and run
+ * without taking time to decode.
+ * 
+ * @author tadams
+ *
+ */
 public class MusicData {
+	
+	private static final int MILLISECS_PER_SEC = 1000;
 	private static int finalScore = 0;
 	private static String songName;
 	private static String fileLocation;
@@ -24,35 +34,69 @@ public class MusicData {
 	private static int platforms = 0;
 	public static int frameCounter = 0;
 
-
+/**
+ * Private constructor, this class is only called statically
+ * 
+ */
+	
+	//TODO Should we call this differently since class is effectively static?
 	private MusicData(){
 
 	}
 	
+	/**
+	 * Save the final score for a game for High
+	 * scores to retrieve
+	 * @param score  - score value to save
+	 */
 	public static void setScore(int score) {
 		finalScore = score;
 	}
 	
+	/**
+	 * Return saved score value
+	 * @return return saved score value
+	 */
 	public static int getScore() {
 		return finalScore;
 	}
 	
+	/**
+	 * Save name of song for High Scores to retrieve
+	 * @param name - song title
+	 */
 	public static void setName(String name) {
 		songName = name;
 	}
 	
+	/**
+	 * Retrieve saved song name
+	 * @return song title
+	 */
 	public static String getName() {
 		return songName;
 	}
 	
+	/**
+	 * Saves libgdx Music class for other operations
+	 * @param inMusic	Libgdx Music class
+	 */
 	public static void setMusic(Music inMusic){
 		music = inMusic;
 	}
 
-	public static float getPosition(){	//Milliseconds should be in thousands of seconds
+	/**
+	 * Get position of song using libgdx Music class
+	 * @return position of song in milliseconds
+	 */
+	public static float getPosition(){
 		return currPosition;
 	}
 	
+	/**
+	 * 
+	 * @return
+	 */
 	public static float getPrevPosition(){	//Milliseconds should be in thousands of seconds
 		return prevPosition;
 	}
@@ -128,7 +172,7 @@ public class MusicData {
 
 	public static void update(ScreenHandler scr){
 		prevPosition = currPosition;
-		currPosition = music.getPosition()*1000;
+		currPosition = music.getPosition()*MILLISECS_PER_SEC;
 		MusicData.decode();
 		MusicData.loadPlatforms(scr);
 	}

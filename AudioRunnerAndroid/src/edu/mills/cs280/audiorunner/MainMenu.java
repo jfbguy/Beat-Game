@@ -9,6 +9,12 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+/**
+ * Handles the start page (main menu) of the application. Plays a song while user navigates the application. 
+ * Song will stop when user terminates or exits application. 
+ * @author jvizcain
+ *
+ */
 public class MainMenu extends Activity{
 	private static final boolean menuMusic = false;
 	static MediaPlayer mp;
