@@ -9,6 +9,12 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+/**
+ * Main palyer class, decides where to draw player and most interactions with game
+ * 
+ * @author jklein
+ *
+ */
 public class Player extends Collidable {
 
 	private final float PLATFORM_CATCH = .4f;
@@ -229,6 +235,8 @@ public class Player extends Collidable {
 
 	/**
 	 * Player Jumps.  Adds a positive velocity to player's vertical velocity
+	 * 
+	 * @param jumpSpeed velocity to add to player's vertical velocity
 	 */
 	public void jump(float jumpSpeed){
 		if(mStatus != AIR){
@@ -240,6 +248,13 @@ public class Player extends Collidable {
 		}
 	}
 
+	/**
+	 * Regular jump, decide if boost is added according if there is a peak at this moment in the song
+	 * 
+	 * @param scoreBoard needed if we add a floater score
+	 * @param screenHandler 
+	 * @param boostMeter for adding boost
+	 */
 	public void jump(ScoreBoard scoreBoard, ScreenHandler screenHandler, BoostMeter boostMeter){
 
 		int jumpscore = (int)MusicData.getPeaks().get((int)(MusicData.getPosition()/MusicData.getFrameDuration())).floatValue();
@@ -259,6 +274,13 @@ public class Player extends Collidable {
 		//and create particles to show if jump is special
 	}
 
+	/**
+	 * Boost jump, If there is boost, multiply the jump with its power
+	 * 
+	 * @param scoreBoard needed if we add a floater score
+	 * @param screenHandler 
+	 * @param boostMeter for adding boost,and depleting the meter
+	 */
 	public void boostJump(ScoreBoard scoreBoard, ScreenHandler screenHandler, BoostMeter boostMeter){
 		if(boostMeter.getBoost() > 0.0f){
 			int jumpscore = (int)MusicData.getPeaks().get((int)(MusicData.getPosition()/MusicData.getFrameDuration())).floatValue();

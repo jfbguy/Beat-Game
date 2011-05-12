@@ -42,7 +42,7 @@ public class ScreenHandler{
 	private final int TREE = 3;
 	private final int RAINBOW = 4;
 	private final int CARROT = 5;
-	
+
 	private final int NUM_OF_PIXMAPS = 2;		//UPDATE THIS IF YOU ADD A PIXMAP!!!
 	private final int PLATFORM_PIXMAP = 0;
 	private final int CARROT_PIXMAP = 1;
@@ -57,7 +57,7 @@ public class ScreenHandler{
 	private final float PLATFORM_MAX_FRAMES = 5;
 	private final float PLATFORM_MAX_WIDTH= 500;
 	private final float PLATFORM_GAP = 30f;
-	
+
 	//carrot info
 	private final float CARROT_Y_OFFSET = 30f;
 	private final float CARROT_DIMENSIONS = 32f;
@@ -65,7 +65,7 @@ public class ScreenHandler{
 	private final float CARROT_DELAY = 30f;
 
 	private static float mSpeed;
-//	private static float mCurrentFrameSpeed;
+	//	private static float mCurrentFrameSpeed;
 	ImmediateModeRenderer mRenderer;
 	private static Vector2 mWorldPosition;
 	private static int mWorldLeadin;
@@ -75,7 +75,7 @@ public class ScreenHandler{
 	private CollisionLayer platformLayer;
 	private CollisionLayer scoreItemLayer;
 	private int mSyncOffset;
-	
+
 	//private LinkedList<Particle> particles;
 
 	/**
@@ -108,12 +108,12 @@ public class ScreenHandler{
 		mTextures[CARROT] = new Texture(Gdx.files.internal(CARROT_FILE));
 		mTextures[RAINBOW] = new Texture(Gdx.files.internal(RAINBOW_FILE));
 		mTextures[GROUND] = new Texture(Gdx.files.internal(GROUND_FILE));
-		
+
 		//load pixmaps - these are needed for pixel perfect collisions
 		mPixmaps = new Pixmap[NUM_OF_PIXMAPS];
 		mPixmaps[PLATFORM_PIXMAP] = new Pixmap(Gdx.files.internal(PLATFORM_FILE));
 		mPixmaps[CARROT_PIXMAP] = new Pixmap(Gdx.files.internal(CARROT_FILE));
-		
+
 		//sync offset, represents were music is synced to
 		float mSyncOffset = Gdx.graphics.getWidth();
 
@@ -154,12 +154,13 @@ public class ScreenHandler{
 	}
 
 	/**
-	 * Updates the world position, so sprites can be moved on screen.
+	 * Updates the worldposition for correct scrolling
 	 * 
+	 * @param player Main Player class
 	 */
 	public void updateScreen(Player player){	//Updates level depending on music and how player is doing
-//		mCurrentFrameSpeed = getSpeed()*TimeHandler.getTransitionScale();
-//		mWorldPosition.x += mCurrentFrameSpeed;
+		//		mCurrentFrameSpeed = getSpeed()*TimeHandler.getTransitionScale();
+		//		mWorldPosition.x += mCurrentFrameSpeed;
 
 		if(player.getY() > mWorldPosition.y + CEILING_HEIGHT){
 			mWorldPosition.y = (int) (player.getY() - CEILING_HEIGHT);
@@ -171,9 +172,10 @@ public class ScreenHandler{
 	}
 
 	/**
-	 * Draws Everything on Screen
+	 * Draws all of the layers to the screen in order to represent the parallax scrolling
 	 * 
-	 * @param
+	 * @param spriteBatch SpriteBatch to draw all of the textures into
+	 * @param player main player class to draw player to screen
 	 */
 	public void draw(SpriteBatch spriteBatch, Player player){
 
@@ -185,8 +187,8 @@ public class ScreenHandler{
 		mRenderer.color(1, 0, 0, 1);
 		mRenderer.vertex(300, 300, 0);
 		mRenderer.end();
-		*/
-		
+		 */
+
 		//Draw first half of layers rounded down
 		for(int i = mSpriteLayers.length-1; i >= mSpriteLayers.length/2; i--){
 			mSpriteLayers[i].draw(spriteBatch,mWorldPosition);
@@ -233,23 +235,31 @@ public class ScreenHandler{
 	}
 
 	/**
+	 * Gets the platform layer
 	 * 
 	 * @return the layer of platforms
 	 */
 	public CollisionLayer getPlatforms(){
 		return platformLayer;
 	}
-	
-/**
- * 
- * @return the layer of scoreitems
- */
+
+	/**
+	 * Gets the score item layer
+	 * 
+	 * @return the layer of scoreitems
+	 */
 	public CollisionLayer getScoreItems(){
 		return scoreItemLayer;
 	}
-	
+
+	/**
+	 * laods more platforms into the platform layer
+	 * 
+	 * @param peaks	peaks to add
+	 * @param frameNum number of frames already processed
+	 */
 	public void loadPlatforms(List<Float> peaks, int frameNum){
-		
+
 		Iterator<Float> iter = peaks.iterator();	
 		float frameDuration = MusicData.getFrameDuration(), stopCarrotsFor = 0;
 		int framesHeld = 0, frameHeldAt = 0;
@@ -257,19 +267,19 @@ public class ScreenHandler{
 		Platform heldPlatform = new Platform(
 				0,0,0,0,mTextures[PLATFORM],mPixmaps[PLATFORM_PIXMAP]);
 		Float xPosition;
-		
+
 		for(int i = frameNum; i < peaks.size(); i++){
-			
+
 			//x position
 			xPosition = (i*frameDuration + mSyncOffset);
-//			xPosition = (i*frameDuration + mSyncOffset)*PARALLAX[GAME_PARALLAX_LAYER];
+			//			xPosition = (i*frameDuration + mSyncOffset)*PARALLAX[GAME_PARALLAX_LAYER];
 
-				
+
 			//if detect a peak, finish any ongoing platforms and ready a new one
 			if(peaks.get(i) > 0.0f){
-//				System.out.print(peaks.get(i) + ",");
+				//				System.out.print(peaks.get(i) + ",");
 				float yAdjust = (peaks.get(i) % 50)*2;
-				
+
 				if(framesHeld > 0){
 					float newWidth = ((i - frameHeldAt) * frameDuration) - PLATFORM_GAP - 1;
 					newWidth = Math.max(newWidth,PLATFORM_MIN_WIDTH);
@@ -292,7 +302,7 @@ public class ScreenHandler{
 					frameHeldAt = i;
 				}
 			}
-			
+
 			//if platform longer than max, end it and start anew
 			if(framesHeld*frameDuration > PLATFORM_MAX_WIDTH){
 				float newWidth = ((i - frameHeldAt) * frameDuration) -1;
@@ -300,7 +310,7 @@ public class ScreenHandler{
 				platformLayer.put((int)(heldPlatform.getX()),heldPlatform);
 				framesHeld = 0;
 			}
-			
+
 			//make carrots if there is a platform going
 			if(framesHeld > 0 && stopCarrotsFor <=0){
 				ScoreItem scoreItem = new ScoreItem(
@@ -319,7 +329,7 @@ public class ScreenHandler{
 				scoreItemLayer.put(xPosition.intValue(),scoreItem);
 				stopCarrotsFor = CARROT_DELAY;
 			}
-				
+
 			//increment # frames that have passed since held began
 			//decrement distance to stop carrots for
 			if(framesHeld > 0){
@@ -332,19 +342,9 @@ public class ScreenHandler{
 	}
 
 	/**
+	 * Gets the world position
 	 * 
-	 * @return speed
-	 */
-//	public static float getSpeed(){
-//		return mSpeed;
-//	}
-
-//	public static float getCurrentFrameSpeed(){
-//		return mCurrentFrameSpeed;
-//	}
-
-	/**
-	 * @return Position of world
+	 * @return Vector2 containing the x and y position of world
 	 */
 	public static Vector2 getWorldPosition(){
 		return mWorldPosition;

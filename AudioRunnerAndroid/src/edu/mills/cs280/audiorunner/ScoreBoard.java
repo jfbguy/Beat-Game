@@ -6,6 +6,13 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+/**
+ * ScoreBoard holds the player's score and implements the visual for it and score floaters
+ * 
+ * 
+ * @author jklein
+ *
+ */
 public class ScoreBoard {
 	private final int FONTSIZE = 64;				//Size of Font in Texture
 	private final float SCREENPERCENTAGE = 0.1f;	//Percentage of screen to draw score on

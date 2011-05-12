@@ -10,13 +10,18 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+/**
+ * Method for buffering and creating particles to use in Graphics
+ * 
+ * @author jklein
+ *
+ */
 public class Particle{
 	private final static float SPEED = .5f;
 	private final static float GRAVITY = -.6f;
 	public static final int FALLING = 0;
 	public static final int DIRECTIONAL = 1;
 	public static final int EXPLODING = 2;
-	public static final int VISUALIZE = 3;
 
 	//Explosion Constants
 	private static final float EXPLOSION_SPREAD = .1f;
@@ -42,12 +47,15 @@ public class Particle{
 	private float size;
 	private float alpha;
 	private Texture mTexture;
-	private Color color;
 
 	private Particle(){
 
 	}
 
+	/**
+	 * Creates a Number of Particles to buffer so no particles have to be created at run time
+	 * 
+	 */
 	public static void BufferParticles(){
 		for(int i = 0; i < 4000; i++){
 			PARTICLE_BUFFER.add(new Particle());
@@ -84,8 +92,6 @@ public class Particle{
 			break;
 		case EXPLODING:
 			break;
-		case VISUALIZE:
-			break;
 		}
 		add.setTexture(PARTICLE_TEXTURE);
 		add.x = x;
@@ -98,20 +104,10 @@ public class Particle{
 
 		PARTICLES.add(add);
 	}
-	
-	private static void AddParticle(float x, float y,float radius, Color color,  int type){
-		Particle add = PARTICLE_BUFFER.pop();
-		add.setTexture(PARTICLE_TEXTURE);
-		add.x = x;
-		add.y = y;
-		add.size = radius;
-		add.type = type;
-		add.alpha = 1;
-		add.color = color;
 
-		PARTICLES.add(add);
-	}
-
+	/**
+	 * Updates all movement of all particles that are still alive
+	 */
 	public static void updateParticles(){
 		float spdScale = TimeHandler.getTransitionScale();
 
@@ -153,10 +149,6 @@ public class Particle{
 					p.alpha *= (1-EXPLOSION_FADE*spdScale);
 				}
 				break;
-			case VISUALIZE:
-				PARTICLE_BUFFER.push(p);
-				iter.remove();
-				break;
 			}
 
 		}
@@ -164,6 +156,12 @@ public class Particle{
 
 	}
 
+	/**
+	 * Creates explosion particles (They move outward, slow down, and disappear)
+	 * 
+	 * @param x x position to create explosion
+	 * @param y y position to create explosion
+	 */
 	public static void createExplosion(float x, float y){
 		Random rand = new Random();
 		for(int i = 0; i < EXPLOSION_PARTICLE_AMOUNT; i++){
@@ -174,6 +172,12 @@ public class Particle{
 		}
 	}
 
+	/**
+	 * Creates jump particles (They burst out upward and fall down)
+	 * 
+	 * @param player Player location to create particles
+	 * @param jumpscore Jumpscore decides how many particles are created
+	 */
 	public static void createJumpParticles(Player player, int jumpscore){
 		Random rand = new Random();
 		
@@ -188,11 +192,13 @@ public class Particle{
 					FALLING_PARTICLE_SIZE, Particle.FALLING);
 		}
 	}
-	
-	public static void createVisualizeParticle(float x, float y, float radius,Color color){
-		AddParticle((int)x,(int)y,radius,color,VISUALIZE);
-	}
 
+	/**
+	 * Draw all particles
+	 * 
+	 * @param spriteBatch to draw particles into
+	 * @param worldPosition worldposition for any movement calculations
+	 */
 	public static void draw(SpriteBatch spriteBatch, Vector2 worldPosition){
 		spriteBatch.begin();
 		Iterator<Particle> iter = PARTICLES.iterator();
@@ -216,39 +222,55 @@ public class Particle{
 						p.getTexture().getWidth(), p.getTexture().getHeight(),
 						false,false);
 				break;
-			case VISUALIZE:
-				spriteBatch.setColor(p.color);
-				spriteBatch.draw(p.getTexture(),
-						p.x,p.y,
-						p.size,p.size,
-						0, 0,
-						p.getTexture().getWidth(), p.getTexture().getHeight(),
-						false,false);
-				spriteBatch.setColor(Color.WHITE);
-				break;
 			}
 		}
 		spriteBatch.end();
 		spriteBatch.setColor(1.0f, 1.0f, 1.0f, 1.0f);	//reset transperancies to normal
 	}
 
+	/**
+	 * Set texture of particles
+	 * 
+	 * @param texture Particle Texture
+	 */
 	public void setTexture(Texture texture){
 		this.mTexture = texture;
 	}
 
+	/**
+	 * Gets the texture of particles
+	 * 
+	 * @return texture of particles
+	 */
 	public Texture getTexture(){
 		return this.mTexture;
 	}
 
+	/**
+	 * Set position of particle
+	 * 
+	 * @param x x position to set
+	 * @param y y position to set
+	 */
 	public void setPosition(float x, float y){
 		this.x = x;
 		this.y = y;
 	}
 
+	/**
+	 * Get X position of particle
+	 * 
+	 * @return x position of particle
+	 */
 	public float getX(){
 		return x;
 	}
 
+	/**
+	 * Get Y position of particle
+	 * 
+	 * @return y position of particle
+	 */
 	public float getY(){
 		return y;
 	}

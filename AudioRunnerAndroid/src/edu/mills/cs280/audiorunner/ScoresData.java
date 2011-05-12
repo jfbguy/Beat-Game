@@ -5,6 +5,12 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+/**
+ * Implements SQLite Database for high scores
+ * 
+ * @author Dave
+ *
+ */
 public class ScoresData extends SQLiteOpenHelper {
 
 	public ScoresData(Context ctx) {

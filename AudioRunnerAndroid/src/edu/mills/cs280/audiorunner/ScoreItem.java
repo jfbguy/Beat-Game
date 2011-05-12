@@ -3,6 +3,12 @@ package edu.mills.cs280.audiorunner;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 
+/**
+ * Score items can be touched to add more score to the palyer's score
+ * 
+ * @author jklein
+ *
+ */
 public class ScoreItem extends Collidable{
 	private int points;
 	
