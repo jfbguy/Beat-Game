@@ -211,8 +211,8 @@ public class ScreenHandler{
 		scoreItemLayer.draw(spriteBatch, mWorldPosition);
 
 		//Draw Particles
-		Particle.updateParticles();
 		Particle.draw(spriteBatch, mWorldPosition);
+		Particle.updateParticles();
 
 		//Draw second half of layers rounded down
 		for(int i = mSpriteLayers.length/2-1; i >= 0; i--){

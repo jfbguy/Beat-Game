@@ -6,6 +6,7 @@ import java.util.Random;
 import java.util.Stack;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
@@ -15,6 +16,7 @@ public class Particle{
 	public static final int FALLING = 0;
 	public static final int DIRECTIONAL = 1;
 	public static final int EXPLODING = 2;
+	public static final int VISUALIZE = 3;
 
 	//Explosion Constants
 	private static final float EXPLOSION_SPREAD = .1f;
@@ -40,13 +42,14 @@ public class Particle{
 	private float size;
 	private float alpha;
 	private Texture mTexture;
+	private Color color;
 
 	private Particle(){
 
 	}
 
 	public static void BufferParticles(){
-		for(int i = 0; i < 2000; i++){
+		for(int i = 0; i < 4000; i++){
 			PARTICLE_BUFFER.add(new Particle());
 		}
 	}
@@ -81,6 +84,8 @@ public class Particle{
 			break;
 		case EXPLODING:
 			break;
+		case VISUALIZE:
+			break;
 		}
 		add.setTexture(PARTICLE_TEXTURE);
 		add.x = x;
@@ -90,6 +95,19 @@ public class Particle{
 		add.size = size;
 		add.type = type;
 		add.alpha = 1;
+
+		PARTICLES.add(add);
+	}
+	
+	private static void AddParticle(float x, float y,float radius, Color color,  int type){
+		Particle add = PARTICLE_BUFFER.pop();
+		add.setTexture(PARTICLE_TEXTURE);
+		add.x = x;
+		add.y = y;
+		add.size = radius;
+		add.type = type;
+		add.alpha = 1;
+		add.color = color;
 
 		PARTICLES.add(add);
 	}
@@ -135,6 +153,10 @@ public class Particle{
 					p.alpha *= (1-EXPLOSION_FADE*spdScale);
 				}
 				break;
+			case VISUALIZE:
+				PARTICLE_BUFFER.push(p);
+				iter.remove();
+				break;
 			}
 
 		}
@@ -166,6 +188,10 @@ public class Particle{
 					FALLING_PARTICLE_SIZE, Particle.FALLING);
 		}
 	}
+	
+	public static void createVisualizeParticle(float x, float y, float radius,Color color){
+		AddParticle((int)x,(int)y,radius,color,VISUALIZE);
+	}
 
 	public static void draw(SpriteBatch spriteBatch, Vector2 worldPosition){
 		spriteBatch.begin();
@@ -189,6 +215,16 @@ public class Particle{
 						0, 0,
 						p.getTexture().getWidth(), p.getTexture().getHeight(),
 						false,false);
+				break;
+			case VISUALIZE:
+				spriteBatch.setColor(p.color);
+				spriteBatch.draw(p.getTexture(),
+						p.x,p.y,
+						p.size,p.size,
+						0, 0,
+						p.getTexture().getWidth(), p.getTexture().getHeight(),
+						false,false);
+				spriteBatch.setColor(Color.WHITE);
 				break;
 			}
 		}

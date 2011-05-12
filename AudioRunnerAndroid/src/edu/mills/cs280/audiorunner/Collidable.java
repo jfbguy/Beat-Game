@@ -5,6 +5,13 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 
+/**
+ * Exension of Sprite class
+ * Adds a Pixmap and functionality for collision with other collidables
+ * 
+ * @author jklein
+ *
+ */
 public class Collidable extends Sprite{
 	Pixmap pixmap;
 

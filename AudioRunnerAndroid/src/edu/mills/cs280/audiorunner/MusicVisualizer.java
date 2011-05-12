@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -61,11 +62,16 @@ public class MusicVisualizer{
 				data = (frame[i]+Math.abs(min))/scaler;
 				y = 0.05f*Gdx.graphics.getHeight()*data;
 				
+				Particle.createVisualizeParticle((float)i*ratio,
+						y+Gdx.graphics.getHeight()/2,
+						Gdx.graphics.getWidth()/40,
+						new Color((float)Math.random(),(float)Math.random(),(float)Math.random(),1.0f));
+				/*
 				sb.draw(tex,
 						(float)i*ratio,
 						y+Gdx.graphics.getHeight()/2,
 						Gdx.graphics.getWidth()/40,
-						(float)tex.getTexture().getHeight());
+						(float)tex.getTexture().getHeight());*/
 				//sb.draw(tex.getTexture(),	//texture region
 				//		(float)i*ratio,  //x position
 				//		0);	//y position); //rotation 
@@ -74,6 +80,7 @@ public class MusicVisualizer{
 		}
 	}
 
+	/*
 	public static void draw1(ImmediateModeRenderer r){
 		if(activate){
 			//TODO java.lang.IndexOutOfBoundsException: Invalid index 382, size is 382
@@ -120,5 +127,5 @@ public class MusicVisualizer{
 			}
 
 		}
-	}
+	}*/
 }
