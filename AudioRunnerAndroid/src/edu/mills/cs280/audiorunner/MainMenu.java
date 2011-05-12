@@ -67,6 +67,13 @@ public class MainMenu extends Activity{
     	mp.release();
     }
     
+    public void onResume() {
+    	super.onResume();
+    }
+    
+    public void onPause() {
+    	super.onResume();
+    }
 
     
 }
