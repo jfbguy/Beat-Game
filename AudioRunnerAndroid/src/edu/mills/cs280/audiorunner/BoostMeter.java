@@ -4,6 +4,12 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+/**
+ * BoostMeter keeps the value of boost for boost jumping
+ * 
+ * @author jklein
+ *
+ */
 public class BoostMeter {
 	private final int FULL_BAR_WAIT = (int) (TimeHandler.FRAMERATE * 2);
 	private final float REDUCTION_AMOUNT = .01f;
@@ -20,12 +26,19 @@ public class BoostMeter {
 	private float mCoolDown = 0.0f;
 	private float mReduction = 0.0f;
 
+	/**
+	 * Constructor of Boostmeter
+	 */
 	public BoostMeter(){
 		mValue = 0.0f;
 		mBorderTexture = new Texture(Gdx.files.internal("data/boostmeterborder.png"));
 		mBoostTexture = new Texture(Gdx.files.internal("data/yellow.png"));
 	}
 
+	/**
+	 * Updates the boost according to the time that has past.
+	 * After a threshold the boost starts to drop
+	 */
 	public void updateBoost(){
 		if(mCoolDown > 0){
 			mCoolDown -= TimeHandler.getTransitionScale();
@@ -41,6 +54,11 @@ public class BoostMeter {
 		}
 	}
 
+	/**
+	 * Adds a amount of boost to the boostmeter
+	 * 
+	 * @param value
+	 */
 	public void addBoost(int value){
 		mValue += value;
 		if(mValue > MAX_METER_VALUE){
@@ -50,10 +68,20 @@ public class BoostMeter {
 		mReduction = REDUCTION_RATE;
 	}
 	
+	/**
+	 * Returns the amount of boost in the Boostmeter
+	 * 
+	 * @return value in Boostmeter
+	 */
 	public float getBoost(){
 		return mValue;
 	}
 	
+	/**
+	 * Users up all of the boostmeter
+	 * 
+	 * @return value to add to jump velocity
+	 */
 	public float boost(){
 		float rVal;
 		if(mValue == MAX_METER_VALUE){
@@ -67,6 +95,12 @@ public class BoostMeter {
 		return rVal;
 	}
 
+	/**
+	 * Draws boostmeter border and yellow bar indicating
+	 * the amount of boost in the boostmeter
+	 * 
+	 * @param spriteBatch
+	 */
 	public void draw(SpriteBatch spriteBatch){
 		spriteBatch.begin();
 		spriteBatch.draw(mBoostTexture,

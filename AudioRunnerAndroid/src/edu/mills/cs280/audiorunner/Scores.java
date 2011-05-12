@@ -62,7 +62,8 @@ public class Scores extends Activity {
 	 * @param song The song's name
 	 * @param score The score to be added to the database
 	 */
-	public void addScore(final String song, final int score) {
+
+	private void addScore(final String song, final int score) {
 
 		AlertDialog.Builder alert = new AlertDialog.Builder(this);
 		alert.setMessage("Your Name");

@@ -1,5 +1,7 @@
 package edu.mills.cs280.audiorunner;
 
+import android.app.Activity;
+
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
@@ -8,6 +10,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ImmediateModeRenderer;
 
 public class GameHandler implements ApplicationListener {
+	OnExitListener onExitListen;
+	
 	private static final float VOLUME = .01f;
 
 	private SpriteBatch spriteBatch;
@@ -22,10 +26,10 @@ public class GameHandler implements ApplicationListener {
 	private String trackLocation;
 	private boolean touched;
 	private ScreenHandler screenHandler;
-	
 
-	public GameHandler(){
+	public GameHandler(OnExitListener onExit){
 		trackLocation = MusicData.getFileLocation();
+		onExitListen = onExit;
 	}
 
 	@Override
@@ -58,7 +62,6 @@ public class GameHandler implements ApplicationListener {
 		renderer = new ImmediateModeRenderer();
 		Particle.BufferParticles();
 		
-		
 		//Debug
 		DebugText.SetupDebugText(spriteBatch);
 	}
@@ -78,13 +81,18 @@ public class GameHandler implements ApplicationListener {
 			
 		if(!music.isPlaying()){
 			if(gameStarted){
-				pause();
+
+				MusicData.setScore(scoreBoard.getScore());
+				onExitListen.onExit();
+
 			}
 			else{
 				gameStarted = true;
 				music.play();
 			}
 		}
+		
+		try{
 		
 		TimeHandler.updateTime();
 		MusicData.update(screenHandler);
@@ -120,7 +128,6 @@ public class GameHandler implements ApplicationListener {
 		//Clear Screen
 		Gdx.graphics.getGL10().glClearColor(0,0,0,1);
 		Gdx.graphics.getGL10().glClear(GL10.GL_COLOR_BUFFER_BIT);
-
 		
 		//draw visualizer
 		MusicVisualizer.draw(spriteBatch);
@@ -140,6 +147,10 @@ public class GameHandler implements ApplicationListener {
 		DebugText.writeText(50,yPos-60,"Peak #: " + Float.toString(MusicData.getPeaks().size()));
 		DebugText.writeText(50,yPos-80,"Platforms Loaded Up To: " + Float.toString(MusicData.getPeaks().size()*MusicData.getFrameDuration()));
 		DebugText.writeText(50,yPos-100,"FPS: " + Float.toString(Gdx.graphics.getFramesPerSecond()));
+		}
+		catch(Exception e){
+			
+		}
 	}
 
 	@Override

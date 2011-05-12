@@ -11,6 +11,14 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ImmediateModeRenderer;
 
+/**
+ * This class handles the graphics and gameplay of the game itself.
+ * Includes sprite layers, collision, level generation, score.
+ * 
+ * @author tadams
+ * @author jfbguy
+ */
+
 public class ScreenHandler{
 
 	private static final float SPEED_MULTIPLIER = 6;//TODO remove
@@ -18,7 +26,7 @@ public class ScreenHandler{
 	public static final float GROUND_HEIGHT = Gdx.graphics.getHeight()*.1f;
 	public static final float CEILING_HEIGHT = Gdx.graphics.getHeight()*.7f;
 
-	private final float[] PARALLAX = {1.5f,0.8f,.4f,.06f,.001f};
+	private final float[] PARALLAX = {1.0f,1.0f,.4f,.06f,.001f};
 
 	private final String SUN_FILE = "data/sun.png";
 	private final String PLATFORM_FILE = "data/purple.png";
@@ -44,6 +52,7 @@ public class ScreenHandler{
 	private final int CYAN_PIXMAP = 2;
 
 	//TODO Synch platform occurrences with music
+	private final int GAME_PARALLAX_LAYER = 1;
 	private final int PLATFORM_STEP_SIZE = 200;//These will be defined by screensize/music synch
 	private final int PLATFORMS_START = 1000;
 	private final int PLATFORM_Y = 50;//This will be defined by...something
@@ -60,7 +69,7 @@ public class ScreenHandler{
 	private final float CARROT_DELAY = 30f;
 
 	private static float mSpeed;
-	private static float mCurrentFrameSpeed;
+//	private static float mCurrentFrameSpeed;
 	ImmediateModeRenderer mRenderer;
 	private static Vector2 mWorldPosition;
 	private static int mWorldLeadin;
@@ -69,10 +78,13 @@ public class ScreenHandler{
 	private SpriteLayer[] mSpriteLayers;
 	private CollisionLayer platformLayer;
 	private CollisionLayer scoreItemLayer;
+	private int mSyncOffset;
+	
 	//private LinkedList<Particle> particles;
 
 	/**
-	 * Constructor
+	 * Constructor: initializes variables for textures and creates level/ graphics
+	 * @param # of sprite layers to draw
 	 */
 	public ScreenHandler(int numOfLayers){
 		mRenderer = new ImmediateModeRenderer();
@@ -83,7 +95,7 @@ public class ScreenHandler{
 		mWorldLeadin = (int) (Gdx.graphics.getWidth()-mSpeed/2);
 		mWorldPosition.x += mWorldLeadin;
 		mSpriteLayers = new SpriteLayer[numOfLayers];
-		platformLayer = new CollisionLayer(PARALLAX[1]);
+		platformLayer = new CollisionLayer(PARALLAX[1]);	//Platforms synched to music, Paralax 1 for loading
 		scoreItemLayer = new CollisionLayer(PARALLAX[1]);
 		//particles = new LinkedList<Particle>();
 
@@ -107,6 +119,9 @@ public class ScreenHandler{
 		mPixmaps[PLATFORM_PIXMAP] = new Pixmap(Gdx.files.internal(PLATFORM_FILE));
 		mPixmaps[CARROT_PIXMAP] = new Pixmap(Gdx.files.internal(CARROT_FILE));
 		mPixmaps[CYAN_PIXMAP] = new Pixmap(Gdx.files.internal(CYAN_FILE));
+		
+		//sync offset, represents were music is synced to
+		float mSyncOffset = Gdx.graphics.getWidth();
 
 		//************************************************************************************************
 		//************** DEBUG level load ****************************************************************
@@ -127,14 +142,6 @@ public class ScreenHandler{
 			mSpriteLayers[3].put(temp.getX(),tSprite);
 		}
 
-//		//Score Items
-//		for(int i = 0; i < 300; i++){
-//			temp.set(i*30,150);
-//			ScoreItem scoreItem = new ScoreItem((float)temp.getX(),(float)temp.getY(),32f,32f,mTextures[CARROT],mPixmaps[CARROT_PIXMAP],10);
-//			scoreItem.setBounds(temp.getX(), temp.getY(), Gdx.graphics.getHeight()*.1f, Gdx.graphics.getHeight()*.1f);
-//			scoreItemLayer.put(temp.getX(),scoreItem);
-//		}
-
 		//platforms
 		MusicData.loadPlatforms(this);
 
@@ -153,13 +160,12 @@ public class ScreenHandler{
 	}
 
 	/**
-	 * Updates current screen with level data from processed audio.
-	 * For the moment, it just updates the world position.
-	 * Need to add added platforms, sprites, change ground, etc
+	 * Updates the world position, so sprites can be moved on screen.
+	 * 
 	 */
 	public void updateScreen(Player player){	//Updates level depending on music and how player is doing
-		mCurrentFrameSpeed = getSpeed()*TimeHandler.getTransitionScale();
-		mWorldPosition.x += mCurrentFrameSpeed;
+//		mCurrentFrameSpeed = getSpeed()*TimeHandler.getTransitionScale();
+//		mWorldPosition.x += mCurrentFrameSpeed;
 
 		if(player.getY() > mWorldPosition.y + CEILING_HEIGHT){
 			mWorldPosition.y = (int) (player.getY() - CEILING_HEIGHT);
@@ -185,7 +191,7 @@ public class ScreenHandler{
 		mRenderer.color(1, 0, 0, 1);
 		mRenderer.vertex(300, 300, 0);
 		mRenderer.end();
-*/
+		*/
 		
 		//Draw first half of layers rounded down
 		for(int i = mSpriteLayers.length-1; i >= mSpriteLayers.length/2; i--){
@@ -205,8 +211,8 @@ public class ScreenHandler{
 		scoreItemLayer.draw(spriteBatch, mWorldPosition);
 
 		//Draw Particles
-		Particle.updateParticles();
 		Particle.draw(spriteBatch, mWorldPosition);
+		Particle.updateParticles();
 
 		//Draw second half of layers rounded down
 		for(int i = mSpriteLayers.length/2-1; i >= 0; i--){
@@ -216,7 +222,7 @@ public class ScreenHandler{
 	}
 
 	/**
-	 * Draws Ground, Player runs ontop of
+	 * Draws Ground, Player runs on top of
 	 * 
 	 * @param  SpriteBatch, Draw within the current SpriteBatch
 	 */
@@ -232,37 +238,38 @@ public class ScreenHandler{
 		spriteBatch.end();
 	}
 
+	/**
+	 * 
+	 * @return the layer of platforms
+	 */
 	public CollisionLayer getPlatforms(){
 		return platformLayer;
 	}
-
+	
+/**
+ * 
+ * @return the layer of scoreitems
+ */
 	public CollisionLayer getScoreItems(){
 		return scoreItemLayer;
 	}
 	
 	public void loadPlatforms(List<Float> peaks, int frameNum){
-		Iterator<Float> iter = peaks.iterator();
-		/*
-		float avg = 0.0f;
-		int peakCounter = 0;
-		while(iter.hasNext()){
-			peakCounter++;
-			peak = iter.next();
-			if(peak > 0.0f){
-				System.out.println(peak);
-				avg += peak;
-			}
-		}
-		avg = (avg/(float)(peakCounter));*/
 		
+		Iterator<Float> iter = peaks.iterator();	
 		float frameDuration = MusicData.getFrameDuration(), stopCarrotsFor = 0;
 		int framesHeld = 0, frameHeldAt = 0;
 		//dummy platform, in case error causes to use without init
-		Platform dummyPlatform = new Platform(
+		Platform heldPlatform = new Platform(
 				0,0,0,0,mTextures[PLATFORM],mPixmaps[PLATFORM_PIXMAP]);
-		Platform heldPlatform = dummyPlatform;
+		Float xPosition;
 		
 		for(int i = frameNum; i < peaks.size(); i++){
+			
+			//x position
+			xPosition = (i*frameDuration + mSyncOffset);
+//			xPosition = (i*frameDuration + mSyncOffset)*PARALLAX[GAME_PARALLAX_LAYER];
+
 				
 			//if detect a peak, finish any ongoing platforms and ready a new one
 			if(peaks.get(i) > 0.0f){
@@ -272,20 +279,16 @@ public class ScreenHandler{
 				if(framesHeld > 0){
 					float newWidth = ((i - frameHeldAt) * frameDuration) - PLATFORM_GAP - 1;
 					newWidth = Math.max(newWidth,PLATFORM_MIN_WIDTH);
-					//					if(newWidth <= PLATFORM_MIN_WIDTH){
-//						newWidth = PLATFORM
-//					}
-					//heldPlatform.setPosition(i*frameDuration+Gdx.graphics.getWidth(), PLATFORM_Y);
 					heldPlatform.setSize(newWidth, 10f);
 					platformLayer.put((int)(heldPlatform.getX()),heldPlatform);
 					framesHeld = 0;
 				}
 				//only create a new platform if you weren't holding a platform
 				//if this is NOT in an else loop, platforms overlap, not sure why
-				//in meantime, we may unecessarily cull some platforms in exchange for no overlap
+				//in meantime, we may uneccessarily cull some platforms in exchange for no overlap
 				else{
 					Platform platform = new Platform(
-							i*frameDuration + Gdx.graphics.getWidth(),
+							xPosition,
 							PLATFORM_Y + yAdjust,
 							PLATFORM_MIN_WIDTH,
 							PLATFORM_HEIGHT
@@ -293,54 +296,33 @@ public class ScreenHandler{
 					heldPlatform = platform;
 					framesHeld = 1;
 					frameHeldAt = i;
-					//platformLayer.put((int)(i*frameDuration + Gdx.graphics.getWidth()),platform);
 				}
-				
-				//regardless, set a score item whenever there is a peak
-				//this places on every peak, ends up not looking very good
-//				ScoreItem scoreItem = new ScoreItem(
-//						i*frameDuration + Gdx.graphics.getWidth(),
-//						PLATFORM_Y + yAdjust + CARROT_Y_OFFSET,
-//						CARROT_DIMENSIONS,
-//						CARROT_DIMENSIONS,
-//						mTextures[CARROT],
-//						mPixmaps[CARROT_PIXMAP],
-//						CARROT_POINTS);
-//				scoreItem.setBounds(i*frameDuration + Gdx.graphics.getWidth(),
-//						PLATFORM_Y + yAdjust + CARROT_Y_OFFSET,
-//						Gdx.graphics.getHeight()*.1f, //TODO what is magic number??
-//						Gdx.graphics.getHeight()*.1f);
-//				Float x = frameDuration;
-//				scoreItemLayer.put((i*x.intValue() + Gdx.graphics.getWidth()),scoreItem);
 			}
 			
 			//if platform longer than max, end it and start anew
 			if(framesHeld*frameDuration > PLATFORM_MAX_WIDTH){
 				float newWidth = ((i - frameHeldAt) * frameDuration) -1;
-				//heldPlatform.setPosition(i*frameDuration+Gdx.graphics.getWidth(), PLATFORM_Y);
-				//heldPlatform.setSize(newWidth, 10f);
-				heldPlatform.setSize(PLATFORM_MAX_WIDTH,PLATFORM_HEIGHT);
+				heldPlatform.setSize(PLATFORM_MAX_WIDTH/2,PLATFORM_HEIGHT);
 				platformLayer.put((int)(heldPlatform.getX()),heldPlatform);
 				framesHeld = 0;
 			}
 			
 			//make carrots if there is a platform going
 			if(framesHeld > 0 && stopCarrotsFor <=0){
-				
 				ScoreItem scoreItem = new ScoreItem(
-						i*frameDuration + Gdx.graphics.getWidth(),
+						xPosition,
 						heldPlatform.getY()+ CARROT_Y_OFFSET,
 						CARROT_DIMENSIONS,
 						CARROT_DIMENSIONS,
 						mTextures[CARROT],
 						mPixmaps[CARROT_PIXMAP],
 						CARROT_POINTS);
-				scoreItem.setBounds(i*frameDuration + Gdx.graphics.getWidth(),
+				scoreItem.setBounds(xPosition,
 						heldPlatform.getY() + CARROT_Y_OFFSET,
-						Gdx.graphics.getHeight()*.1f, //TODO what is magic number??
+						Gdx.graphics.getHeight()*.1f,
 						Gdx.graphics.getHeight()*.1f);
 				Float x = frameDuration;
-				scoreItemLayer.put((i*x.intValue() + Gdx.graphics.getWidth()),scoreItem);
+				scoreItemLayer.put(xPosition.intValue(),scoreItem);
 				stopCarrotsFor = CARROT_DELAY;
 			}
 				
@@ -355,18 +337,30 @@ public class ScreenHandler{
 		}
 	}
 
-	public static float getSpeed(){
-		return mSpeed;
-	}
+	/**
+	 * 
+	 * @return speed
+	 */
+//	public static float getSpeed(){
+//		return mSpeed;
+//	}
 
-	public static float getCurrentFrameSpeed(){
-		return mCurrentFrameSpeed;
-	}
+//	public static float getCurrentFrameSpeed(){
+//		return mCurrentFrameSpeed;
+//	}
 
+	/**
+	 * @return Position of world
+	 */
 	public static Vector2 getWorldPosition(){
 		return mWorldPosition;
 	}
 
+	/**
+	 * Determine if a vector position is on the screen currently
+	 * @param position, as a vector
+	 * @return whether position is on screen
+	 */
 	public static boolean onScreen(Vector2 pos){
 		if(pos.x-MusicData.getPosition() < -ONSCREEN_BUFFER || pos.x-MusicData.getPosition() > Gdx.graphics.getWidth() + ONSCREEN_BUFFER){
 			return false;
@@ -378,6 +372,12 @@ public class ScreenHandler{
 		return true;
 	}
 
+	/**
+	 * Determine if a position, represented as x,y coordinates are on screen
+	 * @param x - x position
+	 * @param y - y position
+	 * @return whether position is on screen currently
+	 */
 	public static boolean onScreen(float x,float y){
 		if(x-MusicData.getPosition() < -ONSCREEN_BUFFER || x-MusicData.getPosition() > Gdx.graphics.getWidth() + ONSCREEN_BUFFER){
 			return false;

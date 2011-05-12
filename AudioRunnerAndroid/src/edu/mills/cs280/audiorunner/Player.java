@@ -12,7 +12,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 public class Player extends Collidable {
 
 	private final float PLATFORM_CATCH = .4f;
-	private final int FRAME_COUNT = 6;
+	private final int FRAME_COUNT = 5;
 	private final float FRAME_DELAY = TimeHandler.FRAMERATE/FRAME_COUNT/2;
 	private final int SPRITE_SIZE = 64;
 	private final float GRAVITY = 1.0f;
@@ -41,8 +41,8 @@ public class Player extends Collidable {
 	 * @param float, height
 	 */
 	public Player(float x, float y, float width, float height) {
-		mTexture = new Texture(Gdx.files.internal("data/runner.png"));
-		mPixmap = new Pixmap(Gdx.files.internal("data/runner.png"));
+		mTexture = new Texture(Gdx.files.internal("data/bunnysprite.png"));
+		mPixmap = new Pixmap(Gdx.files.internal("data/bunnysprite.png"));
 		this.loadTexture(mPixmap, mTexture);
 		mStartX = (int)x;
 		this.setBounds(x, y, width, height);
@@ -87,7 +87,9 @@ public class Player extends Collidable {
 			if(mFrameNum == FRAME_COUNT-1 ) {
 				mFrameNum = 0;
 			}
-			mFrameNum++;
+			else{
+				mFrameNum++;
+			}
 			mAnimCounter = 0;
 		}
 	}

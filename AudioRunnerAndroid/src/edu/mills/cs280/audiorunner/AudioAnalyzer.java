@@ -7,7 +7,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Hashtable;
 import java.util.List;
 
 import javazoom.jl.decoder.Bitstream;
@@ -18,6 +17,12 @@ import javazoom.jl.decoder.SampleBuffer;
 
 import com.badlogic.gdx.audio.analysis.FFT;
 
+/**
+ * Loads and decodes an mp3.
+ * 
+ * @author jklein
+ * @author tadams
+ */
 public class AudioAnalyzer{
 
 	private File file;
@@ -29,7 +34,7 @@ public class AudioAnalyzer{
 	public static final int SAMPLE_FRACTION = 8;
 	public static final int THRESHOLD_WINDOW_SIZE = 10;
 	public static final float MULTIPLIER = 1.5f;
-	public static final float SONG_DIVISION = 1f; //amount of song to load (i.e. 4 means load 1/4 of song)
+	public static final float SONG_DIVISION = 4f; //amount of song to load (i.e. 4 means load 1/4 of song)
 	
 	private int bufferLimit = (int) (MusicData.getDuration()/MusicData.getFrameDuration()/SONG_DIVISION);
 
@@ -50,6 +55,11 @@ public class AudioAnalyzer{
 	private int bufferAnalyze = 0;
 	private Boolean flip = true;
 
+	/**
+	 * Creates an inputStream from the file at the specified file location.
+	 * Initializes our variables and creates the Fast Fourier Transform function (FFT).
+	 * @param fileLocation - path to the mp3 to load
+	 */
 	public AudioAnalyzer(String fileLocation){
 		file = new File(fileLocation);
 		try {
@@ -82,6 +92,12 @@ public class AudioAnalyzer{
 		decodingDone = false;
 	}
 
+
+	/**
+	 * Call to decode to run the decoding algorithm.
+	 * Usually decodes a single frame per call, when bufferLimit is met
+	 * it runs the buffered decoding and creates the peaks
+	 */
 	public void decode(){
 		if(!decodingDone){
 			if(bufferCounter > bufferLimit){
@@ -115,6 +131,9 @@ public class AudioAnalyzer{
 
 	}
 
+	/**
+	 * Decodes a single frame
+	 */
 	public void bufferFrame(){
 
 		float value = 0.0f;
@@ -157,6 +176,11 @@ public class AudioAnalyzer{
 
 	}
 
+	/**
+	 * Calculate the spectral flux.  This is a method of checking a a chunk of a song
+	 * for peaks over its entire frequency band. Data is calculated in-place.
+	 * 
+	 */
 	public void spectralFlux(){
 		for( int i = 0; i < spectralFlux.size(); i++ )
 		{
@@ -170,6 +194,10 @@ public class AudioAnalyzer{
 		}
 	}
 
+	/**
+	 * Checks if the magnitude of a "beat" is greater than the "threshold
+	 * level calculated elsewhere.  Events less than the threshold are culled.
+	 */
 	public void prune(){
 		for( int i = 0; i < threshold.size(); i++ )
 		{
@@ -181,6 +209,13 @@ public class AudioAnalyzer{
 		}
 	}
 
+	/**
+<<<<<<< HEAD
+	 * Chooses the peaks based upon the prunedSpectralFlux
+=======
+	 * 
+>>>>>>> refs/remotes/choose_remote_name/TrevorJavadoc
+	 */
 	public void choosePeaks(){
 		for( int i = 0; i < prunedSpectralFlux.size() - 1; i++ )
 		{
@@ -194,6 +229,12 @@ public class AudioAnalyzer{
 		}
 	}
 
+	/**
+	 * Populates samples with decoded frame of song
+	 * 
+	 * @param samples Float Array to be populated with sample data
+	 * @return
+	 */
 	public int singleSamples(float[] samples)
 	{
 
@@ -229,6 +270,9 @@ public class AudioAnalyzer{
 
 	}
 	
+	/**
+	 * 
+	 */
 	public void dispose(){
 		try {
 			inputStream.close();

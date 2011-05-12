@@ -88,7 +88,9 @@ public class ScoreBoard {
 	 * Retrieves score 
 	 * @return score
 	 */
-	public static int getScore(){
+
+	public int getScore(){
+
 		return mScore;
 	}
 

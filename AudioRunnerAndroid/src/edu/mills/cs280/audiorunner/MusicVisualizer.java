@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import android.content.Intent;
 import android.app.Activity;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -36,25 +37,24 @@ public class MusicVisualizer{
 		if(activate){
 			int frameNumber = (int)(MusicData.getPosition()/MusicData.getFrameDuration());
 
-			try  {
-				float[] frame = samples.get(frameNumber);
-				if (frameNumber%4==0){
-					//System.arraycopy(frame, 0, vSample, 0, vSample.length);
 
-					sum = 0;
-					min = 0;
-					for(float f: frame){
-						//System.out.print(f+",");
-						sum += f; 
-						if(f<min){
-							min = f;
-						}
+			float[] frame = samples.get(frameNumber);
+			if (frameNumber%4==0){
+				//System.arraycopy(frame, 0, vSample, 0, vSample.length);
+
+				sum = 0;
+				min = 0;
+				for(float f: frame){
+					//System.out.print(f+",");
+					sum += f; 
+					if(f<min){
+						min = f;
 					}
-					//System.out.println();
-					scaler = (sum/frame.length)+Math.abs(min); //sum+min*frame.length/frame.length
-					ratio = (int)(Gdx.graphics.getWidth()/frame.length);//vSample.length is 128
-
 				}
+				//System.out.println();
+				scaler = (sum/frame.length)+Math.abs(min); //sum+min*frame.length/frame.length
+				ratio = (int)(Gdx.graphics.getWidth()/frame.length);//vSample.length is 128
+
 
 				sb.begin();
 				float data;
@@ -63,23 +63,26 @@ public class MusicVisualizer{
 					data = (frame[i]+Math.abs(min))/scaler;
 					y = 0.05f*Gdx.graphics.getHeight()*data;
 
-					sb.draw(tex,
-							(float)i*ratio,
+					Particle.createVisualizeParticle((float)i*ratio,
 							y+Gdx.graphics.getHeight()/2,
 							Gdx.graphics.getWidth()/40,
-							(float)tex.getTexture().getHeight());
+							new Color((float)Math.random(),(float)Math.random(),(float)Math.random(),1.0f));
+					/*
+				sb.draw(tex,
+						(float)i*ratio,
+						y+Gdx.graphics.getHeight()/2,
+						Gdx.graphics.getWidth()/40,
+						(float)tex.getTexture().getHeight());*/
 					//sb.draw(tex.getTexture(),	//texture region
 					//		(float)i*ratio,  //x position
 					//		0);	//y position); //rotation 
+
 				}
-				sb.end();
-			}
-			catch (Exception e) {
-				System.exit(1);
+
 			}
 		}
-	}
 
+		/*
 	public static void draw1(ImmediateModeRenderer r){
 		if(activate){
 			//TODO java.lang.IndexOutOfBoundsException: Invalid index 382, size is 382
@@ -126,5 +129,6 @@ public class MusicVisualizer{
 			}
 
 		}
+	}*/
 	}
 }
