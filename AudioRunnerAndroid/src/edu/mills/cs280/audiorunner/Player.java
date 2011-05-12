@@ -13,7 +13,7 @@ public class Player extends Collidable {
 
 	private final float PLATFORM_CATCH = .4f;
 	private final int FRAME_COUNT = 5;
-	private final float FRAME_DELAY = TimeHandler.FRAMERATE/FRAME_COUNT/2;
+	private final float FRAME_DELAY = TimeHandler.FRAMERATE/FRAME_COUNT/3;
 	private final int SPRITE_SIZE = 64;
 	private final float GRAVITY = 1.0f;
 	public final int JUMPSPEED = 10;
@@ -208,6 +208,7 @@ public class Player extends Collidable {
 					((ScoreItem)tempCollidable).scored(scoreBoard);	//Score!
 					//create explosion at touch point
 					Particle.createExplosion(tempCollidable.getX(),tempCollidable.getY());
+					scoreBoard.addFloaterScore((int)(tempCollidable.getX()-MusicData.getPosition()),(int)tempCollidable.getY(),(int)tempCollidable.getY()/10);
 					//screenHandler.explosionParticles(tempCollidable.getX(),tempCollidable.getY());
 					iter.remove();		//Remove ScoreItem after being collected
 				}
@@ -268,6 +269,9 @@ public class Player extends Collidable {
 			//and create particles to show if jump is special
 			Particle.createJumpParticles(this,jumpscore);
 			this.jump(jumpscore);
+		}
+		else{
+			this.jump(this.JUMPSPEED);
 		}
 
 	}

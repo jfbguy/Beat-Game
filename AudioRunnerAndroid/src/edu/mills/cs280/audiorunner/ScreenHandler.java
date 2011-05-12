@@ -29,7 +29,7 @@ public class ScreenHandler{
 	private final float[] PARALLAX = {1.0f,1.0f,.4f,.06f,.001f};
 
 	private final String SUN_FILE = "data/sun.png";
-	private final String PLATFORM_FILE = "data/purple.png";
+	private final String PLATFORM_FILE = "data/longcloud.png";
 	private final String TREE_FILE = "data/tree.png";
 	private final String RAINBOW_FILE = "data/rainbow.png";
 	private final String CARROT_FILE = "data/carrot.png";
@@ -56,7 +56,7 @@ public class ScreenHandler{
 	private final int PLATFORM_STEP_SIZE = 200;//These will be defined by screensize/music synch
 	private final int PLATFORMS_START = 1000;
 	private final int PLATFORM_Y = 50;//This will be defined by...something
-	private final float PLATFORM_HEIGHT = 10f;
+	private final float PLATFORM_HEIGHT = 25f;
 	private final float PLATFORM_MIN_WIDTH = 100f;
 	private final float PLATFORM_MAX_FRAMES = 5;
 	private final float PLATFORM_MAX_WIDTH= 500;
@@ -274,12 +274,12 @@ public class ScreenHandler{
 			//if detect a peak, finish any ongoing platforms and ready a new one
 			if(peaks.get(i) > 0.0f){
 //				System.out.print(peaks.get(i) + ",");
-				float yAdjust = (peaks.get(i) % 50);
+				float yAdjust = (peaks.get(i) % 50)*2;
 				
 				if(framesHeld > 0){
 					float newWidth = ((i - frameHeldAt) * frameDuration) - PLATFORM_GAP - 1;
 					newWidth = Math.max(newWidth,PLATFORM_MIN_WIDTH);
-					heldPlatform.setSize(newWidth, 10f);
+					heldPlatform.setSize(newWidth, PLATFORM_HEIGHT);
 					platformLayer.put((int)(heldPlatform.getX()),heldPlatform);
 					framesHeld = 0;
 				}

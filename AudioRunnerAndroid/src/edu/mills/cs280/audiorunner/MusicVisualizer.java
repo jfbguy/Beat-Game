@@ -7,6 +7,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ImmediateModeRenderer;
@@ -15,7 +16,8 @@ public class MusicVisualizer{
 	private static ArrayList<float[]> samples;
 	private static boolean activate = false;
 	private static float[] vSample = new float[128];
-	private static TextureRegion tex;
+	private static Texture tex;
+	private static Sprite[] bubbles = new Sprite[vSample.length];
 
 	private MusicVisualizer(){
 
@@ -23,7 +25,10 @@ public class MusicVisualizer{
 
 	public static void setupMusicVisualizer(){
 		samples = MusicData.getSamples();
-		tex = new TextureRegion(new Texture(Gdx.files.internal("data/purple.png")));
+		tex = new Texture(Gdx.files.internal("data/particle.png"));
+		for(int i = 0; i < bubbles.length; i++){
+			bubbles[i] = new Sprite(tex);
+		}
 		activate = true;
 	}
 
@@ -37,7 +42,7 @@ public class MusicVisualizer{
 			int frameNumber = (int)(MusicData.getPosition()/MusicData.getFrameDuration());
 			float[] frame = samples.get(frameNumber);
 
-			if (frameNumber%4==0){
+			if (frameNumber%10==0){//10 is the update frequency
 				//System.arraycopy(frame, 0, vSample, 0, vSample.length);
 
 				sum = 0;
@@ -52,29 +57,41 @@ public class MusicVisualizer{
 				//System.out.println();
 				scaler = (sum/frame.length)+Math.abs(min); //sum+min*frame.length/frame.length
 				ratio = (int)(Gdx.graphics.getWidth()/frame.length);//vSample.length is 128
-				
+
 			}
 
 			sb.begin();
 			float data;
 			float y;
-			for(int i = 0 ; i < frame.length ; i++){
+
+			for(int i = 0 ; i < frame.length; i++){
 				data = (frame[i]+Math.abs(min))/scaler;
-				y = 0.05f*Gdx.graphics.getHeight()*data;
-				
-				Particle.createVisualizeParticle((float)i*ratio,
-						y+Gdx.graphics.getHeight()/2,
-						Gdx.graphics.getWidth()/40,
-						new Color((float)Math.random(),(float)Math.random(),(float)Math.random(),1.0f));
+				y = 0.1f*Gdx.graphics.getHeight()*data;
+
+
+
 				/*
-				sb.draw(tex,
+				if(i%20==0){
+				Particle.createVisualizeParticle(
 						(float)i*ratio,
 						y+Gdx.graphics.getHeight()/2,
-						Gdx.graphics.getWidth()/40,
-						(float)tex.getTexture().getHeight());*/
-				//sb.draw(tex.getTexture(),	//texture region
-				//		(float)i*ratio,  //x position
-				//		0);	//y position); //rotation 
+						Gdx.graphics.getWidth()/10,//radius
+						new Color((float)Math.random(),(float)Math.random(),(float)Math.random(),0.5f));
+				}*/
+
+				Sprite bubble = bubbles[i];
+				
+				sb.setColor((float)Math.random(),(float)Math.random(),(float)Math.random(),0.5f);
+				
+				int apartDistance = (int) (15*Math.random())+10; // something between 15 and 25
+				
+				if(i%(apartDistance)==0){	//this step sets how far apart bubbles are
+					sb.draw(bubble,
+							(float)i*ratio,
+							y+Gdx.graphics.getHeight()/2,
+							y, y);
+				}
+				sb.setColor(1.0f, 1.0f, 1.0f,1.0f);
 			}
 			sb.end();
 		}
