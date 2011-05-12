@@ -1,6 +1,8 @@
 package edu.mills.cs280.audiorunner;
 
 import android.content.Intent;
+
+
 import android.os.Bundle;
 
 import com.badlogic.gdx.backends.android.AndroidApplication;
@@ -10,14 +12,21 @@ import com.badlogic.gdx.backends.android.AndroidApplication;
   * 
   * @author jklein
   */
-public class AudioRunnerActivity extends AndroidApplication {
+public class AudioRunnerActivity extends AndroidApplication implements OnExitListener{
 
 	@Override
     public void onCreate(Bundle savedInstanceState) {
     	super.onCreate(savedInstanceState);
-    		initialize(new GameHandler(), false);
+    		
+    		GameHandler listener = new GameHandler(this);
+    		initialize(listener, false);
     }
 	
+	@Override
+    public void onExit()
+    {
+        this.finish();
+    }
 	
 	
 }
