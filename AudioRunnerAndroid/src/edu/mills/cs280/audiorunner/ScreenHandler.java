@@ -15,8 +15,8 @@ import com.badlogic.gdx.graphics.glutils.ImmediateModeRenderer;
  * This class handles the graphics and gameplay of the game itself.
  * Includes sprite layers, collision, level generation, score.
  * 
- * @author tadams
  * @author jfbguy
+ * @author tadams
  */
 
 public class ScreenHandler{
@@ -34,22 +34,18 @@ public class ScreenHandler{
 	private final String RAINBOW_FILE = "data/rainbow.png";
 	private final String CARROT_FILE = "data/carrot.png";
 	private final String GROUND_FILE = "data/gradient_BW_1D.png";
-	private final String CYAN_FILE = "data/cyan.png";
 
-	private final int NUM_OF_TEXTURES = 7;		//UPDATE THIS IF YOU ADD A TEXTURE!!!
+	private final int NUM_OF_TEXTURES = 6;		//UPDATE THIS IF YOU ADD A TEXTURE!!!
 	private final int SUN = 0;
 	private final int GROUND = 1;
 	private final int PLATFORM = 2;
 	private final int TREE = 3;
 	private final int RAINBOW = 4;
 	private final int CARROT = 5;
-	private final int CYAN = 6;
 	
-	private final int NUM_OF_PIXMAPS = 3;		//UPDATE THIS IF YOU ADD A PIXMAP!!!
-
+	private final int NUM_OF_PIXMAPS = 2;		//UPDATE THIS IF YOU ADD A PIXMAP!!!
 	private final int PLATFORM_PIXMAP = 0;
 	private final int CARROT_PIXMAP = 1;
-	private final int CYAN_PIXMAP = 2;
 
 	//TODO Synch platform occurrences with music
 	private final int GAME_PARALLAX_LAYER = 1;
@@ -112,13 +108,11 @@ public class ScreenHandler{
 		mTextures[CARROT] = new Texture(Gdx.files.internal(CARROT_FILE));
 		mTextures[RAINBOW] = new Texture(Gdx.files.internal(RAINBOW_FILE));
 		mTextures[GROUND] = new Texture(Gdx.files.internal(GROUND_FILE));
-		mTextures[CYAN] = new Texture(Gdx.files.internal(CYAN_FILE));
 		
 		//load pixmaps - these are needed for pixel perfect collisions
 		mPixmaps = new Pixmap[NUM_OF_PIXMAPS];
 		mPixmaps[PLATFORM_PIXMAP] = new Pixmap(Gdx.files.internal(PLATFORM_FILE));
 		mPixmaps[CARROT_PIXMAP] = new Pixmap(Gdx.files.internal(CARROT_FILE));
-		mPixmaps[CYAN_PIXMAP] = new Pixmap(Gdx.files.internal(CYAN_FILE));
 		
 		//sync offset, represents were music is synced to
 		float mSyncOffset = Gdx.graphics.getWidth();
