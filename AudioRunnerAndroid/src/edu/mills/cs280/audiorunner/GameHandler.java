@@ -35,7 +35,7 @@ public class GameHandler implements ApplicationListener {
 	@Override
 	public void create() {
 		touched = false;
-		//Gdx.input.setCatchBackKey(true);
+		gameStarted = false;
 
 		//Initiate player
 		playerWidth = Gdx.graphics.getWidth()*.1f;

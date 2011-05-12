@@ -17,14 +17,17 @@ public class AudioRunnerActivity extends AndroidApplication implements OnExitLis
 	@Override
     public void onCreate(Bundle savedInstanceState) {
     	super.onCreate(savedInstanceState);
-    		
+			
     		GameHandler listener = new GameHandler(this);
     		initialize(listener, false);
     }
 	
 	@Override
     public void onExit()
-    {
+    { 
+		BrowseMusic.exitFlag = true;
+		BrowseMusic.songName = MusicData.getName();
+		BrowseMusic.highScore = MusicData.getScore();
         this.finish();
     }
 	

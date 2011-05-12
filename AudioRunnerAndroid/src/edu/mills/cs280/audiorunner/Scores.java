@@ -36,20 +36,20 @@ public class Scores extends Activity {
 		setContentView(R.layout.high_scores);
 		scores = new ScoresData(this);
 
-		// if (MusicData.getScore() > 0) {
-		// addScore(MusicData.getName(), MusicData.getScore());
-		// MusicData.setScore(0);
-		// }
-		// else {
-		//	showSongList();
-	    // }
+		 if (BrowseMusic.exitFlag) {
+			 addScore(BrowseMusic.songName, BrowseMusic.highScore);
+			 BrowseMusic.exitFlag = false;
+		 }
+		 else {
+			showSongList();
+	     }
 
 		Button settings = (Button) findViewById(R.id.Return_Button);
 		settings.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View view) {
-				MainMenu.mp.stop();
 				Intent thisIntent = new Intent(view.getContext(), MainMenu.class);
 				startActivityForResult(thisIntent, 0);
+				finish();
 			}
 		});
 
@@ -89,7 +89,7 @@ public class Scores extends Activity {
 				}
 
 				else {
-					for (int i = 0; i < 9; i++) {
+					for (int i = 0; i <= 8; i++) {
 						if (songScores.get(i) >= score && songScores.get(i + 1) < score) {
 							songScores.add(i + 1, score);
 							playerNames.add(i + 1, playerName);
@@ -197,7 +197,7 @@ public class Scores extends Activity {
 			nameList.add("His Royal Highness Josef Krein");
 			nameList.add("Doctor Trevorkian");
 			nameList.add("Judge Jackie");
-			nameList.add("Colonel Meow");
+			nameList.add("Yoyomyo");
 			nameList.add("Super Cyberbunny Runner");
 			nameList.add("Smoke Force");
 			nameList.add("Look mom, I made the high scores table");
@@ -267,5 +267,17 @@ public class Scores extends Activity {
 				score9.setText(score9String);	
 			}
 		});
+	}
+	
+	public void onResume() {
+		super.onResume();
+	}
+	
+	public void onDestroy() {
+		super.onDestroy();
+	}
+	
+	public void onPause() {
+		super.onPause();
 	}
 }

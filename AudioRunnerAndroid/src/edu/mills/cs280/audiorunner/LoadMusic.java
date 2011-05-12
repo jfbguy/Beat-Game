@@ -34,7 +34,6 @@ public class LoadMusic extends Activity{
 		linProgressBar.setVisibility(View.VISIBLE);
 		musicFile = MusicData.getFileLocation();
 		songDuration = MusicData.getDuration();
-
 		new decodeMusic().execute();
 
 	}
@@ -123,4 +122,10 @@ public class LoadMusic extends Activity{
 		}
 
 	}
+	
+	public void onDestroy() {
+		super.onDestroy();
+	}
+	
+	
 }

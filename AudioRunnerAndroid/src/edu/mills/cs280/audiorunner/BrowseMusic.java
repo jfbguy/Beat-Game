@@ -22,6 +22,10 @@ import android.util.Log;
 
 public class BrowseMusic extends Activity {
 	/** Called when the activity is first created. */
+	public static boolean exitFlag = false;
+	public static String songName;
+	public static int highScore;
+		
 	private ListView musiclist;
 	private TextView selectedSong,duration,name;
 	private Button startGame, startGameDefault;
@@ -89,7 +93,6 @@ public class BrowseMusic extends Activity {
 					Intent loadIntent = new Intent(getApplicationContext(), LoadMusic.class);
 					loadIntent.putExtra("song", filename);
 					MusicData.setFile(filename);
-					MusicData.setName(MediaStore.Audio.Media.TITLE);
 					Log.d("duration","********************"+songDuration+"*****************");
 
 					MusicData.setDuration((float)songDuration);
@@ -124,6 +127,7 @@ public class BrowseMusic extends Activity {
 			.getColumnIndexOrThrow(MediaStore.Audio.Media.TITLE);
 			musicCursor.moveToPosition(position);
 			String songName = musicCursor.getString(musicColumnIndex);
+			MusicData.setName(songName);
 			name.setText(songName);
 
 			//duration
@@ -205,5 +209,18 @@ public class BrowseMusic extends Activity {
 		return fileName.contains("mp3");
 	}
 
-
+	public void onResume() {
+		super.onResume();
+		
+		if (exitFlag) {
+            Intent thisIntent = new Intent(getBaseContext(), Scores.class);
+            startActivityForResult(thisIntent, 0);		
+		}
+		
+	}
+	
+	public void onDestroy() {
+		super.onDestroy();
+	}
+	
 }
