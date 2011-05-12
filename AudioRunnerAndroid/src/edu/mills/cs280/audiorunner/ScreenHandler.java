@@ -18,7 +18,7 @@ public class ScreenHandler{
 	public static final float GROUND_HEIGHT = Gdx.graphics.getHeight()*.1f;
 	public static final float CEILING_HEIGHT = Gdx.graphics.getHeight()*.7f;
 
-	private final float[] PARALLAX = {1.5f,0.8f,.4f,.06f,.001f};
+	private final float[] PARALLAX = {1.0f,1.0f,.4f,.06f,.001f};
 
 	private final String SUN_FILE = "data/sun.png";
 	private final String PLATFORM_FILE = "data/purple.png";
@@ -83,7 +83,7 @@ public class ScreenHandler{
 		mWorldLeadin = (int) (Gdx.graphics.getWidth()-mSpeed/2);
 		mWorldPosition.x += mWorldLeadin;
 		mSpriteLayers = new SpriteLayer[numOfLayers];
-		platformLayer = new CollisionLayer(PARALLAX[1]);
+		platformLayer = new CollisionLayer(PARALLAX[1]);	//Platforms synched to music, Paralax 1 for loading
 		scoreItemLayer = new CollisionLayer(PARALLAX[1]);
 		//particles = new LinkedList<Particle>();
 
@@ -185,7 +185,7 @@ public class ScreenHandler{
 		mRenderer.color(1, 0, 0, 1);
 		mRenderer.vertex(300, 300, 0);
 		mRenderer.end();
-*/
+		*/
 		
 		//Draw first half of layers rounded down
 		for(int i = mSpriteLayers.length-1; i >= mSpriteLayers.length/2; i--){
@@ -216,7 +216,7 @@ public class ScreenHandler{
 	}
 
 	/**
-	 * Draws Ground, Player runs ontop of
+	 * Draws Ground, Player runs on top of
 	 * 
 	 * @param  SpriteBatch, Draw within the current SpriteBatch
 	 */
@@ -285,7 +285,7 @@ public class ScreenHandler{
 				//in meantime, we may unecessarily cull some platforms in exchange for no overlap
 				else{
 					Platform platform = new Platform(
-							i*frameDuration + Gdx.graphics.getWidth(),
+							(i*frameDuration + Gdx.graphics.getWidth()),
 							PLATFORM_Y + yAdjust,
 							PLATFORM_MIN_WIDTH,
 							PLATFORM_HEIGHT
@@ -319,7 +319,7 @@ public class ScreenHandler{
 				float newWidth = ((i - frameHeldAt) * frameDuration) -1;
 				//heldPlatform.setPosition(i*frameDuration+Gdx.graphics.getWidth(), PLATFORM_Y);
 				//heldPlatform.setSize(newWidth, 10f);
-				heldPlatform.setSize(PLATFORM_MAX_WIDTH,PLATFORM_HEIGHT);
+				heldPlatform.setSize(PLATFORM_MAX_WIDTH/2,PLATFORM_HEIGHT);
 				platformLayer.put((int)(heldPlatform.getX()),heldPlatform);
 				framesHeld = 0;
 			}

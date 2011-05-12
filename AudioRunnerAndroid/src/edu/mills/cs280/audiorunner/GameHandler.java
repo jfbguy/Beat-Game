@@ -22,7 +22,6 @@ public class GameHandler implements ApplicationListener {
 	private String trackLocation;
 	private boolean touched;
 	private ScreenHandler screenHandler;
-	
 
 	public GameHandler(){
 		trackLocation = MusicData.getFileLocation();

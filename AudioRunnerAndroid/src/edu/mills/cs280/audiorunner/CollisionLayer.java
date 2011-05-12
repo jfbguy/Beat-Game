@@ -144,5 +144,12 @@ public class CollisionLayer {
 		}
 		spriteBatch.end();
 	}
+	
+	public float getParallax(){
+		return parallax;
+	}
+	public Hashtable<Integer,LinkedList<Collidable>> getLayer(){
+		return layer;
+	}
 
 }
