@@ -7,7 +7,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Hashtable;
 import java.util.List;
 
 import javazoom.jl.decoder.Bitstream;
@@ -20,8 +19,9 @@ import com.badlogic.gdx.audio.analysis.FFT;
 
 /**
  * Loads and decodes an mp3.
+ * 
+ * @author jklein
  * @author tadams
- *
  */
 public class AudioAnalyzer{
 
@@ -92,7 +92,11 @@ public class AudioAnalyzer{
 		decodingDone = false;
 	}
 
-
+	/**
+	 * Call to decode to run the decoding algorithm.
+	 * Usually decodes a single frame per call, when bufferLimit is met
+	 * it runs the buffered decoding and creates the peaks
+	 */
 	public void decode(){
 		if(!decodingDone){
 			if(bufferCounter > bufferLimit){
@@ -126,6 +130,9 @@ public class AudioAnalyzer{
 
 	}
 
+	/**
+	 * Decodes a single frame
+	 */
 	public void bufferFrame(){
 
 		float value = 0.0f;
@@ -202,7 +209,7 @@ public class AudioAnalyzer{
 	}
 
 	/**
-	 * 
+	 * Chooses the peaks based upon the prunedSpectralFlux
 	 */
 	public void choosePeaks(){
 		for( int i = 0; i < prunedSpectralFlux.size() - 1; i++ )
@@ -217,6 +224,12 @@ public class AudioAnalyzer{
 		}
 	}
 
+	/**
+	 * Populates samples with decoded frame of song
+	 * 
+	 * @param samples Float Array to be populated with sample data
+	 * @return
+	 */
 	public int singleSamples(float[] samples)
 	{
 
@@ -252,6 +265,9 @@ public class AudioAnalyzer{
 
 	}
 	
+	/**
+	 * 
+	 */
 	public void dispose(){
 		try {
 			inputStream.close();
