@@ -42,7 +42,7 @@ public class VolumeSeekBar extends Activity {
 		volControl.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 
 
-			@Override
+			
 			public void onProgressChanged(SeekBar seekBar, int progress,
 					boolean fromUser) {
 
@@ -65,7 +65,7 @@ public class VolumeSeekBar extends Activity {
 			 * Notifies that the user has started the touch gesture
 			 * @param seekBar is where the gesture began
 			 */
-			@Override
+			
 			public void onStartTrackingTouch(SeekBar seekBar) {
 
 			}
@@ -74,7 +74,7 @@ public class VolumeSeekBar extends Activity {
 			 * Notifies that the user has finished the touch gesture
 			 * @param seekBar The seekBar where the gesture began
 			 */
-			@Override
+			
 			public void onStopTrackingTouch(SeekBar seekBar) {
 
 			}

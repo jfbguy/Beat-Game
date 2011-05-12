@@ -22,7 +22,7 @@ public class AudioRunnerActivity extends AndroidApplication implements OnExitLis
     		initialize(listener, false);
     }
 	
-	@Override
+	
     public void onExit()
     { 
 		BrowseMusic.exitFlag = true;

@@ -111,7 +111,7 @@ public class Vector2 implements Comparable<Object> {
 				+ Math.pow(this.y - y, 2));
 	}
 
-	@Override
+	
 	public int compareTo(Object obj) {
 		if (this.x < ((Vector2) obj).getX())
 			return -1;

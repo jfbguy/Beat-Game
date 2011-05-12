@@ -10,8 +10,8 @@ import android.view.View;
 import android.widget.Button;
 
 /**
- * Handles the start page (main menu) of the application. Plays a song while user navigates the application. 
- * Song will stop when user terminates or exits application. 
+ * MainMenu is the welcome screen. 
+ * It starts BrowseMusic Activity once the select-music button is clicked. 
  * @author ymiao, dlu, jvizcaino
  *
  */

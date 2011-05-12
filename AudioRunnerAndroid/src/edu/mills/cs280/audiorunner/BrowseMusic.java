@@ -19,7 +19,15 @@ import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Toast;
 import android.util.Log;
-
+/**
+ * 
+ * @author yunmiao
+ * BrowseMusic queries data of all songs stored on the SD card against Android.MediaStore database, 
+ * and inflates a listview with the query result. 
+ * Once a user selects a song and clicks the start button, 
+ * BrowseMusic will start the LoadMusic activity, which takes the user to a loading screen. 
+ * A user cannot start the game without selecting a music on the phone.
+ */
 public class BrowseMusic extends Activity {
 	/** Called when the activity is first created. */
 	public static boolean exitFlag = false;
@@ -38,7 +46,9 @@ public class BrowseMusic extends Activity {
 
 	static final private int LOAD_ACTIVITY = 1;
 
-	/** Called when the activity is first created. */
+	/** 
+	 * Called when the activity is first created. 
+	 */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -50,7 +60,12 @@ public class BrowseMusic extends Activity {
 			startActivityForResult(gameIntent, 0);
 		}
 	}
-
+	/**
+	 * Handles the result returned by calling StartActivityForResult
+	 * @param requestCode return values from the start activity 
+	 * @param resultCode Identifies who the result came from
+	 * @param data Intent that is passed in
+	 */
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if(requestCode==LOAD_ACTIVITY){
 			System.gc();

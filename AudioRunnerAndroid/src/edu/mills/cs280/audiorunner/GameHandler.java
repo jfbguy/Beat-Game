@@ -32,7 +32,7 @@ public class GameHandler implements ApplicationListener {
 		onExitListen = onExit;
 	}
 
-	@Override
+	
 	public void create() {
 		touched = false;
 		gameStarted = false;
@@ -66,17 +66,17 @@ public class GameHandler implements ApplicationListener {
 		DebugText.SetupDebugText(spriteBatch);
 	}
 
-	@Override
+	
 	public void dispose() {
 		music.dispose();
 	}
 
-	@Override
+	
 	public void pause() {
 		music.pause();
 	}
 
-	@Override
+	
 	public void render() {
 			
 		if(!music.isPlaying()){
@@ -151,12 +151,12 @@ public class GameHandler implements ApplicationListener {
 		}
 	}
 
-	@Override
+	
 	public void resize(int width, int height) {
 
 	}
 
-	@Override
+	
 	public void resume() {
 	}
 

@@ -11,7 +11,15 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ImmediateModeRenderer;
-
+/**
+ * 
+ * Visualizes the music.
+ * It is a visual test of the decoder.
+ * It adds art to the game.
+ * 
+ * @author ymiao
+ *
+ */
 public class MusicVisualizer{
 	private static ArrayList<float[]> samples;
 	private static boolean activate = false;
@@ -23,6 +31,11 @@ public class MusicVisualizer{
 
 	}
 
+	/**
+	 * assign the value of some important data used by the visualizer
+	 * samples are the song information
+	 * tex is the what the visualizer uses to draw
+	 */
 	public static void setupMusicVisualizer(){
 		samples = MusicData.getSamples();
 		tex = new Texture(Gdx.files.internal("data/particle.png"));
@@ -37,6 +50,13 @@ public class MusicVisualizer{
 	private static float min = 0;
 	private static float sum = 0;
 
+	/**
+	 * The draw method calculates
+	 * the location and the size of the bubbles 
+	 * based on the music peak samples
+	 * 
+	 * @param sb the SpriteBatch to draw on
+	 */
 	public static void draw(SpriteBatch sb){
 		if(activate){
 			int frameNumber = (int)(MusicData.getPosition()/MusicData.getFrameDuration());
@@ -67,17 +87,6 @@ public class MusicVisualizer{
 			for(int i = 0 ; i < frame.length; i++){
 				data = (frame[i]+Math.abs(min))/scaler;
 				y = 0.1f*Gdx.graphics.getHeight()*data;
-
-
-
-				/*
-				if(i%20==0){
-				Particle.createVisualizeParticle(
-						(float)i*ratio,
-						y+Gdx.graphics.getHeight()/2,
-						Gdx.graphics.getWidth()/10,//radius
-						new Color((float)Math.random(),(float)Math.random(),(float)Math.random(),0.5f));
-				}*/
 
 				Sprite bubble = bubbles[i];
 				

@@ -21,8 +21,12 @@ import android.widget.Toast;
 /**
  * 
  * @author ymiao
- *  Loads music and shows progress bar
+ * LoadMusic is an indeterminate loading screen. 
+ * It calls a decoder to decode the selected music. 
+ * When decoding is done, it starts AudioRunnerActivity. 
+ * LoadMusic uses AsyncTask to do the decoding work in the background while UI is running. 
  */
+
 public class LoadMusic extends Activity{
 
 	public String musicFile;
@@ -47,7 +51,7 @@ public class LoadMusic extends Activity{
 	}
 
 	/**
-	 * Handles the returning from the game
+	 * Handles the result returned from calling StartActivityForResult
 	 * @param requestCode return values from the start activity 
 	 * @param resultCode Identifies who the result came from
 	 * @param data Intent that is passed in
@@ -137,7 +141,8 @@ public class LoadMusic extends Activity{
 	}
 	
 	/**
-	 * Destroys the activity
+	 * Destroys the activity so that when the user click the back button during the game
+	 * The user will not return to a loading screen
 	 */
 	public void onDestroy() {
 		super.onDestroy();

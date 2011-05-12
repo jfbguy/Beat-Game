@@ -1,26 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:orientation="vertical" android:layout_width="fill_parent"
-	android:layout_height="fill_parent">
-	 <TextView
-	    android:id="@+id/title_text"
-    	android:layout_width="fill_parent"
-    	android:layout_height="wrap_content"
-    	android:textColor="#00E6FF"
-    	android:textSize="36px"
-    	android:padding = "10px"
-    	android:text="Psychedelic Bunny Runner"
-    	android:gravity="center_vertical|center_horizontal"
-        android:layout_gravity="center_vertical|center_horizontal|center"
-    	/>
+	android:layout_height="fill_parent"
+	android:background="@drawable/bground">
 	 <Button 
 	    android:text="Select Music"
         android:id="@+id/Start_Button"
         android:layout_width="250px"
         android:textSize="18px"
         android:layout_height="55px"
-        android:gravity="center_vertical|center_horizontal"
-        android:layout_gravity="center_vertical|center_horizontal|center"
+        android:layout_marginTop="140dip"
+		android:layout_alignParentRight="true"
         >
     </Button>
     <Button 
@@ -29,8 +19,7 @@
         android:layout_width="250px"
         android:textSize="18px"
         android:layout_height="55px"
-        android:gravity="center_vertical|center_horizontal"
-        android:layout_gravity="center_vertical|center_horizontal|center"
+        android:layout_alignParentRight="true"
         >
     </Button>
 </LinearLayout>
