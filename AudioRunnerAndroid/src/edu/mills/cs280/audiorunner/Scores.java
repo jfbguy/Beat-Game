@@ -30,6 +30,10 @@ public class Scores extends Activity {
 	private final int DEFAULT_SCORE = 0;
 	private ScoresData scores;
 	String playerName; 
+	
+	/**
+	 * Initializes the activity
+	 */
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -138,6 +142,8 @@ public class Scores extends Activity {
 
 	}
 
+	
+
 	/**
 	 * Returns a list of scores that have been added to the scoreList array.  
 	 * @param song The song's name
@@ -209,7 +215,7 @@ public class Scores extends Activity {
 		db.close();
 		return nameList;
 	}
-
+	
 	private void showSongList() {
 		final String[] QUERY = { _ID, "title" };
 		final String[] FROM = { "title" };

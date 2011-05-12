@@ -18,6 +18,11 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+/**
+ * 
+ * @author ymiao
+ *  Loads music and shows progress bar
+ */
 public class LoadMusic extends Activity{
 
 	public String musicFile;
@@ -25,6 +30,9 @@ public class LoadMusic extends Activity{
 	private LinearLayout linProgressBar;
 	private static int GAME  = 1;
 
+	/**
+	 * Starts the activity
+	 */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -38,7 +46,12 @@ public class LoadMusic extends Activity{
 
 	}
 
-
+	/**
+	 * Handles the returning from the game
+	 * @param requestCode return values from the start activity 
+	 * @param resultCode Identifies who the result came from
+	 * @param data Intent that is passed in
+	 */
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(requestCode==GAME){
     		finish();
@@ -123,6 +136,9 @@ public class LoadMusic extends Activity{
 
 	}
 	
+	/**
+	 * Destroys the activity
+	 */
 	public void onDestroy() {
 		super.onDestroy();
 	}
