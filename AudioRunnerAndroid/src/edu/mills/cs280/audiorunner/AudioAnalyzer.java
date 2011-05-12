@@ -18,6 +18,11 @@ import javazoom.jl.decoder.SampleBuffer;
 
 import com.badlogic.gdx.audio.analysis.FFT;
 
+/**
+ * Loads and decodes an mp3.
+ * @author tadams
+ *
+ */
 public class AudioAnalyzer{
 
 	private File file;
@@ -50,6 +55,11 @@ public class AudioAnalyzer{
 	private int bufferAnalyze = 0;
 	private Boolean flip = true;
 
+	/**
+	 * Creates an inputStream from the file at the specified file location.
+	 * Initializes our variables and creates the Fast Fourier Transform function (FFT).
+	 * @param fileLocation - path to the mp3 to load
+	 */
 	public AudioAnalyzer(String fileLocation){
 		file = new File(fileLocation);
 		try {
@@ -81,6 +91,7 @@ public class AudioAnalyzer{
 
 		decodingDone = false;
 	}
+
 
 	public void decode(){
 		if(!decodingDone){
@@ -157,6 +168,11 @@ public class AudioAnalyzer{
 
 	}
 
+	/**
+	 * Calculate the spectral flux.  This is a method of checking a a chunk of a song
+	 * for peaks over its entire frequency band. Data is calculated in-place.
+	 * 
+	 */
 	public void spectralFlux(){
 		for( int i = 0; i < spectralFlux.size(); i++ )
 		{
@@ -170,6 +186,10 @@ public class AudioAnalyzer{
 		}
 	}
 
+	/**
+	 * Checks if the magnitude of a "beat" is greater than the "threshold
+	 * level calculated elsewhere.  Events less than the threshold are culled.
+	 */
 	public void prune(){
 		for( int i = 0; i < threshold.size(); i++ )
 		{
@@ -181,6 +201,9 @@ public class AudioAnalyzer{
 		}
 	}
 
+	/**
+	 * 
+	 */
 	public void choosePeaks(){
 		for( int i = 0; i < prunedSpectralFlux.size() - 1; i++ )
 		{
