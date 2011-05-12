@@ -92,6 +92,7 @@ public class AudioAnalyzer{
 		decodingDone = false;
 	}
 
+
 	/**
 	 * Call to decode to run the decoding algorithm.
 	 * Usually decodes a single frame per call, when bufferLimit is met
@@ -209,7 +210,11 @@ public class AudioAnalyzer{
 	}
 
 	/**
+<<<<<<< HEAD
 	 * Chooses the peaks based upon the prunedSpectralFlux
+=======
+	 * 
+>>>>>>> refs/remotes/choose_remote_name/TrevorJavadoc
 	 */
 	public void choosePeaks(){
 		for( int i = 0; i < prunedSpectralFlux.size() - 1; i++ )
