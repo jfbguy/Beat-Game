@@ -14,7 +14,7 @@ import javazoom.jl.decoder.SampleBuffer;
  * as a serializable class to store music data offline and run
  * without taking time to decode.
  * 
- * @author tadams
+ * @author jklein
  *
  */
 public class MusicData {

@@ -27,22 +27,24 @@ import android.widget.TextView;
  *
  */
 public class Scores extends Activity {
+	private final int DEFAULT_SCORE = 0;
 	private ScoresData scores;
 	String playerName; 
-	
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.high_scores);
 		scores = new ScoresData(this);
 
-		 if (BrowseMusic.exitFlag) {
-			 addScore(BrowseMusic.songName, BrowseMusic.highScore);
-			 BrowseMusic.exitFlag = false;
-		 }
-		 else {
+		if (BrowseMusic.exitFlag && BrowseMusic.highScore > 0) {
+			addScore(BrowseMusic.songName, BrowseMusic.highScore);
+		}
+		else {
+
 			showSongList();
-	     }
+		}
+		BrowseMusic.exitFlag = false;
 
 		Button settings = (Button) findViewById(R.id.Return_Button);
 		settings.setOnClickListener(new View.OnClickListener() {
@@ -55,7 +57,7 @@ public class Scores extends Activity {
 
 	}
 
-	
+
 	/**
 	 * Adds a new High score to High Scores Database
 	 * 
@@ -70,19 +72,19 @@ public class Scores extends Activity {
 		alert.setView(input);
 		alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int whichButton) {
-				
+
 				ArrayList<Integer> songScores = getScores(song);
 				ArrayList<String> playerNames = getNames(song);
 				playerName = input.getText().toString();
-				
+
 				boolean newScoreFlag;
-				if (songScores.get(0) == 0) {
+				if (songScores.get(0) == DEFAULT_SCORE) {
 					newScoreFlag = true;
 				} else {
 					newScoreFlag = false;
 				}
-					
-				
+
+
 				if (score > songScores.get(0)) {
 					songScores.add(0, score);
 					playerNames.add(0, playerName);
@@ -97,7 +99,7 @@ public class Scores extends Activity {
 						}
 					}
 				}
-				
+
 				SQLiteDatabase db = scores.getWritableDatabase();
 				ContentValues values = new ContentValues();
 				values.put("title", song);
@@ -133,9 +135,9 @@ public class Scores extends Activity {
 			}
 		});
 		alert.show();
-		
+
 	}
-	
+
 	/**
 	 * Returns a list of scores that have been added to the scoreList array.  
 	 * @param song The song's name
@@ -145,7 +147,7 @@ public class Scores extends Activity {
 		ArrayList<Integer> scoreList = new ArrayList<Integer>();
 		final String[] QUERY = { _ID, "title", "score0", "score1", "score2",
 				"score3", "score4", "score5", "score6", "score7", "score8",
-				"score9" };
+		"score9" };
 		final String QUERYSONG = "title = '" + song + "'";
 		SQLiteDatabase db = scores.getReadableDatabase();
 		Cursor cursor = db.query("scoresTable", QUERY, QUERYSONG, null, null,
@@ -161,7 +163,7 @@ public class Scores extends Activity {
 
 		catch (Exception e) {
 			for (int i = 0; i < 10; i++) {
-				scoreList.add(0);
+				scoreList.add(DEFAULT_SCORE);
 			}
 		}
 		db.close();
@@ -207,7 +209,7 @@ public class Scores extends Activity {
 		db.close();
 		return nameList;
 	}
-	
+
 	private void showSongList() {
 		final String[] QUERY = { _ID, "title" };
 		final String[] FROM = { "title" };
@@ -268,15 +270,15 @@ public class Scores extends Activity {
 			}
 		});
 	}
-	
+
 	public void onResume() {
 		super.onResume();
 	}
-	
+
 	public void onDestroy() {
 		super.onDestroy();
 	}
-	
+
 	public void onPause() {
 		super.onPause();
 	}
