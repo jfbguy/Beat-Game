@@ -5,7 +5,6 @@ import android.os.Bundle;
 
 import com.badlogic.gdx.backends.android.AndroidApplication;
 
- //bizzarely, this class does not extend Activity...
 public class AudioRunnerActivity extends AndroidApplication {
 
 	@Override
