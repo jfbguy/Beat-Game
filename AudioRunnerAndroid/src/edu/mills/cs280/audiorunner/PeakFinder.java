@@ -1,11 +1,20 @@
 package edu.mills.cs280.audiorunner;
 
+/*
+ * This class is based on com.badlogic.audio.samples.part7.threshold.javva by Badlogic Games
+ */
+
 import java.util.ArrayList;
 import java.util.List;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.analysis.FFT;
 
+/**
+ * This class
+ * @author Trevor Adams
+ *
+ */
 public class PeakFinder{
 
 	public static final int THRESHOLD_WINDOW_SIZE = 10;
@@ -13,27 +22,19 @@ public class PeakFinder{
 
 	private boolean useTestMusicData = false;
 
-	//action performed in returnPeaks
+	/**
+	 * Empty constructor, action performed in returnPeaks()
+	 */
 	public PeakFinder(){}
+/**
+ * 	Takes a list of of floats representing aggregate onset amplitudes
+	and prunes them by creating an average threshold of amplitude
+ * @return returns the peak onsets (musical events) from an mp3 (specified in MusicData)
+ */
 
-	public void setTestable(boolean testable){
-		useTestMusicData = testable;
-	}
-
-	//takes a list of of floats representing aggregate onset amplitudes
-	//and prunes them by creating an average threshold of amplitude
 	public List<Float> returnPeaks()
 	{
-		//this breaks threading - do not un comment
-//		if(useTestMusicData){
-//    		//System.out.print("****************************" + SerializableMusicData.getDefaultName());
-//    		SerializableMusicData load = SerializableMusicData.load();
-//    		MusicData.setSamples(load.getSamples());
-//    		return load.getPeaks();
-//    	}
-
 		try{
-			//MP3Decoder decoder = new MP3Decoder(  new FileInputStream (fileName ) );
 			AudioAnalyzer decoder = new AudioAnalyzer(MusicData.getFileLocation());
 			FFT fft = new FFT( 1024, 44100 );
 			fft.window( FFT.HAMMING );
@@ -103,23 +104,13 @@ public class PeakFinder{
 					peaks.add( prunedSpectralFlux.get(i) );
 				else
 					peaks.add( (float)0 );				
-			}
-			//       System.out.println(prunedSpectralFlux.toString());
-			//       System.out.println(peaks.toString());
-			//       System.out.println("size = " + peaks.size());
-			//       
+			}     
 
 			decoder.dispose();
 
 			return peaks;
-
-			//       Plot plot = new Plot( "Spectral Flux", 1024, 512 );
-			//       plot.plot( spectralFlux, 1, Color.red );		
-			//       plot.plot( threshold, 1, Color.green ) ;
-			//       new PlaybackVisualizer( plot, 1024, new MP3Decoder( new FileInputStream( fileName ) ) );
-			//       
+    
 		}catch(Exception e){
-			//What should I do here???
 			System.out.println("FILE FAILED TO LOAD");
 			return null;
 		}
