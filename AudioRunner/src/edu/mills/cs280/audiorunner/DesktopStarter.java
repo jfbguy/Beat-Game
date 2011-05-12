@@ -10,7 +10,9 @@ import com.badlogic.gdx.backends.jogl.JoglApplication;
 public class DesktopStarter {
 	public static void main(String[] args){
 
+
 		//commented out to make annyoing error symbol go away
+
 //		MusicData.setFile("data/music/test.mp3");
 //		PeakFinder songData = new PeakFinder();
 //		List<Float> peaks = songData.returnPeaks();
