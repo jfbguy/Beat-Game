@@ -1,6 +1,11 @@
 package edu.mills.cs280.audiorunner;
 
-
+/**
+ * Keeps track of current time to correctly decide on movement independent on frame rate
+ * 
+ * @author jklein
+ *
+ */
 public class TimeHandler {
 	static public final float FRAMERATE = 60.0f;
 	static public final float TIMESCALE = 1000/FRAMERATE;  //Milliseconds / Desire FrameRate
@@ -12,6 +17,9 @@ public class TimeHandler {
 	private TimeHandler(){
 	}
 
+	/**
+	 * Updates time values
+	 */
 	public static void updateTime(){
 		if(prevTime == 0)
 			prevTime = System.currentTimeMillis();
@@ -23,13 +31,19 @@ public class TimeHandler {
 	}
 
 	/**
+	 * Get transition scale, percentage of movement that shoudl be done
 	 * 
-	 * @return
+	 * @return float of transition scale
 	 */
 	public static float getTransitionScale(){
 		return timeDiff/TIMESCALE;
 	}
 	
+	/**
+	 * gets current frame time in milliseconds
+	 * 
+	 * @return current time in milliseconds
+	 */
 	public static float getTimeOfCurrFrame(){
 		return System.currentTimeMillis() - currTime;
 	}

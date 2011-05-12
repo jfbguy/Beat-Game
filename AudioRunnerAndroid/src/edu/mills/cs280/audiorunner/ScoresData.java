@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 /**
  * Creates the scores database 
+ * 
  * @author Dave
  *
  */

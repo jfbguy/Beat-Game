@@ -7,10 +7,11 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 /**
- * Handles the score board page after the user ends playing a game.
+ * ScoreBoard holds the player's score and implements the visual for it and score floaters
  * 
- * @author Dave
  * 
+ * @author jklein
+ *
  */
 public class ScoreBoard {
 	private final int FONTSIZE = 64; // Size of Font in Texture

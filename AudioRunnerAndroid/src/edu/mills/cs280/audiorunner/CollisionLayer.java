@@ -7,6 +7,12 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+/**
+ * Similar to sprite layer but implements extra methods for collidables
+ * 
+ * @author jklein
+ *
+ */
 public class CollisionLayer {
 	private static final int MAX_SPRITE_SIZE = 256;
 	private static final int SPEED = 5;
@@ -89,10 +95,20 @@ public class CollisionLayer {
 		return layer.get(xPos);
 	}
 	
+	/**
+	 * Gets collidables that are on screen
+	 * 
+	 * @return Hashtable of on screen collidables
+	 */
 	public Hashtable<Integer,LinkedList<Collidable>> getOnScreen(){
 		return onScreenLayer;
 	}
 
+	/**
+	 * Load Collidables that start on screen
+	 * 
+	 * @param worldPosition
+	 */
 	public void loadStart(int worldPosition){
 		int parallaxPosition = (int)(MusicData.getPosition()*parallax);
 		for(int i = -MAX_SPRITE_SIZE; i < Gdx.graphics.getWidth(); i++){
@@ -104,6 +120,12 @@ public class CollisionLayer {
 		}
 	}
 
+	/**
+	 * Decide which collidables are on screen and Draw all them
+	 * 
+	 * @param spriteBatch SpriteBatch which you draw all of your tectures into
+	 * @param worldPosition
+	 */
 	public void draw(SpriteBatch spriteBatch, Vector2 worldPosition){
 		LinkedList<Collidable> temp;
 		int parallaxPositionX = (int)(MusicData.getPosition()*parallax);
@@ -145,9 +167,20 @@ public class CollisionLayer {
 		spriteBatch.end();
 	}
 	
+	/**
+	 * Gets parallax value of this layer
+	 * 
+	 * @return parallax value
+	 */
 	public float getParallax(){
 		return parallax;
 	}
+	
+	/**
+	 * Gets full collision layer
+	 * 
+	 * @return layer containing all collidables
+	 */
 	public Hashtable<Integer,LinkedList<Collidable>> getLayer(){
 		return layer;
 	}

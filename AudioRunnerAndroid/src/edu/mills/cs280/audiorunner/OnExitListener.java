@@ -1,6 +1,11 @@
 package edu.mills.cs280.audiorunner;
 
-//Define somewhere accessible to all of your code
+/**
+ * Quick fix Interface for allowing the GameHandler to finish() without crashing program
+ * 
+ * @author jklein
+ *
+ */
 public interface OnExitListener
 {
     public void onExit();

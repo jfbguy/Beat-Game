@@ -9,6 +9,12 @@ import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ImmediateModeRenderer;
 
+/**
+ * Main Handler for Game
+ * 
+ * @author jklein
+ *
+ */
 public class GameHandler implements ApplicationListener {
 	OnExitListener onExitListen;
 	
@@ -27,6 +33,11 @@ public class GameHandler implements ApplicationListener {
 	private boolean touched;
 	private ScreenHandler screenHandler;
 
+	/**
+	 * Constructor, set the onExitLIstener
+	 * 
+	 * @param onExit listener for exiting game
+	 */
 	public GameHandler(OnExitListener onExit){
 		trackLocation = MusicData.getFileLocation();
 		onExitListen = onExit;

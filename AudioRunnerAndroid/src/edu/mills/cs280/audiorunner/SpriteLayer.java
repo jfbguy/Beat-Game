@@ -89,6 +89,11 @@ public class SpriteLayer {
 		return layer.get(xPos);
 	}
 
+	/**
+	 * Load starting sprites onto screen
+	 * 
+	 * @param worldPosition
+	 */
 	public void loadStart(Vector2 worldPosition){
 		int parallaxPosition = (int)(worldPosition.x*parallax);
 		for(int i = -MAX_SPRITE_SIZE; i < Gdx.graphics.getWidth(); i++){
@@ -100,6 +105,12 @@ public class SpriteLayer {
 		}
 	}
 
+	/**
+	 * Decide which sprites are on screen and draws them on screen
+	 * 
+	 * @param spriteBatch
+	 * @param worldPosition
+	 */
 	public void draw(SpriteBatch spriteBatch, Vector2 worldPosition){
 		LinkedList<Sprite> temp;
 		int parallaxPositionX = (int)(MusicData.getPosition()*parallax);
