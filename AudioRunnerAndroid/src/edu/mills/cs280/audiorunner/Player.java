@@ -20,7 +20,7 @@ public class Player extends Collidable {
 	private final float PLATFORM_CATCH = .4f;
 	private final int FRAME_COUNT = 5;
 	private final float FRAME_DELAY = TimeHandler.FRAMERATE/FRAME_COUNT/3;
-	private final int SPRITE_SIZE = 64;
+	private final int SPRITE_SIZE = 128;
 	private final float GRAVITY = 1.0f;
 	public final int JUMPSPEED = 10;
 	public final int TERMINAL_VELOCITY = -5;
